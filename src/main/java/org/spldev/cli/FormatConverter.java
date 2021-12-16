@@ -26,7 +26,7 @@ import org.spldev.util.cli.CLI;
 import org.spldev.util.cli.CLIFunction;
 import org.spldev.formula.expression.Formula;
 import org.spldev.formula.expression.io.FormulaFormatManager;
-import org.spldev.util.Result;
+import org.spldev.util.data.Result;
 import org.spldev.util.extension.ExtensionPoint.NoSuchExtensionException;
 import org.spldev.util.io.FileHandler;
 import org.spldev.util.io.format.Format;
