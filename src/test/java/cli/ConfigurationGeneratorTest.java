@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula-analysis> for further information.
  * -----------------------------------------------------------------------------
  */
-package cli.formula;
+package cli;
 
 import static org.junit.jupiter.api.Assertions.*;
 

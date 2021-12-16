@@ -20,7 +20,7 @@
  * See <https://github.com/skrieter/formula> for further information.
  * -----------------------------------------------------------------------------
  */
-package cli.formula;
+package cli;
 
 import org.junit.jupiter.api.Test;
 import org.spldev.cli.FormatConverter;
