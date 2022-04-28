@@ -1,23 +1,23 @@
 /* -----------------------------------------------------------------------------
- * Formula-Analysis Lib - Library to analyze propositional formulas.
- * Copyright (C) 2021  Sebastian Krieter
+ * Command Line Interface - Reference frontend for the library
+ * Copyright (C) 2021  Elias Kuiter
  * 
- * This file is part of Formula-Analysis Lib.
+ * This file is part of Command Line Interface.
  * 
- * Formula-Analysis Lib is free software: you can redistribute it and/or modify it
+ * Command Line Interface is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  * 
- * Formula-Analysis Lib is distributed in the hope that it will be useful,
+ * Command Line Interface is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with Formula-Analysis Lib.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Command Line Interface.  If not, see <https://www.gnu.org/licenses/>.
  * 
- * See <https://github.com/skrieter/formula-analysis> for further information.
+ * See <https://github.com/skrieter/cli> for further information.
  * -----------------------------------------------------------------------------
  */
 package org.spldev.cli;
@@ -26,14 +26,14 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.spldev.cli.configuration.ConfigurationGeneratorAlgorithmManager;
-import org.spldev.formula.ModelRepresentation;
-import org.spldev.formula.analysis.sat4j.*;
-import org.spldev.formula.clauses.*;
-import org.spldev.formula.expression.io.*;
+import org.spldev.analysis.sat4j.*;
+import org.spldev.clauses.solutions.*;
+import org.spldev.clauses.solutions.io.*;
+import org.spldev.cli.configuration.*;
+import org.spldev.formula.*;
 import org.spldev.formula.io.*;
 import org.spldev.util.cli.*;
-import org.spldev.util.data.Result;
+import org.spldev.util.data.*;
 import org.spldev.util.io.*;
 import org.spldev.util.job.*;
 import org.spldev.util.logging.*;
@@ -116,7 +116,7 @@ public class ConfigurationGenerator implements CLIFunction {
 			final Result<SolutionList> result = Executor.run(generator, c);
 			result.ifPresentOrElse(list -> {
 				try {
-					FileHandler.save(list, out, new ConfigurationListFormat());
+					FileHandler.save(list, out, new ListFormat());
 				} catch (final IOException e) {
 					Logger.logError(e);
 				}

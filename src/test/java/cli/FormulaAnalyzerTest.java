@@ -1,23 +1,23 @@
 /* -----------------------------------------------------------------------------
- * Formula-Analysis Lib - Library to analyze propositional formulas.
- * Copyright (C) 2021  Sebastian Krieter
+ * Command Line Interface - Reference frontend for the library
+ * Copyright (C) 2021  Elias Kuiter
  * 
- * This file is part of Formula-Analysis Lib.
+ * This file is part of Command Line Interface.
  * 
- * Formula-Analysis Lib is free software: you can redistribute it and/or modify it
+ * Command Line Interface is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  * 
- * Formula-Analysis Lib is distributed in the hope that it will be useful,
+ * Command Line Interface is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with Formula-Analysis Lib.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Command Line Interface.  If not, see <https://www.gnu.org/licenses/>.
  * 
- * See <https://github.com/skrieter/formula-analysis> for further information.
+ * See <https://github.com/skrieter/cli> for further information.
  * -----------------------------------------------------------------------------
  */
 package cli;
@@ -29,7 +29,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
-import org.spldev.cli.FormulaAnalyzer;
+import org.spldev.cli.*;
 import org.spldev.util.extension.*;
 
 /**

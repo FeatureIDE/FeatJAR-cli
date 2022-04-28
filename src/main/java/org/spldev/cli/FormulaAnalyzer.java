@@ -1,23 +1,23 @@
 /* -----------------------------------------------------------------------------
- * Formula-Analysis Lib - Library to analyze propositional formulas.
- * Copyright (C) 2021  Sebastian Krieter
+ * Command Line Interface - Reference frontend for the library
+ * Copyright (C) 2021  Elias Kuiter
  * 
- * This file is part of Formula-Analysis Lib.
+ * This file is part of Command Line Interface.
  * 
- * Formula-Analysis Lib is free software: you can redistribute it and/or modify it
+ * Command Line Interface is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  * 
- * Formula-Analysis Lib is distributed in the hope that it will be useful,
+ * Command Line Interface is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with Formula-Analysis Lib.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Command Line Interface.  If not, see <https://www.gnu.org/licenses/>.
  * 
- * See <https://github.com/skrieter/formula-analysis> for further information.
+ * See <https://github.com/skrieter/cli> for further information.
  * -----------------------------------------------------------------------------
  */
 package org.spldev.cli;
@@ -25,11 +25,9 @@ package org.spldev.cli;
 import java.nio.file.*;
 import java.util.*;
 
-import org.spldev.cli.analysis.AnalysisAlgorithmManager;
-import org.spldev.formula.ModelRepresentation;
-import org.spldev.util.cli.AlgorithmWrapper;
-import org.spldev.util.cli.CLI;
-import org.spldev.util.cli.CLIFunction;
+import org.spldev.cli.analysis.*;
+import org.spldev.formula.*;
+import org.spldev.util.cli.*;
 import org.spldev.util.job.*;
 import org.spldev.util.logging.*;
 
@@ -39,7 +37,7 @@ import org.spldev.util.logging.*;
  * @author Sebastian Krieter
  */
 public class FormulaAnalyzer implements CLIFunction {
-	private final List<AlgorithmWrapper<org.spldev.formula.analysis.Analysis<?>>> algorithms = AnalysisAlgorithmManager
+	private final List<AlgorithmWrapper<org.spldev.analysis.Analysis<?>>> algorithms = AnalysisAlgorithmManager
 		.getInstance().getExtensions();
 
 	@Override
@@ -55,7 +53,7 @@ public class FormulaAnalyzer implements CLIFunction {
 	@Override
 	public void run(List<String> args) {
 		Path fmFile = null;
-		AlgorithmWrapper<org.spldev.formula.analysis.Analysis<?>> algorithm = null;
+		AlgorithmWrapper<org.spldev.analysis.Analysis<?>> algorithm = null;
 		long timeout = 0;
 
 		final List<String> remainingArguments = new ArrayList<>();
@@ -93,7 +91,7 @@ public class FormulaAnalyzer implements CLIFunction {
 		}
 
 		final ModelRepresentation rep = ModelRepresentation.load(fmFile).orElseThrow();
-		final org.spldev.formula.analysis.Analysis<?> analysis = algorithm.parseArguments(remainingArguments).orElse(
+		final org.spldev.analysis.Analysis<?> analysis = algorithm.parseArguments(remainingArguments).orElse(
 			Logger::logProblems);
 
 		final long localTime = System.nanoTime();

@@ -1,47 +1,43 @@
 /* -----------------------------------------------------------------------------
- * Formula Lib - Library to represent and edit propositional formulas.
- * Copyright (C) 2021  Sebastian Krieter
+ * Command Line Interface - Reference frontend for the library
+ * Copyright (C) 2021  Elias Kuiter
  * 
- * This file is part of Formula Lib.
+ * This file is part of Command Line Interface.
  * 
- * Formula Lib is free software: you can redistribute it and/or modify it
+ * Command Line Interface is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License,
  * or (at your option) any later version.
  * 
- * Formula Lib is distributed in the hope that it will be useful,
+ * Command Line Interface is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with Formula Lib.  If not, see <https://www.gnu.org/licenses/>.
+ * along with Command Line Interface.  If not, see <https://www.gnu.org/licenses/>.
  * 
- * See <https://github.com/skrieter/formula> for further information.
+ * See <https://github.com/skrieter/cli> for further information.
  * -----------------------------------------------------------------------------
  */
 package org.spldev.cli;
 
-import org.spldev.util.cli.CLI;
-import org.spldev.util.cli.CLIFunction;
-import org.spldev.formula.expression.Formula;
-import org.spldev.formula.expression.io.FormulaFormatManager;
-import org.spldev.util.data.Result;
-import org.spldev.util.extension.ExtensionPoint.NoSuchExtensionException;
-import org.spldev.util.io.FileHandler;
-import org.spldev.util.io.format.Format;
-import org.spldev.util.logging.Logger;
+import java.io.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
+import org.spldev.formula.io.*;
+import org.spldev.formula.structure.*;
+import org.spldev.util.cli.*;
+import org.spldev.util.data.*;
+import org.spldev.util.extension.ExtensionPoint.*;
+import org.spldev.util.io.*;
+import org.spldev.util.io.format.*;
+import org.spldev.util.logging.*;
 
 /**
  * Command line interface for sampling algorithms.
