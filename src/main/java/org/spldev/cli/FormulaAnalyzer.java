@@ -28,7 +28,6 @@ import java.util.*;
 import org.spldev.cli.analysis.*;
 import org.spldev.formula.*;
 import org.spldev.util.cli.*;
-import org.spldev.util.job.*;
 import org.spldev.util.logging.*;
 
 /**
@@ -95,7 +94,7 @@ public class FormulaAnalyzer implements CLIFunction {
 			Logger::logProblems);
 
 		final long localTime = System.nanoTime();
-		final Object result = CLI.runInThread(() -> Executor.run(analysis, rep), timeout).orElse(Logger::logProblems);
+		final Object result = CLI.runInThread(() -> rep.getResult(analysis), timeout).orElse(Logger::logProblems);
 		final long timeNeeded = System.nanoTime() - localTime;
 
 		Logger.logInfo("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
