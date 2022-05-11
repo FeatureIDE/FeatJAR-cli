@@ -35,7 +35,6 @@ import org.spldev.formula.io.*;
 import org.spldev.util.cli.*;
 import org.spldev.util.data.*;
 import org.spldev.util.io.*;
-import org.spldev.util.job.*;
 import org.spldev.util.logging.*;
 
 /**
@@ -113,7 +112,7 @@ public class ConfigurationGenerator implements CLIFunction {
 				.map(ModelRepresentation::new) //
 				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
 			final Path out = outputFile;
-			final Result<SolutionList> result = Executor.run(generator, c);
+			final Result<SolutionList> result = c.getResult(generator);
 			result.ifPresentOrElse(list -> {
 				try {
 					FileHandler.save(list, out, new ListFormat());
