@@ -22,22 +22,26 @@
  */
 package org.spldev.cli;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.nio.file.*;
-import java.util.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
+import org.spldev.formula.io.FormulaFormatManager;
+import org.spldev.formula.structure.Formula;
+import org.spldev.formula.structure.Formulas;
+import org.spldev.util.cli.CLI;
+import org.spldev.util.cli.CLIFunction;
+import org.spldev.util.data.Result;
+import org.spldev.util.io.FileHandler;
+import org.spldev.util.io.format.Format;
+import org.spldev.util.logging.Logger;
 
-import org.spldev.formula.io.*;
-import org.spldev.formula.structure.*;
-import org.spldev.util.cli.*;
-import org.spldev.util.data.*;
-import org.spldev.util.extension.ExtensionPoint.*;
-import org.spldev.util.io.*;
-import org.spldev.util.io.format.*;
-import org.spldev.util.logging.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Command line interface for sampling algorithms.
@@ -45,6 +49,7 @@ import org.spldev.util.logging.*;
  * @author Sebastian Krieter
  */
 public class FormatConverter implements CLIFunction {
+	private final List<Format<Formula>> formats = FormulaFormatManager.getInstance().getExtensions();
 
 	@Override
 	public String getName() {
@@ -58,40 +63,35 @@ public class FormatConverter implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		Path input = null;
-		Path output = null;
+		String input = CLI.DEFAULT_INPUT;
+		String output = CLI.DEFAULT_OUTPUT;
 		Format<Formula> outFormat = null;
 		boolean recursive = false;
-		boolean overwrite = false;
 		boolean dryRun = false;
+		boolean cnf = false;
 		String fileNameFilter = null;
 
-		final ListIterator<String> iterator = args.listIterator();
-		if (iterator.hasNext()) {
-			input = Paths.get(iterator.next());
-		}
-		if (iterator.hasNext()) {
-			final String name = iterator.next();
-			try {
-				outFormat = FormulaFormatManager.getInstance().getFormatById(name).orElse(Logger::logProblems);
-			} catch (final NoSuchExtensionException e) {
-				throw new RuntimeException(e);
-			}
-		}
-
-		while (iterator.hasNext()) {
+		for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext();) {
 			final String arg = iterator.next();
 			switch (arg) {
-			case "-out": {
-				output = Paths.get(CLI.getArgValue(iterator, arg));
+			case "-f": {
+				final String name = CLI.getArgValue(iterator, arg).toLowerCase();
+				outFormat = formats.stream()
+					.filter(f -> Objects.equals(name, f.getName().toLowerCase()))
+					.findFirst()
+					.orElseThrow(() -> new IllegalArgumentException("Unknown format: " + name));
+				break;
+			}
+			case "-o": {
+				output = CLI.getArgValue(iterator, arg);
+				break;
+			}
+			case "-i": {
+				input = CLI.getArgValue(iterator, arg);
 				break;
 			}
 			case "-r": {
 				recursive = true;
-				break;
-			}
-			case "-f": {
-				overwrite = true;
 				break;
 			}
 			case "-name": {
@@ -102,59 +102,24 @@ public class FormatConverter implements CLIFunction {
 				dryRun = true;
 				break;
 			}
+			case "-cnf": {
+				cnf = true;
+				break;
+			}
 			}
 		}
+
 		if (outFormat == null) {
 			throw new IllegalArgumentException("No output format specified!");
 		}
-		if (input == null) {
-			throw new IllegalArgumentException("No input directory or file defined!");
-		} else if (!Files.exists(input)) {
+		if (!CLI.isValidInput(input)) {
 			throw new IllegalArgumentException("No input directory or file does not exist!");
 		}
-		final boolean directory = Files.isDirectory(input);
+		final boolean directory = Files.isDirectory(Paths.get(input));
 
-		if (output == null) {
-			output = Paths.get(directory ? "out" : "out." + outFormat.getFileExtension());
-		}
-		if (overwrite) {
-			if (directory) {
-				if (Files.isRegularFile(output)) {
-					try {
-						Files.delete(output);
-					} catch (final IOException e) {
-						throw new IllegalArgumentException("Existing output file could not be deleted!");
-					}
-				}
-			} else {
-				if (Files.isDirectory(output)) {
-					try {
-						Files.delete(output);
-					} catch (final IOException e) {
-						throw new IllegalArgumentException("Existing output file could not be deleted!");
-					}
-				}
-			}
-		} else {
-			if (Files.exists(output)) {
-				if (Files.isDirectory(output)) {
-					try {
-						if (Files.list(output).findAny().isPresent()) {
-							throw new IllegalArgumentException(
-								"Output directory is not empty!\n\tUse -f to force overwrite existing files");
-						}
-					} catch (final IOException e) {
-						throw new IllegalArgumentException("Output directory is not accessible!");
-					}
-				} else {
-					throw new IllegalArgumentException("Output file already exists!\n\tUse -f to force overwrite");
-				}
-			}
-		}
-
-		if (directory && !Files.exists(output)) {
+		if (directory && !Files.exists(Paths.get(output))) {
 			try {
-				Files.createDirectory(output);
+				Files.createDirectory(Paths.get(output));
 			} catch (final IOException e) {
 				throw new IllegalArgumentException("Output directory could not be created!");
 			}
@@ -163,12 +128,13 @@ public class FormatConverter implements CLIFunction {
 		final boolean convert = !dryRun;
 		if (directory) {
 			final Format<Formula> format = outFormat;
-			final Path rootIn = input;
-			final Path rootOut = output;
+			final Path rootIn = Paths.get(input);
+			final Path rootOut = Paths.get(output);
 			final Predicate<String> fileNamePredicate = fileNameFilter == null ? (s -> true)
 				: Pattern.compile(fileNameFilter).asMatchPredicate();
 			try {
-				final Stream<Path> fileStream = recursive ? Files.walk(input) : Files.list(input);
+				final Stream<Path> fileStream = recursive ? Files.walk(rootIn) : Files.list(rootIn);
+				boolean finalCnf = cnf;
 				fileStream //
 					.filter(Files::isRegularFile) //
 					.filter(f -> fileNamePredicate.test(f.getFileName().toString())) //
@@ -184,7 +150,7 @@ public class FormatConverter implements CLIFunction {
 							} catch (final IOException e) {
 								throw new RuntimeException(e);
 							}
-							convert(inputFile, outputFile, format);
+							convert(inputFile.toString(), outputFile.toString(), format, finalCnf);
 						}
 					});
 			} catch (final IOException e) {
@@ -193,24 +159,41 @@ public class FormatConverter implements CLIFunction {
 		} else {
 			Logger.logInfo(input + " -> " + output);
 			if (convert) {
-				convert(input, output, outFormat);
+				convert(input, output, outFormat, cnf);
 			}
 		}
 	}
 
-	private void convert(Path inputFile, Path outputFile, Format<Formula> outFormat) {
+	private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
 		try {
-			final Result<Formula> parse = FileHandler.load(inputFile, FormulaFormatManager.getInstance(),
-				StandardCharsets.UTF_8);
+			final Result<Formula> parse = CLI.loadFile(inputFile, FormulaFormatManager.getInstance());
 			if (parse.isPresent()) {
-				FileHandler.save(parse.get(), outputFile, outFormat, StandardCharsets.UTF_8);
+				Formula formula = parse.get();
+				if (cnf) {
+					formula = Formulas.toCNF(formula).get();
+				}
+				CLI.saveFile(formula, outputFile, outFormat);
 			} else {
 				Logger.logProblems(parse.getProblems());
 			}
-		} catch (final IOException e) {
-			throw new RuntimeException(e);
 		} catch (final Exception e) {
 			Logger.logError(e);
 		}
+	}
+
+	@Override
+	public String getHelp() {
+		final StringBuilder helpBuilder = new StringBuilder();
+		helpBuilder.append("\tParameters:\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: <stdin:xml>)\n");
+		helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: <stdout>)\n");
+		helpBuilder.append("\t\t-f <Format>  Specify format by identifier. One of:\n");
+		formats.forEach(f -> helpBuilder.append("\t\t                 ").append(f.getName().toLowerCase()).append(
+			"\n"));
+		helpBuilder.append("\t\t-r           Proceed recursively\n");
+		helpBuilder.append("\t\t-name        Specify file name filter as regular expression\n");
+		helpBuilder.append("\t\t-dry         Perform dry run\n");
+		helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
+		return helpBuilder.toString();
 	}
 }

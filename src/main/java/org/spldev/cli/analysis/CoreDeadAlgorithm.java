@@ -22,19 +22,37 @@
  */
 package org.spldev.cli.analysis;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
+import org.spldev.analysis.sat4j.CoreDeadAnalysis;
+import org.spldev.clauses.LiteralList;
+import org.spldev.formula.structure.atomic.literal.VariableMap;
+import org.spldev.util.cli.AlgorithmWrapper;
 
-public class SatisfiableAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> {
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
 
 	@Override
-	protected HasSolutionAnalysis createAlgorithm() {
-		return new HasSolutionAnalysis();
+	protected CoreDeadAnalysis createAlgorithm() {
+		return new CoreDeadAnalysis();
+	}
+
+	@Override
+	public Object parseResult(Object result, Object arg) {
+		LiteralList literalList = (LiteralList) result;
+		VariableMap variableMap = (VariableMap) arg;
+		return String.format("core:\n%s\ndead:\n%s\n",
+			Arrays.stream(literalList.getPositiveLiterals().getLiterals())
+				.mapToObj(l -> variableMap.getVariable(l).get().getName())
+				.collect(Collectors.joining("\n")),
+			Arrays.stream(literalList.getNegativeLiterals().getLiterals())
+				.mapToObj(l -> variableMap.getVariable(-l).get().getName())
+				.collect(Collectors.joining("\n")));
 	}
 
 	@Override
 	public String getName() {
-		return "satisfiable";
+		return "core-dead";
 	}
 
 	@Override
@@ -42,6 +60,7 @@ public class SatisfiableAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> 
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
+		helpBuilder.append(": reports the feature model's core and dead features\n");
 		return helpBuilder.toString();
 	}
 

@@ -22,20 +22,22 @@
  */
 package org.spldev.cli;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import org.spldev.analysis.sat4j.AbstractConfigurationGenerator;
+import org.spldev.clauses.solutions.SolutionList;
+import org.spldev.clauses.solutions.io.ListFormat;
+import org.spldev.cli.configuration.ConfigurationGeneratorAlgorithmManager;
+import org.spldev.formula.ModelRepresentation;
+import org.spldev.formula.io.FormulaFormatManager;
+import org.spldev.util.cli.AlgorithmWrapper;
+import org.spldev.util.cli.CLI;
+import org.spldev.util.cli.CLIFunction;
+import org.spldev.util.data.Result;
+import org.spldev.util.logging.Logger;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.clauses.solutions.*;
-import org.spldev.clauses.solutions.io.*;
-import org.spldev.cli.configuration.*;
-import org.spldev.formula.*;
-import org.spldev.formula.io.*;
-import org.spldev.util.cli.*;
-import org.spldev.util.data.*;
-import org.spldev.util.io.*;
-import org.spldev.util.logging.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 
 /**
  * Command line interface for sampling algorithms.
@@ -59,8 +61,8 @@ public class ConfigurationGenerator implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		Path outputFile = null;
-		Path fmFile = null;
+		String input = CLI.DEFAULT_INPUT;
+		String output = CLI.DEFAULT_OUTPUT;
 		AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
 		int limit = Integer.MAX_VALUE;
 
@@ -78,11 +80,11 @@ public class ConfigurationGenerator implements CLIFunction {
 				break;
 			}
 			case "-o": {
-				outputFile = Paths.get(CLI.getArgValue(iterator, arg));
+				output = CLI.getArgValue(iterator, arg);
 				break;
 			}
-			case "-fm": {
-				fmFile = Paths.get(CLI.getArgValue(iterator, arg));
+			case "-i": {
+				input = CLI.getArgValue(iterator, arg);
 				break;
 			}
 			case "-l":
@@ -95,12 +97,6 @@ public class ConfigurationGenerator implements CLIFunction {
 			}
 		}
 
-		if (fmFile == null) {
-			throw new IllegalArgumentException("No input file specified!");
-		}
-		if (outputFile == null) {
-			throw new IllegalArgumentException("No output file specified!");
-		}
 		if (algorithm == null) {
 			throw new IllegalArgumentException("No algorithm specified!");
 		}
@@ -108,18 +104,13 @@ public class ConfigurationGenerator implements CLIFunction {
 			.orElse(Logger::logProblems);
 		if (generator != null) {
 			generator.setLimit(limit);
-			final ModelRepresentation c = FileHandler.load(fmFile, FormulaFormatManager.getInstance()) //
+			final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager
+				.getInstance()) //
 				.map(ModelRepresentation::new) //
 				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
-			final Path out = outputFile;
 			final Result<SolutionList> result = c.getResult(generator);
-			result.ifPresentOrElse(list -> {
-				try {
-					FileHandler.save(list, out, new ListFormat());
-				} catch (final IOException e) {
-					Logger.logError(e);
-				}
-			}, Logger::logProblems);
+			String finalOutput = output;
+			result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);
 		}
 	}
 
@@ -127,8 +118,8 @@ public class ConfigurationGenerator implements CLIFunction {
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-fm <Path>   Specify path to feature model file.\n");
-		helpBuilder.append("\t\t-o <Path>    Specify path to output file.\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: <stdin:xml>)\n");
+		helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: <stdout>)\n");
 		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
 		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
 		helpBuilder.append("\n");

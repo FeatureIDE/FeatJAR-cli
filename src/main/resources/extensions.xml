@@ -15,6 +15,9 @@
 		<extension id="org.spldev.cli.configuration.SampleRandomAlgorithm" />
 	</point>
 	<point id="org.spldev.cli.analysis.AnalysisAlgorithmManager">
-		<extension id="org.spldev.cli.analysis.SatisfiableAlgorithm" />
+		<extension id="org.spldev.cli.analysis.VoidAlgorithm" />
+		<extension id="org.spldev.cli.analysis.CardinalityAlgorithm" />
+		<extension id="org.spldev.cli.analysis.CoreDeadAlgorithm" />
+		<extension id="org.spldev.cli.analysis.AtomicSetAlgorithm" />
 	</point>
 </extensions>

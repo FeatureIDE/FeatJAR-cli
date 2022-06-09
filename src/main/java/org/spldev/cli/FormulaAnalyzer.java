@@ -27,6 +27,7 @@ import java.util.*;
 
 import org.spldev.cli.analysis.*;
 import org.spldev.formula.*;
+import org.spldev.formula.io.FormulaFormatManager;
 import org.spldev.util.cli.*;
 import org.spldev.util.logging.*;
 
@@ -51,7 +52,7 @@ public class FormulaAnalyzer implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		Path fmFile = null;
+		String input = CLI.DEFAULT_INPUT;
 		AlgorithmWrapper<org.spldev.analysis.Analysis<?>> algorithm = null;
 		long timeout = 0;
 
@@ -67,8 +68,8 @@ public class FormulaAnalyzer implements CLIFunction {
 					.orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + name));
 				break;
 			}
-			case "-fm": {
-				fmFile = Paths.get(CLI.getArgValue(iterator, arg));
+			case "-i": {
+				input = CLI.getArgValue(iterator, arg);
 				break;
 			}
 			case "-t": {
@@ -82,14 +83,12 @@ public class FormulaAnalyzer implements CLIFunction {
 			}
 		}
 
-		if (fmFile == null) {
-			throw new IllegalArgumentException("No input file specified!");
-		}
 		if (algorithm == null) {
 			throw new IllegalArgumentException("No algorithm specified!");
 		}
 
-		final ModelRepresentation rep = ModelRepresentation.load(fmFile).orElseThrow();
+		final ModelRepresentation rep = CLI.loadFile(input, FormulaFormatManager.getInstance())
+			.map(ModelRepresentation::new).orElseThrow();
 		final org.spldev.analysis.Analysis<?> analysis = algorithm.parseArguments(remainingArguments).orElse(
 			Logger::logProblems);
 
@@ -98,14 +97,14 @@ public class FormulaAnalyzer implements CLIFunction {
 		final long timeNeeded = System.nanoTime() - localTime;
 
 		Logger.logInfo("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
-		Logger.logInfo("Result:\n" + result);
+		Logger.logInfo("Result:\n" + algorithm.parseResult(result, rep.getFormula().getVariableMap()));
 	}
 
 	@Override
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-fm <Path>   Specify path to feature model file.\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: <stdin:xml>)\n");
 		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
 		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
 		helpBuilder.append("\n");
