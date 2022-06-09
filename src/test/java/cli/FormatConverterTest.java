@@ -32,7 +32,7 @@ public class FormatConverterTest {
 	@Test
 	public void createAuxiliaryRoot() {
 		ExtensionLoader.load();
-		new FormatConverter().run(Arrays.asList("src/test/resources/testFeatureModels",
-			"org.spldev.formula.io.dimacs.DIMACSFormat", "-out", "test", "-r", "-f", "-name", "basic[.]xml"));
+		new FormatConverter().run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml",
+			"-f", "dimacs", "-cnf"));
 	}
 }

@@ -67,8 +67,8 @@ public class FormulaAnalyzerTest {
 
 	@Test
 	public void Satisfiable() {
-		final String result = analyze(modelDirectory.resolve(modelNames.get(0) + ".xml"), "satisfiable");
-		assertEquals("true", result);
+		final String result = analyze(modelDirectory.resolve(modelNames.get(0) + ".xml"), "void");
+		assertEquals("false", result);
 	}
 
 	private static String analyze(final Path modelFile, String algorithm) {
@@ -79,7 +79,7 @@ public class FormulaAnalyzerTest {
 				final ArrayList<String> args = new ArrayList<>();
 				args.add("-a");
 				args.add(algorithm);
-				args.add("-fm");
+				args.add("-i");
 				args.add(inFile.toString());
 				new FormulaAnalyzer().run(args);
 				final String output = newOut.toString();
