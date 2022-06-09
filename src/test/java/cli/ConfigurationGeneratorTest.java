@@ -218,7 +218,7 @@ public class ConfigurationGeneratorTest {
 					args.add(algorithm);
 					args.add("-o");
 					args.add(outFile.toString());
-					args.add("-fm");
+					args.add("-i");
 					args.add(inFile.toString());
 
 					if (t != null) {
