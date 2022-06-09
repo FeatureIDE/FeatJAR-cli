@@ -46,7 +46,7 @@ public class SampleRandomAlgorithm extends RandomAlgorithm {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
-		helpBuilder.append(": generates random valid configurations\n");
+		helpBuilder.append(": generates random valid configurations (uniformly distributed)\n");
 		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
 		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
 		return helpBuilder.toString();

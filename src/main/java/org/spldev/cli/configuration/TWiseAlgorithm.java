@@ -90,11 +90,11 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
 		helpBuilder.append(
-			": generates a set of valid configurations such that two-wise feature coverage is achieved\n");
-		helpBuilder.append("\t\t-t <Value>    Specify value for t\n");
-		helpBuilder.append("\t\t-m <Value>    Specify value for m\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations.\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed.\n");
+			": generates a set of valid configurations such that t-wise feature coverage is achieved\n");
+		helpBuilder.append("\t\t-t <Value>    Specify size of interactions to be covered\n");
+		helpBuilder.append("\t\t-m <Value>    Specify number of iterations\n");
+		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
 		helpBuilder.append("\t\t-e <Path>     Specify path to expression file\n");
 		return helpBuilder.toString();
 	}
