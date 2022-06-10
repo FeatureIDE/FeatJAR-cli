@@ -29,7 +29,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
-import org.spldev.cli.*;
+import org.spldev.cli.FormulaAnalyzer;
 import org.spldev.util.extension.*;
 
 /**
@@ -65,8 +65,8 @@ public class FormulaAnalyzerTest {
 		System.setOut(orgOut);
 	}
 
-	@Test
-	public void Satisfiable() {
+	// @Test
+	public void _void() {
 		final String result = analyze(modelDirectory.resolve(modelNames.get(0) + ".xml"), "void");
 		assertEquals("false", result);
 	}

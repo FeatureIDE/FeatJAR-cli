@@ -61,10 +61,11 @@ public class ConfigurationGenerator implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		String input = CLI.DEFAULT_INPUT;
-		String output = CLI.DEFAULT_OUTPUT;
+		String input = CLI.SYSTEM_INPUT;
+		String output = CLI.SYSTEM_OUTPUT;
 		AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
 		int limit = Integer.MAX_VALUE;
+		String verbosity = CLI.DEFAULT_VERBOSITY;
 
 		final List<String> remainingArguments = new ArrayList<>();
 		for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext();) {
@@ -87,6 +88,10 @@ public class ConfigurationGenerator implements CLIFunction {
 				input = CLI.getArgValue(iterator, arg);
 				break;
 			}
+			case "-v": {
+				verbosity = CLI.getArgValue(iterator, arg);
+				break;
+			}
 			case "-l":
 				limit = Integer.parseInt(CLI.getArgValue(iterator, arg));
 				break;
@@ -96,6 +101,8 @@ public class ConfigurationGenerator implements CLIFunction {
 			}
 			}
 		}
+
+		CLI.installLogger(verbosity);
 
 		if (algorithm == null) {
 			throw new IllegalArgumentException("No algorithm specified!");
@@ -118,8 +125,9 @@ public class ConfigurationGenerator implements CLIFunction {
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: <stdin:xml>)\n");
-		helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: <stdout>)\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: system:in.xml>)\n");
+		helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: system:out>)\n");
+		helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
 		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
 		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
 		helpBuilder.append("\n");

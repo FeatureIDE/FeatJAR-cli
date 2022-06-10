@@ -63,13 +63,14 @@ public class FormatConverter implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		String input = CLI.DEFAULT_INPUT;
-		String output = CLI.DEFAULT_OUTPUT;
+		String input = CLI.SYSTEM_INPUT;
+		String output = CLI.SYSTEM_OUTPUT;
 		Format<Formula> outFormat = null;
 		boolean recursive = false;
 		boolean dryRun = false;
 		boolean cnf = false;
 		String fileNameFilter = null;
+		String verbosity = CLI.DEFAULT_VERBOSITY;
 
 		for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext();) {
 			final String arg = iterator.next();
@@ -98,6 +99,10 @@ public class FormatConverter implements CLIFunction {
 				fileNameFilter = CLI.getArgValue(iterator, arg);
 				break;
 			}
+			case "-v": {
+				verbosity = CLI.getArgValue(iterator, arg);
+				break;
+			}
 			case "-dry": {
 				dryRun = true;
 				break;
@@ -108,6 +113,8 @@ public class FormatConverter implements CLIFunction {
 			}
 			}
 		}
+
+		CLI.installLogger(verbosity);
 
 		if (outFormat == null) {
 			throw new IllegalArgumentException("No output format specified!");
@@ -185,8 +192,8 @@ public class FormatConverter implements CLIFunction {
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tParameters:\n");
-		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: <stdin:xml>)\n");
-		helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: <stdout>)\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
+		helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: system:out)\n");
 		helpBuilder.append("\t\t-f <Format>  Specify format by identifier. One of:\n");
 		formats.forEach(f -> helpBuilder.append("\t\t                 ").append(f.getName().toLowerCase()).append(
 			"\n"));
@@ -194,6 +201,7 @@ public class FormatConverter implements CLIFunction {
 		helpBuilder.append("\t\t-name        Specify file name filter as regular expression\n");
 		helpBuilder.append("\t\t-dry         Perform dry run\n");
 		helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
+		helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
 		return helpBuilder.toString();
 	}
 }

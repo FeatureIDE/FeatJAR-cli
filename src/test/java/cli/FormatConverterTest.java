@@ -25,7 +25,7 @@ package cli;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
-import org.spldev.cli.*;
+import org.spldev.cli.FormatConverter;
 import org.spldev.util.extension.*;
 
 public class FormatConverterTest {

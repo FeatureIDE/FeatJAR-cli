@@ -22,10 +22,9 @@
  */
 package org.spldev.cli;
 
-import java.nio.file.*;
 import java.util.*;
 
-import org.spldev.cli.analysis.*;
+import org.spldev.cli.analysis.AnalysisAlgorithmManager;
 import org.spldev.formula.*;
 import org.spldev.formula.io.FormulaFormatManager;
 import org.spldev.util.cli.*;
@@ -52,9 +51,10 @@ public class FormulaAnalyzer implements CLIFunction {
 
 	@Override
 	public void run(List<String> args) {
-		String input = CLI.DEFAULT_INPUT;
+		String input = CLI.SYSTEM_INPUT;
 		AlgorithmWrapper<org.spldev.analysis.Analysis<?>> algorithm = null;
 		long timeout = 0;
+		String verbosity = CLI.DEFAULT_VERBOSITY;
 
 		final List<String> remainingArguments = new ArrayList<>();
 		for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext();) {
@@ -76,12 +76,18 @@ public class FormulaAnalyzer implements CLIFunction {
 				timeout = Long.parseLong(CLI.getArgValue(iterator, arg));
 				break;
 			}
+			case "-v": {
+				verbosity = CLI.getArgValue(iterator, arg);
+				break;
+			}
 			default: {
 				remainingArguments.add(arg);
 				break;
 			}
 			}
 		}
+
+		CLI.installLogger(verbosity);
 
 		if (algorithm == null) {
 			throw new IllegalArgumentException("No algorithm specified!");
@@ -104,7 +110,8 @@ public class FormulaAnalyzer implements CLIFunction {
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: <stdin:xml>)\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");
+		helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
 		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
 		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
 		helpBuilder.append("\n");

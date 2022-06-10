@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 import org.spldev.clauses.*;
 import org.spldev.clauses.solutions.*;
 import org.spldev.clauses.solutions.io.*;
-import org.spldev.cli.*;
+import org.spldev.cli.ConfigurationGenerator;
 import org.spldev.configuration.list.*;
 import org.spldev.formula.io.*;
 import org.spldev.util.extension.*;
