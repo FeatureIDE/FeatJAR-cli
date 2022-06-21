@@ -34,6 +34,7 @@ import org.spldev.util.logging.*;
  * Command line interface for analyses on feature models.
  *
  * @author Sebastian Krieter
+ * @author Elias Kuiter
  */
 public class FormulaAnalyzer implements CLIFunction {
 	private final List<AlgorithmWrapper<org.spldev.analysis.Analysis<?>>> algorithms = AnalysisAlgorithmManager

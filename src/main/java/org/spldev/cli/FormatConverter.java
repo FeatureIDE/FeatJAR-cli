@@ -47,6 +47,7 @@ import java.util.stream.Stream;
  * Command line interface for sampling algorithms.
  *
  * @author Sebastian Krieter
+ * @author Elias Kuiter
  */
 public class FormatConverter implements CLIFunction {
 	private final List<Format<Formula>> formats = FormulaFormatManager.getInstance().getExtensions();

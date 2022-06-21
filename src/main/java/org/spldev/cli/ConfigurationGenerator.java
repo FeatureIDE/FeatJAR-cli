@@ -43,6 +43,7 @@ import java.util.Objects;
  * Command line interface for sampling algorithms.
  *
  * @author Sebastian Krieter
+ * @author Elias Kuiter
  */
 public class ConfigurationGenerator implements CLIFunction {
 
