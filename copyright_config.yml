@@ -1,9 +1,0 @@
-license:
-  name: lgpl
-  version: 3
-program:
-  name: Command Line Interface
-  description: Reference frontend for the library
-  authors: Elias Kuiter
-  url: https://github.com/skrieter/cli
-  year: 2021
