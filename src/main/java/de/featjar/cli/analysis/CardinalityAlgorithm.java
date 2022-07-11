@@ -22,8 +22,8 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.analysis.sat4j.CountSolutionsAnalysis;
+import de.featjar.util.cli.AlgorithmWrapper;
 
 public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {
 

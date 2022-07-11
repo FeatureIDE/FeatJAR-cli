@@ -22,13 +22,13 @@
  */
 package de.featjar.cli.analysis;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import de.featjar.analysis.sat4j.CoreDeadAnalysis;
 import de.featjar.clauses.LiteralList;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.analysis.sat4j.CoreDeadAnalysis;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
 

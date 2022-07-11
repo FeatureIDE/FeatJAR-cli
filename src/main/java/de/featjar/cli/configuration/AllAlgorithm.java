@@ -25,8 +25,6 @@ package de.featjar.cli.configuration;
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.analysis.sat4j.AllConfigurationGenerator;
 import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.analysis.sat4j.*;
-import de.featjar.util.cli.*;
 
 /**
  * Generates all configurations for a given propositional formula.

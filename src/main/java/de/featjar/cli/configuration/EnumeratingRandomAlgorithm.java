@@ -23,7 +23,6 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.analysis.sat4j.EnumeratingRandomConfigurationGenerator;
-import de.featjar.analysis.sat4j.*;
 
 /**
  * Finds certain solutions of propositional formulas.

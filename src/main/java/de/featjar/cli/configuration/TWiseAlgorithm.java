@@ -22,19 +22,18 @@
  */
 package de.featjar.cli.configuration;
 
-import java.nio.file.*;
-import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Random;
 
 import de.featjar.analysis.sat4j.twise.TWiseConfigurationGenerator;
 import de.featjar.clauses.ClauseList;
 import de.featjar.clauses.io.ExpressionGroupFormat;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
-import de.featjar.analysis.sat4j.twise.*;
-import de.featjar.clauses.*;
-import de.featjar.clauses.io.*;
-import de.featjar.util.cli.*;
-import de.featjar.util.io.*;
+import de.featjar.util.io.IO;
 
 /**
  * Generates configurations for a given propositional formula such that t-wise
@@ -76,8 +75,8 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
 	private List<List<ClauseList>> readExpressionFile(Path expressionFile) {
 		final List<List<ClauseList>> expressionGroups;
 		if (expressionFile != null) {
-			expressionGroups = FileHandler.load(expressionFile, new ExpressionGroupFormat())
-				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
+			expressionGroups = IO.load(expressionFile, new ExpressionGroupFormat())
+				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).toException()));
 		} else {
 			expressionGroups = null;
 		}

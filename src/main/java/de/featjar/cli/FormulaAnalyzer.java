@@ -22,19 +22,19 @@
  */
 package de.featjar.cli;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 
 import de.featjar.analysis.Analysis;
+import de.featjar.cli.analysis.AnalysisAlgorithmManager;
 import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.io.FormulaFormatManager;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
 import de.featjar.util.cli.CLIFunction;
 import de.featjar.util.logging.Logger;
-import de.featjar.cli.analysis.AnalysisAlgorithmManager;
-import de.featjar.formula.*;
-import de.featjar.util.cli.*;
-import de.featjar.util.logging.*;
 
 /**
  * Command line interface for analyses on feature models.

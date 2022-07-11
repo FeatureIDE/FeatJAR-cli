@@ -22,22 +22,30 @@
  */
 package cli;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import de.featjar.clauses.CNF;
 import de.featjar.clauses.Clauses;
 import de.featjar.clauses.solutions.SolutionList;
 import de.featjar.clauses.solutions.io.ListFormat;
+import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormatManager;
 import de.featjar.util.extension.ExtensionLoader;
+import de.featjar.util.io.IO;
 import de.featjar.util.logging.Logger;
-import org.junit.jupiter.api.*;
-import de.featjar.cli.ConfigurationGenerator;
 
 /**
  * Tests sampling algorithms.
@@ -231,7 +239,7 @@ public class ConfigurationGeneratorTest {
 					}
 					new ConfigurationGenerator().run(args);
 
-					final SolutionList sample = FileHandler.load(outFile, new ListFormat()).orElse(
+					final SolutionList sample = IO.load(outFile, new ListFormat()).orElse(
 						Logger::logProblems);
 					if (sample == null) {
 						fail("Sample for " + modelFile.toString() + " could not be read!");
@@ -251,7 +259,7 @@ public class ConfigurationGeneratorTest {
 	}
 
 	private static CNF loadCNF(final Path modelFile) {
-		final CNF cnf = FileHandler.load(modelFile, FormulaFormatManager.getInstance()).map(Clauses::convertToCNF)
+		final CNF cnf = IO.load(modelFile, FormulaFormatManager.getInstance()).map(Clauses::convertToCNF)
 			.orElse(Logger::logProblems);
 		if (cnf == null) {
 			fail("CNF could not be read!");

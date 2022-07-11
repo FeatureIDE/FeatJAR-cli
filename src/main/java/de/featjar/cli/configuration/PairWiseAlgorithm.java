@@ -22,14 +22,13 @@
  */
 package de.featjar.cli.configuration;
 
-import java.util.*;
+import java.util.ListIterator;
+import java.util.Random;
 
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.analysis.sat4j.PairWiseConfigurationGenerator;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
-import de.featjar.analysis.sat4j.*;
-import de.featjar.util.cli.*;
 
 /**
  * Generates configurations for a given propositional formula such that two-wise

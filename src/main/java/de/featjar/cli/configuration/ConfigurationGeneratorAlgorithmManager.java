@@ -25,9 +25,6 @@ package de.featjar.cli.configuration;
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.extension.ExtensionPoint;
-import de.featjar.analysis.sat4j.*;
-import de.featjar.util.cli.*;
-import de.featjar.util.extension.*;
 
 /**
  * Extension point for sampling algorithms.

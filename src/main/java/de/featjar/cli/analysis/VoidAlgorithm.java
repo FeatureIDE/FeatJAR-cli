@@ -24,8 +24,6 @@ package de.featjar.cli.analysis;
 
 import de.featjar.analysis.sat4j.HasSolutionAnalysis;
 import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.analysis.sat4j.*;
-import de.featjar.util.cli.*;
 
 public class VoidAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> {
 

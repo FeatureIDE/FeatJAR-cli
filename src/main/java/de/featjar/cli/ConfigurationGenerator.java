@@ -115,7 +115,7 @@ public class ConfigurationGenerator implements CLIFunction {
 			final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager
 				.getInstance()) //
 				.map(ModelRepresentation::new) //
-				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
+				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).toException()));
 			final Result<SolutionList> result = c.getResult(generator);
 			String finalOutput = output;
 			result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);

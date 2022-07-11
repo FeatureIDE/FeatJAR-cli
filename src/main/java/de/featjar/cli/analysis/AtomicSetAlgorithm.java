@@ -22,15 +22,15 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.clauses.LiteralList;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.analysis.sat4j.AtomicSetAnalysis;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import de.featjar.analysis.sat4j.AtomicSetAnalysis;
+import de.featjar.clauses.LiteralList;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.util.cli.AlgorithmWrapper;
 
 public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
 
@@ -39,6 +39,7 @@ public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
 		return new AtomicSetAnalysis();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object parseResult(Object result, Object arg) {
 		List<LiteralList> atomicSets = (List<LiteralList>) result;

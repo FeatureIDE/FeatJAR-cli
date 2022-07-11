@@ -22,16 +22,6 @@
  */
 package de.featjar.cli;
 
-import de.featjar.formula.io.FormulaFormatManager;
-import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.Formulas;
-import de.featjar.util.cli.CLI;
-import de.featjar.util.cli.CLIFunction;
-import de.featjar.util.data.Result;
-import de.featjar.util.io.format.Format;
-import de.featjar.util.logging.Logger;
-import de.featjar.util.io.FileHandler;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,6 +32,16 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+
+import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Formulas;
+import de.featjar.util.cli.CLI;
+import de.featjar.util.cli.CLIFunction;
+import de.featjar.util.data.Result;
+import de.featjar.util.io.IOObject;
+import de.featjar.util.io.format.Format;
+import de.featjar.util.logging.Logger;
 
 /**
  * Command line interface for sampling algorithms.
@@ -149,7 +149,7 @@ public class FormatConverter implements CLIFunction {
 					.forEach(inputFile -> {
 						final Path outputDirectory = rootOut.resolve(rootIn.relativize(inputFile.getParent()));
 						final Path outputFile = outputDirectory
-							.resolve(FileHandler.getFileNameWithoutExtension(inputFile.getFileName()) + "."
+							.resolve(IOObject.getFileNameWithoutExtension(inputFile.getFileName()) + "."
 								+ format.getFileExtension());
 						Logger.logInfo(inputFile + " -> " + outputFile);
 						if (convert) {

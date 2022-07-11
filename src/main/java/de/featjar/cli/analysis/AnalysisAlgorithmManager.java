@@ -25,9 +25,6 @@ package de.featjar.cli.analysis;
 import de.featjar.analysis.Analysis;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.extension.ExtensionPoint;
-import de.featjar.analysis.*;
-import de.featjar.util.cli.*;
-import de.featjar.util.extension.*;
 
 /**
  * Extension point for analysis algorithms.
