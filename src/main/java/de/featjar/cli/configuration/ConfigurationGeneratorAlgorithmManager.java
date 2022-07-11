@@ -32,7 +32,7 @@ import de.featjar.util.extension.ExtensionPoint;
  * @author Sebastian Krieter
  */
 public class ConfigurationGeneratorAlgorithmManager extends
-        ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
+	ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
 
 	private static final ConfigurationGeneratorAlgorithmManager INSTANCE = new ConfigurationGeneratorAlgorithmManager();
 
