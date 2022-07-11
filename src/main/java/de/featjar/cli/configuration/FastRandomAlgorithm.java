@@ -20,27 +20,26 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
+import de.featjar.analysis.sat4j.FastRandomConfigurationGenerator;
+import de.featjar.analysis.sat4j.*;
 
 /**
- * Generates configurations for a given propositional formula such that one-wise
- * feature coverage is achieved.
+ * Generates random configurations for a given propositional formula.
  *
  * @author Sebastian Krieter
  */
-public class OneWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+public class FastRandomAlgorithm extends RandomAlgorithm {
 
 	@Override
-	protected OneWiseConfigurationGenerator createAlgorithm() {
-		return new OneWiseConfigurationGenerator();
+	protected FastRandomConfigurationGenerator createAlgorithm() {
+		return new FastRandomConfigurationGenerator();
 	}
 
 	@Override
 	public String getName() {
-		return "onewise";
+		return "random";
 	}
 
 	@Override
@@ -48,9 +47,9 @@ public class OneWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGene
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
-		helpBuilder.append(
-			": generates a set of valid configurations such that one-wise feature coverage is achieved\n");
+		helpBuilder.append(": generates random valid configurations (not guaranteed to be uniformly distributed)\n");
 		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
 		return helpBuilder.toString();
 	}
 

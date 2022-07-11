@@ -28,16 +28,16 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import de.featjar.clauses.CNF;
+import de.featjar.clauses.Clauses;
+import de.featjar.clauses.solutions.SolutionList;
+import de.featjar.clauses.solutions.io.ListFormat;
+import de.featjar.configuration.list.TWiseCoverageMetrics;
+import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.util.extension.ExtensionLoader;
+import de.featjar.util.logging.Logger;
 import org.junit.jupiter.api.*;
-import org.spldev.clauses.*;
-import org.spldev.clauses.solutions.*;
-import org.spldev.clauses.solutions.io.*;
-import org.spldev.cli.ConfigurationGenerator;
-import org.spldev.configuration.list.*;
-import org.spldev.formula.io.*;
-import org.spldev.util.extension.*;
-import org.spldev.util.io.*;
-import org.spldev.util.logging.*;
+import de.featjar.cli.ConfigurationGenerator;
 
 /**
  * Tests sampling algorithms.

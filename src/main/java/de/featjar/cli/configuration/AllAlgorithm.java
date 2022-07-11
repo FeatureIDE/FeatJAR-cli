@@ -20,26 +20,40 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.analysis;
+package de.featjar.cli.configuration;
 
-import org.spldev.analysis.*;
-import org.spldev.util.cli.*;
-import org.spldev.util.extension.*;
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.analysis.sat4j.AllConfigurationGenerator;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.analysis.sat4j.*;
+import de.featjar.util.cli.*;
 
 /**
- * Extension point for analysis algorithms.
+ * Generates all configurations for a given propositional formula.
  *
  * @author Sebastian Krieter
  */
-public class AnalysisAlgorithmManager extends ExtensionPoint<AlgorithmWrapper<Analysis<?>>> {
+public class AllAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
-	private static final AnalysisAlgorithmManager INSTANCE = new AnalysisAlgorithmManager();
-
-	public static final AnalysisAlgorithmManager getInstance() {
-		return INSTANCE;
+	@Override
+	protected AllConfigurationGenerator createAlgorithm() {
+		return new AllConfigurationGenerator();
 	}
 
-	private AnalysisAlgorithmManager() {
+	@Override
+	public String getName() {
+		return "all";
+	}
+
+	@Override
+	public String getHelp() {
+		final StringBuilder helpBuilder = new StringBuilder();
+		helpBuilder.append("\t");
+		helpBuilder.append(getName());
+		helpBuilder.append(": generates all valid configurations\n");
+		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+		return helpBuilder.toString();
 	}
 
 }

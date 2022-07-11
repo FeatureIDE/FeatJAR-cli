@@ -24,9 +24,9 @@ package cli;
 
 import java.util.*;
 
+import de.featjar.util.extension.ExtensionLoader;
 import org.junit.jupiter.api.*;
-import org.spldev.cli.FormatConverter;
-import org.spldev.util.extension.*;
+import de.featjar.cli.FormatConverter;
 
 public class FormatConverterTest {
 	@Test

@@ -20,17 +20,17 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli;
+package de.featjar.cli;
 
-import org.spldev.formula.io.FormulaFormatManager;
-import org.spldev.formula.structure.Formula;
-import org.spldev.formula.structure.Formulas;
-import org.spldev.util.cli.CLI;
-import org.spldev.util.cli.CLIFunction;
-import org.spldev.util.data.Result;
-import org.spldev.util.io.FileHandler;
-import org.spldev.util.io.format.Format;
-import org.spldev.util.logging.Logger;
+import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Formulas;
+import de.featjar.util.cli.CLI;
+import de.featjar.util.cli.CLIFunction;
+import de.featjar.util.data.Result;
+import de.featjar.util.io.format.Format;
+import de.featjar.util.logging.Logger;
+import de.featjar.util.io.FileHandler;
 
 import java.io.IOException;
 import java.nio.file.Files;

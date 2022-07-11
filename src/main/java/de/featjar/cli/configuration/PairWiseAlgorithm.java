@@ -20,19 +20,29 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
 import java.util.*;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.analysis.sat4j.PairWiseConfigurationGenerator;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.cli.CLI;
+import de.featjar.analysis.sat4j.*;
+import de.featjar.util.cli.*;
 
 /**
- * Generates random configurations for a given propositional formula.
+ * Generates configurations for a given propositional formula such that two-wise
+ * feature coverage is achieved.
  *
  * @author Sebastian Krieter
  */
-public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+
+	@Override
+	protected PairWiseConfigurationGenerator createAlgorithm() {
+		return new PairWiseConfigurationGenerator();
+	}
 
 	@Override
 	protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
@@ -45,6 +55,23 @@ public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigura
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "incling";
+	}
+
+	@Override
+	public String getHelp() {
+		final StringBuilder helpBuilder = new StringBuilder();
+		helpBuilder.append("\t");
+		helpBuilder.append(getName());
+		helpBuilder.append(
+			": generates a set of valid configurations such that two-wise feature coverage is achieved\n");
+		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+		return helpBuilder.toString();
 	}
 
 }

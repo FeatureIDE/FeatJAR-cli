@@ -20,16 +20,21 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
 import java.nio.file.*;
 import java.util.*;
 
-import org.spldev.analysis.sat4j.twise.*;
-import org.spldev.clauses.*;
-import org.spldev.clauses.io.*;
-import org.spldev.util.cli.*;
-import org.spldev.util.io.*;
+import de.featjar.analysis.sat4j.twise.TWiseConfigurationGenerator;
+import de.featjar.clauses.ClauseList;
+import de.featjar.clauses.io.ExpressionGroupFormat;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.cli.CLI;
+import de.featjar.analysis.sat4j.twise.*;
+import de.featjar.clauses.*;
+import de.featjar.clauses.io.*;
+import de.featjar.util.cli.*;
+import de.featjar.util.io.*;
 
 /**
  * Generates configurations for a given propositional formula such that t-wise

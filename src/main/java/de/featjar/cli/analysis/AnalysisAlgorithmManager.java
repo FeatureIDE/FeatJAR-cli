@@ -20,30 +20,29 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.analysis;
+package de.featjar.cli.analysis;
 
-import org.spldev.analysis.sat4j.CountSolutionsAnalysis;
-import org.spldev.util.cli.AlgorithmWrapper;
+import de.featjar.analysis.Analysis;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.extension.ExtensionPoint;
+import de.featjar.analysis.*;
+import de.featjar.util.cli.*;
+import de.featjar.util.extension.*;
 
-public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {
+/**
+ * Extension point for analysis algorithms.
+ *
+ * @author Sebastian Krieter
+ */
+public class AnalysisAlgorithmManager extends ExtensionPoint<AlgorithmWrapper<Analysis<?>>> {
 
-	@Override
-	protected CountSolutionsAnalysis createAlgorithm() {
-		return new CountSolutionsAnalysis();
+	private static final AnalysisAlgorithmManager INSTANCE = new AnalysisAlgorithmManager();
+
+	public static final AnalysisAlgorithmManager getInstance() {
+		return INSTANCE;
 	}
 
-	@Override
-	public String getName() {
-		return "cardinality";
-	}
-
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(": reports the feature model's number of valid configurations\n");
-		return helpBuilder.toString();
+	private AnalysisAlgorithmManager() {
 	}
 
 }

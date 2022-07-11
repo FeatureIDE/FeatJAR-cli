@@ -20,9 +20,10 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
-import org.spldev.analysis.sat4j.*;
+import de.featjar.analysis.sat4j.EnumeratingRandomConfigurationGenerator;
+import de.featjar.analysis.sat4j.*;
 
 /**
  * Finds certain solutions of propositional formulas.

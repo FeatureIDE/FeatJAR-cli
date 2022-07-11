@@ -20,25 +20,21 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.analysis;
 
-import org.spldev.analysis.sat4j.*;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.analysis.sat4j.CountSolutionsAnalysis;
 
-/**
- * Finds certain solutions of propositional formulas.
- *
- * @author Sebastian Krieter
- */
-public class SampleRandomAlgorithm extends RandomAlgorithm {
+public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {
 
 	@Override
-	protected SampleRandomConfigurationGenerator createAlgorithm() {
-		return new SampleRandomConfigurationGenerator();
+	protected CountSolutionsAnalysis createAlgorithm() {
+		return new CountSolutionsAnalysis();
 	}
 
 	@Override
 	public String getName() {
-		return "urandom";
+		return "cardinality";
 	}
 
 	@Override
@@ -46,9 +42,7 @@ public class SampleRandomAlgorithm extends RandomAlgorithm {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
-		helpBuilder.append(": generates random valid configurations (uniformly distributed)\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+		helpBuilder.append(": reports the feature model's number of valid configurations\n");
 		return helpBuilder.toString();
 	}
 

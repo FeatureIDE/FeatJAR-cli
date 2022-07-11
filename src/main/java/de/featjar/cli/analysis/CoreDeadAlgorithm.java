@@ -20,25 +20,39 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.analysis;
 
-import org.spldev.analysis.sat4j.*;
+import de.featjar.clauses.LiteralList;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.analysis.sat4j.CoreDeadAnalysis;
 
-/**
- * Generates random configurations for a given propositional formula.
- *
- * @author Sebastian Krieter
- */
-public class FastRandomAlgorithm extends RandomAlgorithm {
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
 
 	@Override
-	protected FastRandomConfigurationGenerator createAlgorithm() {
-		return new FastRandomConfigurationGenerator();
+	protected CoreDeadAnalysis createAlgorithm() {
+		return new CoreDeadAnalysis();
+	}
+
+	@Override
+	public Object parseResult(Object result, Object arg) {
+		LiteralList literalList = (LiteralList) result;
+		VariableMap variableMap = (VariableMap) arg;
+		return String.format("core:\n%s\ndead:\n%s\n",
+			Arrays.stream(literalList.getPositiveLiterals().getLiterals())
+				.mapToObj(l -> variableMap.getVariable(l).get().getName())
+				.collect(Collectors.joining("\n")),
+			Arrays.stream(literalList.getNegativeLiterals().getLiterals())
+				.mapToObj(l -> variableMap.getVariable(-l).get().getName())
+				.collect(Collectors.joining("\n")));
 	}
 
 	@Override
 	public String getName() {
-		return "random";
+		return "core-dead";
 	}
 
 	@Override
@@ -46,9 +60,7 @@ public class FastRandomAlgorithm extends RandomAlgorithm {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
-		helpBuilder.append(": generates random valid configurations (not guaranteed to be uniformly distributed)\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+		helpBuilder.append(": reports the feature model's core and dead features\n");
 		return helpBuilder.toString();
 	}
 

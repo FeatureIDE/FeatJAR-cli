@@ -20,42 +20,41 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.analysis;
 
-import java.util.*;
+import de.featjar.clauses.LiteralList;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.analysis.sat4j.AtomicSetAnalysis;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * Generates configurations for a given propositional formula such that two-wise
- * feature coverage is achieved.
- *
- * @author Sebastian Krieter
- */
-public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
 
 	@Override
-	protected PairWiseConfigurationGenerator createAlgorithm() {
-		return new PairWiseConfigurationGenerator();
+	protected AtomicSetAnalysis createAlgorithm() {
+		return new AtomicSetAnalysis();
 	}
 
 	@Override
-	protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
-		throws IllegalArgumentException {
-		switch (arg) {
-		case "-s":
-			gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
-			break;
-		default:
-			return false;
-		}
-		return true;
+	public Object parseResult(Object result, Object arg) {
+		List<LiteralList> atomicSets = (List<LiteralList>) result;
+		VariableMap variableMap = (VariableMap) arg;
+		return atomicSets.stream().map(atomicSet -> String.format("{%s}",
+			Stream.concat(Arrays.stream(atomicSet.getPositiveLiterals().getLiterals())
+				.mapToObj(l -> "+" + variableMap.getVariable(l).get().getName()),
+				Arrays.stream(atomicSet.getNegativeLiterals().getLiterals())
+					.mapToObj(l -> "-" + variableMap.getVariable(-l).get().getName()))
+				.collect(Collectors.joining(", "))))
+			.collect(Collectors.joining("\n"));
 	}
 
 	@Override
 	public String getName() {
-		return "incling";
+		return "atomic-sets";
 	}
 
 	@Override
@@ -63,10 +62,7 @@ public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGen
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\t");
 		helpBuilder.append(getName());
-		helpBuilder.append(
-			": generates a set of valid configurations such that two-wise feature coverage is achieved\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+		helpBuilder.append(": reports the feature model's atomic sets\n");
 		return helpBuilder.toString();
 	}
 

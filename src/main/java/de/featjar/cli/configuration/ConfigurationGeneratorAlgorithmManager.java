@@ -20,11 +20,14 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
-import org.spldev.util.extension.*;
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.extension.ExtensionPoint;
+import de.featjar.analysis.sat4j.*;
+import de.featjar.util.cli.*;
+import de.featjar.util.extension.*;
 
 /**
  * Extension point for sampling algorithms.
@@ -32,7 +35,7 @@ import org.spldev.util.extension.*;
  * @author Sebastian Krieter
  */
 public class ConfigurationGeneratorAlgorithmManager extends
-	ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
+        ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
 
 	private static final ConfigurationGeneratorAlgorithmManager INSTANCE = new ConfigurationGeneratorAlgorithmManager();
 

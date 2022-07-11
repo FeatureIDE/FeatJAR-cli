@@ -20,41 +20,52 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli;
+package de.featjar.cli;
 
-import java.util.*;
+import de.featjar.clauses.solutions.SolutionList;
+import de.featjar.clauses.solutions.io.ListFormat;
+import de.featjar.formula.ModelRepresentation;
+import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.cli.CLI;
+import de.featjar.util.cli.CLIFunction;
+import de.featjar.util.data.Result;
+import de.featjar.util.logging.Logger;
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithmManager;
 
-import org.spldev.cli.analysis.AnalysisAlgorithmManager;
-import org.spldev.formula.*;
-import org.spldev.formula.io.FormulaFormatManager;
-import org.spldev.util.cli.*;
-import org.spldev.util.logging.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Objects;
 
 /**
- * Command line interface for analyses on feature models.
+ * Command line interface for sampling algorithms.
  *
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class FormulaAnalyzer implements CLIFunction {
-	private final List<AlgorithmWrapper<org.spldev.analysis.Analysis<?>>> algorithms = AnalysisAlgorithmManager
+public class ConfigurationGenerator implements CLIFunction {
+
+	private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms = ConfigurationGeneratorAlgorithmManager
 		.getInstance().getExtensions();
 
 	@Override
 	public String getName() {
-		return "analyze";
+		return "genconfig";
 	}
 
 	@Override
 	public String getDescription() {
-		return "Performs an analysis on a feature model";
+		return "Generates configurations with various sampling algorithms";
 	}
 
 	@Override
 	public void run(List<String> args) {
 		String input = CLI.SYSTEM_INPUT;
-		AlgorithmWrapper<org.spldev.analysis.Analysis<?>> algorithm = null;
-		long timeout = 0;
+		String output = CLI.SYSTEM_OUTPUT;
+		AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
+		int limit = Integer.MAX_VALUE;
 		String verbosity = CLI.DEFAULT_VERBOSITY;
 
 		final List<String> remainingArguments = new ArrayList<>();
@@ -62,6 +73,7 @@ public class FormulaAnalyzer implements CLIFunction {
 			final String arg = iterator.next();
 			switch (arg) {
 			case "-a": {
+				// TODO add plugin for icpl and chvatal
 				final String name = CLI.getArgValue(iterator, arg).toLowerCase();
 				algorithm = algorithms.stream()
 					.filter(a -> Objects.equals(name, a.getName()))
@@ -69,18 +81,21 @@ public class FormulaAnalyzer implements CLIFunction {
 					.orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + name));
 				break;
 			}
-			case "-i": {
-				input = CLI.getArgValue(iterator, arg);
+			case "-o": {
+				output = CLI.getArgValue(iterator, arg);
 				break;
 			}
-			case "-t": {
-				timeout = Long.parseLong(CLI.getArgValue(iterator, arg));
+			case "-i": {
+				input = CLI.getArgValue(iterator, arg);
 				break;
 			}
 			case "-v": {
 				verbosity = CLI.getArgValue(iterator, arg);
 				break;
 			}
+			case "-l":
+				limit = Integer.parseInt(CLI.getArgValue(iterator, arg));
+				break;
 			default: {
 				remainingArguments.add(arg);
 				break;
@@ -93,25 +108,26 @@ public class FormulaAnalyzer implements CLIFunction {
 		if (algorithm == null) {
 			throw new IllegalArgumentException("No algorithm specified!");
 		}
-
-		final ModelRepresentation rep = CLI.loadFile(input, FormulaFormatManager.getInstance())
-			.map(ModelRepresentation::new).orElseThrow();
-		final org.spldev.analysis.Analysis<?> analysis = algorithm.parseArguments(remainingArguments).orElse(
-			Logger::logProblems);
-
-		final long localTime = System.nanoTime();
-		final Object result = CLI.runInThread(() -> rep.getResult(analysis), timeout).orElse(Logger::logProblems);
-		final long timeNeeded = System.nanoTime() - localTime;
-
-		Logger.logInfo("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
-		Logger.logInfo("Result:\n" + algorithm.parseResult(result, rep.getFormula().getVariableMap()));
+		final AbstractConfigurationGenerator generator = algorithm.parseArguments(remainingArguments)
+			.orElse(Logger::logProblems);
+		if (generator != null) {
+			generator.setLimit(limit);
+			final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager
+				.getInstance()) //
+				.map(ModelRepresentation::new) //
+				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).getError().get()));
+			final Result<SolutionList> result = c.getResult(generator);
+			String finalOutput = output;
+			result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);
+		}
 	}
 
 	@Override
 	public String getHelp() {
 		final StringBuilder helpBuilder = new StringBuilder();
 		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");
+		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: system:in.xml>)\n");
+		helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: system:out>)\n");
 		helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
 		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
 		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));

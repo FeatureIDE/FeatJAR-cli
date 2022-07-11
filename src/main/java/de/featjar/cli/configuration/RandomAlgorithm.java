@@ -20,37 +20,34 @@
  * See <https://github.com/FeatJAR/cli> for further information.
  * -----------------------------------------------------------------------------
  */
-package org.spldev.cli.configuration;
+package de.featjar.cli.configuration;
 
-import org.spldev.analysis.sat4j.*;
-import org.spldev.util.cli.*;
+import java.util.*;
+
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.util.cli.CLI;
+import de.featjar.analysis.sat4j.*;
+import de.featjar.util.cli.*;
 
 /**
- * Generates all configurations for a given propositional formula.
+ * Generates random configurations for a given propositional formula.
  *
  * @author Sebastian Krieter
  */
-public class AllAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
 	@Override
-	protected AllConfigurationGenerator createAlgorithm() {
-		return new AllConfigurationGenerator();
-	}
-
-	@Override
-	public String getName() {
-		return "all";
-	}
-
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(": generates all valid configurations\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
-		return helpBuilder.toString();
+	protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
+		throws IllegalArgumentException {
+		switch (arg) {
+		case "-s":
+			gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
+			break;
+		default:
+			return false;
+		}
+		return true;
 	}
 
 }

@@ -28,9 +28,9 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
+import de.featjar.util.extension.ExtensionLoader;
 import org.junit.jupiter.api.*;
-import org.spldev.cli.FormulaAnalyzer;
-import org.spldev.util.extension.*;
+import de.featjar.cli.FormulaAnalyzer;
 
 /**
  * Tests sampling algorithms.
