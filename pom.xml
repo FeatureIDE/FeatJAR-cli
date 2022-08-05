@@ -25,9 +25,9 @@
 
 	<parent>
 		<groupId>de.featjar</groupId>
-		<artifactId>executable-project</artifactId>
+		<artifactId>executable-module</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath>../executable-project/pom.xml</relativePath>
+		<relativePath>../executable-module/pom.xml</relativePath>
 	</parent>
 
 	<dependencies>
