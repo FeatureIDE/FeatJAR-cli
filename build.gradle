@@ -1,5 +1,5 @@
 plugins {
-    id 'de.featjar.cli-application'
+    id 'de.featjar.java-application'
 }
 
 dependencies {
