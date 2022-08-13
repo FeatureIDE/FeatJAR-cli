@@ -7,3 +7,10 @@ dependencies {
     implementation 'de.featjar:formula-analysis-sat4j'
     implementation 'de.featjar:formula-analysis-sharpsat'
 }
+
+license {
+    ext {
+        author = 'Elias Kuiter'
+        url = 'https://github.com/FeatJAR/cli'
+    }
+}

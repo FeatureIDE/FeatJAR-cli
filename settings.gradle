@@ -2,7 +2,6 @@ pluginManagement {
     includeBuild '../gradle-plugins'
 }
 
-includeBuild '../util'
 includeBuild '../formula'
 includeBuild '../formula-analysis-sat4j'
 includeBuild '../formula-analysis-sharpsat'
