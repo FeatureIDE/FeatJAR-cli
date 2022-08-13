@@ -20,8 +20,10 @@
  */
 package de.featjar.cli;
 
+import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.clauses.solutions.SolutionList;
 import de.featjar.clauses.solutions.io.ListFormat;
+import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithmManager;
 import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.io.FormulaFormatManager;
 import de.featjar.util.cli.AlgorithmWrapper;
@@ -29,9 +31,6 @@ import de.featjar.util.cli.CLI;
 import de.featjar.util.cli.CLIFunction;
 import de.featjar.util.data.Result;
 import de.featjar.util.logging.Logger;
-import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
-import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithmManager;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -45,94 +44,94 @@ import java.util.Objects;
  */
 public class ConfigurationGenerator implements CLIFunction {
 
-	private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms = ConfigurationGeneratorAlgorithmManager
-		.getInstance().getExtensions();
+    private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms =
+            ConfigurationGeneratorAlgorithmManager.getInstance().getExtensions();
 
-	@Override
-	public String getName() {
-		return "genconfig";
-	}
+    @Override
+    public String getName() {
+        return "genconfig";
+    }
 
-	@Override
-	public String getDescription() {
-		return "Generates configurations with various sampling algorithms";
-	}
+    @Override
+    public String getDescription() {
+        return "Generates configurations with various sampling algorithms";
+    }
 
-	@Override
-	public void run(List<String> args) {
-		String input = CLI.SYSTEM_INPUT;
-		String output = CLI.SYSTEM_OUTPUT;
-		AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
-		int limit = Integer.MAX_VALUE;
-		String verbosity = CLI.DEFAULT_VERBOSITY;
+    @Override
+    public void run(List<String> args) {
+        String input = CLI.SYSTEM_INPUT;
+        String output = CLI.SYSTEM_OUTPUT;
+        AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
+        int limit = Integer.MAX_VALUE;
+        String verbosity = CLI.DEFAULT_VERBOSITY;
 
-		final List<String> remainingArguments = new ArrayList<>();
-		for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext();) {
-			final String arg = iterator.next();
-			switch (arg) {
-			case "-a": {
-				// TODO add plugin for icpl and chvatal
-				final String name = CLI.getArgValue(iterator, arg).toLowerCase();
-				algorithm = algorithms.stream()
-					.filter(a -> Objects.equals(name, a.getName()))
-					.findFirst()
-					.orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + name));
-				break;
-			}
-			case "-o": {
-				output = CLI.getArgValue(iterator, arg);
-				break;
-			}
-			case "-i": {
-				input = CLI.getArgValue(iterator, arg);
-				break;
-			}
-			case "-v": {
-				verbosity = CLI.getArgValue(iterator, arg);
-				break;
-			}
-			case "-l":
-				limit = Integer.parseInt(CLI.getArgValue(iterator, arg));
-				break;
-			default: {
-				remainingArguments.add(arg);
-				break;
-			}
-			}
-		}
+        final List<String> remainingArguments = new ArrayList<>();
+        for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
+            final String arg = iterator.next();
+            switch (arg) {
+                case "-a": {
+                    // TODO add plugin for icpl and chvatal
+                    final String name = CLI.getArgValue(iterator, arg).toLowerCase();
+                    algorithm = algorithms.stream()
+                            .filter(a -> Objects.equals(name, a.getName()))
+                            .findFirst()
+                            .orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + name));
+                    break;
+                }
+                case "-o": {
+                    output = CLI.getArgValue(iterator, arg);
+                    break;
+                }
+                case "-i": {
+                    input = CLI.getArgValue(iterator, arg);
+                    break;
+                }
+                case "-v": {
+                    verbosity = CLI.getArgValue(iterator, arg);
+                    break;
+                }
+                case "-l":
+                    limit = Integer.parseInt(CLI.getArgValue(iterator, arg));
+                    break;
+                default: {
+                    remainingArguments.add(arg);
+                    break;
+                }
+            }
+        }
 
-		CLI.installLogger(verbosity);
+        CLI.installLogger(verbosity);
 
-		if (algorithm == null) {
-			throw new IllegalArgumentException("No algorithm specified!");
-		}
-		final AbstractConfigurationGenerator generator = algorithm.parseArguments(remainingArguments)
-			.orElse(Logger::logProblems);
-		if (generator != null) {
-			generator.setLimit(limit);
-			final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager
-				.getInstance()) //
-				.map(ModelRepresentation::new) //
-				.orElseThrow(p -> new IllegalArgumentException(p.isEmpty() ? null : p.get(0).toException()));
-			final Result<SolutionList> result = c.getResult(generator);
-			String finalOutput = output;
-			result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);
-		}
-	}
+        if (algorithm == null) {
+            throw new IllegalArgumentException("No algorithm specified!");
+        }
+        final AbstractConfigurationGenerator generator =
+                algorithm.parseArguments(remainingArguments).orElse(Logger::logProblems);
+        if (generator != null) {
+            generator.setLimit(limit);
+            final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager.getInstance()) //
+                    .map(ModelRepresentation::new) //
+                    .orElseThrow(p -> new IllegalArgumentException(
+                            p.isEmpty() ? null : p.get(0).toException()));
+            final Result<SolutionList> result = c.getResult(generator);
+            String finalOutput = output;
+            result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);
+        }
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\tGeneral Parameters:\n");
-		helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: system:in.xml>)\n");
-		helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: system:out>)\n");
-		helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
-		helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
-		algorithms.forEach(a -> helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
-		helpBuilder.append("\n");
-		helpBuilder.append("\tAlgorithm Specific Parameters:\n\t");
-		algorithms.forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
-		return helpBuilder.toString();
-	}
-
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\tGeneral Parameters:\n");
+        helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: system:in.xml>)\n");
+        helpBuilder.append("\t\t-o <Path>    Specify path to output CSV file (default: system:out>)\n");
+        helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
+        helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
+        algorithms.forEach(a ->
+                helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
+        helpBuilder.append("\n");
+        helpBuilder.append("\tAlgorithm Specific Parameters:\n\t");
+        algorithms.forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
+        return helpBuilder.toString();
+    }
 }

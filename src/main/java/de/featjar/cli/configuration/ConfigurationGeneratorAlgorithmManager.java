@@ -29,16 +29,14 @@ import de.featjar.util.extension.ExtensionPoint;
  *
  * @author Sebastian Krieter
  */
-public class ConfigurationGeneratorAlgorithmManager extends
-	ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
+public class ConfigurationGeneratorAlgorithmManager
+        extends ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
 
-	private static final ConfigurationGeneratorAlgorithmManager INSTANCE = new ConfigurationGeneratorAlgorithmManager();
+    private static final ConfigurationGeneratorAlgorithmManager INSTANCE = new ConfigurationGeneratorAlgorithmManager();
 
-	public static final ConfigurationGeneratorAlgorithmManager getInstance() {
-		return INSTANCE;
-	}
+    public static final ConfigurationGeneratorAlgorithmManager getInstance() {
+        return INSTANCE;
+    }
 
-	private ConfigurationGeneratorAlgorithmManager() {
-	}
-
+    private ConfigurationGeneratorAlgorithmManager() {}
 }

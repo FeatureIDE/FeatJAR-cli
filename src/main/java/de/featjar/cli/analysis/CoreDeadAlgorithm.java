@@ -20,46 +20,45 @@
  */
 package de.featjar.cli.analysis;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import de.featjar.analysis.sat4j.CoreDeadAnalysis;
 import de.featjar.clauses.LiteralList;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.util.cli.AlgorithmWrapper;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
 
-	@Override
-	protected CoreDeadAnalysis createAlgorithm() {
-		return new CoreDeadAnalysis();
-	}
+    @Override
+    protected CoreDeadAnalysis createAlgorithm() {
+        return new CoreDeadAnalysis();
+    }
 
-	@Override
-	public Object parseResult(Object result, Object arg) {
-		LiteralList literalList = (LiteralList) result;
-		VariableMap variableMap = (VariableMap) arg;
-		return String.format("core:\n%s\ndead:\n%s\n",
-			Arrays.stream(literalList.getPositiveLiterals().getLiterals())
-				.mapToObj(l -> variableMap.getVariable(l).get().getName())
-				.collect(Collectors.joining("\n")),
-			Arrays.stream(literalList.getNegativeLiterals().getLiterals())
-				.mapToObj(l -> variableMap.getVariable(-l).get().getName())
-				.collect(Collectors.joining("\n")));
-	}
+    @Override
+    public Object parseResult(Object result, Object arg) {
+        LiteralList literalList = (LiteralList) result;
+        VariableMap variableMap = (VariableMap) arg;
+        return String.format(
+                "core:\n%s\ndead:\n%s\n",
+                Arrays.stream(literalList.getPositiveLiterals().getLiterals())
+                        .mapToObj(l -> variableMap.getVariable(l).get().getName())
+                        .collect(Collectors.joining("\n")),
+                Arrays.stream(literalList.getNegativeLiterals().getLiterals())
+                        .mapToObj(l -> variableMap.getVariable(-l).get().getName())
+                        .collect(Collectors.joining("\n")));
+    }
 
-	@Override
-	public String getName() {
-		return "core-dead";
-	}
+    @Override
+    public String getName() {
+        return "core-dead";
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(": reports the feature model's core and dead features\n");
-		return helpBuilder.toString();
-	}
-
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\t");
+        helpBuilder.append(getName());
+        helpBuilder.append(": reports the feature model's core and dead features\n");
+        return helpBuilder.toString();
+    }
 }

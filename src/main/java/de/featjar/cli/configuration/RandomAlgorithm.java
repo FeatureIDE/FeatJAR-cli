@@ -20,12 +20,11 @@
  */
 package de.featjar.cli.configuration;
 
-import java.util.ListIterator;
-import java.util.Random;
-
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
+import java.util.ListIterator;
+import java.util.Random;
 
 /**
  * Generates random configurations for a given propositional formula.
@@ -34,17 +33,16 @@ import de.featjar.util.cli.CLI;
  */
 public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
-	@Override
-	protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
-		throws IllegalArgumentException {
-		switch (arg) {
-		case "-s":
-			gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
-			break;
-		default:
-			return false;
-		}
-		return true;
-	}
-
+    @Override
+    protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
+            throws IllegalArgumentException {
+        switch (arg) {
+            case "-s":
+                gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 }

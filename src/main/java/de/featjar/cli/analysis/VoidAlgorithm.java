@@ -25,27 +25,27 @@ import de.featjar.util.cli.AlgorithmWrapper;
 
 public class VoidAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> {
 
-	@Override
-	protected HasSolutionAnalysis createAlgorithm() {
-		return new HasSolutionAnalysis();
-	}
+    @Override
+    protected HasSolutionAnalysis createAlgorithm() {
+        return new HasSolutionAnalysis();
+    }
 
-	@Override
-	public Object parseResult(Object result, Object arg) {
-		return !((Boolean) result);
-	}
+    @Override
+    public Object parseResult(Object result, Object arg) {
+        return !((Boolean) result);
+    }
 
-	@Override
-	public String getName() {
-		return "void";
-	}
+    @Override
+    public String getName() {
+        return "void";
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(": reports whether the feature model has a valid configuration\n");
-		return helpBuilder.toString();
-	}
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\t");
+        helpBuilder.append(getName());
+        helpBuilder.append(": reports whether the feature model has a valid configuration\n");
+        return helpBuilder.toString();
+    }
 }

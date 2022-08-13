@@ -20,17 +20,16 @@
  */
 package cli;
 
-import java.util.*;
-
-import de.featjar.util.extension.ExtensionLoader;
-import org.junit.jupiter.api.*;
 import de.featjar.cli.FormatConverter;
+import de.featjar.util.extension.ExtensionLoader;
+import java.util.*;
+import org.junit.jupiter.api.*;
 
 public class FormatConverterTest {
-	@Test
-	public void createAuxiliaryRoot() {
-		ExtensionLoader.load();
-		new FormatConverter().run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml",
-			"-f", "dimacs", "-cnf"));
-	}
+    @Test
+    public void createAuxiliaryRoot() {
+        ExtensionLoader.load();
+        new FormatConverter()
+                .run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml", "-f", "dimacs", "-cnf"));
+    }
 }

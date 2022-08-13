@@ -20,49 +20,62 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.analysis.sat4j.AtomicSetAnalysis;
+import de.featjar.clauses.LiteralList;
+import de.featjar.formula.structure.atomic.literal.VariableMap;
+import de.featjar.util.cli.AlgorithmWrapper;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import de.featjar.analysis.sat4j.AtomicSetAnalysis;
-import de.featjar.clauses.LiteralList;
-import de.featjar.formula.structure.atomic.literal.VariableMap;
-import de.featjar.util.cli.AlgorithmWrapper;
-
 public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
 
-	@Override
-	protected AtomicSetAnalysis createAlgorithm() {
-		return new AtomicSetAnalysis();
-	}
+    @Override
+    protected AtomicSetAnalysis createAlgorithm() {
+        return new AtomicSetAnalysis();
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Object parseResult(Object result, Object arg) {
-		List<LiteralList> atomicSets = (List<LiteralList>) result;
-		VariableMap variableMap = (VariableMap) arg;
-		return atomicSets.stream().map(atomicSet -> String.format("{%s}",
-			Stream.concat(Arrays.stream(atomicSet.getPositiveLiterals().getLiterals())
-				.mapToObj(l -> "+" + variableMap.getVariable(l).get().getName()),
-				Arrays.stream(atomicSet.getNegativeLiterals().getLiterals())
-					.mapToObj(l -> "-" + variableMap.getVariable(-l).get().getName()))
-				.collect(Collectors.joining(", "))))
-			.collect(Collectors.joining("\n"));
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public Object parseResult(Object result, Object arg) {
+        List<LiteralList> atomicSets = (List<LiteralList>) result;
+        VariableMap variableMap = (VariableMap) arg;
+        return atomicSets.stream()
+                .map(atomicSet -> String.format(
+                        "{%s}",
+                        Stream.concat(
+                                        Arrays.stream(atomicSet
+                                                        .getPositiveLiterals()
+                                                        .getLiterals())
+                                                .mapToObj(l -> "+"
+                                                        + variableMap
+                                                                .getVariable(l)
+                                                                .get()
+                                                                .getName()),
+                                        Arrays.stream(atomicSet
+                                                        .getNegativeLiterals()
+                                                        .getLiterals())
+                                                .mapToObj(l -> "-"
+                                                        + variableMap
+                                                                .getVariable(-l)
+                                                                .get()
+                                                                .getName()))
+                                .collect(Collectors.joining(", "))))
+                .collect(Collectors.joining("\n"));
+    }
 
-	@Override
-	public String getName() {
-		return "atomic-sets";
-	}
+    @Override
+    public String getName() {
+        return "atomic-sets";
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(": reports the feature model's atomic sets\n");
-		return helpBuilder.toString();
-	}
-
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\t");
+        helpBuilder.append(getName());
+        helpBuilder.append(": reports the feature model's atomic sets\n");
+        return helpBuilder.toString();
+    }
 }

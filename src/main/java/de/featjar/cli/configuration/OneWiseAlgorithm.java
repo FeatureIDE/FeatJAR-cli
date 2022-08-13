@@ -32,25 +32,24 @@ import de.featjar.util.cli.AlgorithmWrapper;
  */
 public class OneWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
-	@Override
-	protected OneWiseConfigurationGenerator createAlgorithm() {
-		return new OneWiseConfigurationGenerator();
-	}
+    @Override
+    protected OneWiseConfigurationGenerator createAlgorithm() {
+        return new OneWiseConfigurationGenerator();
+    }
 
-	@Override
-	public String getName() {
-		return "onewise";
-	}
+    @Override
+    public String getName() {
+        return "onewise";
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(
-			": generates a set of valid configurations such that one-wise feature coverage is achieved\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		return helpBuilder.toString();
-	}
-
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\t");
+        helpBuilder.append(getName());
+        helpBuilder.append(
+                ": generates a set of valid configurations such that one-wise feature coverage is achieved\n");
+        helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+        return helpBuilder.toString();
+    }
 }

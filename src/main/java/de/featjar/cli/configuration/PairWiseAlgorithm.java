@@ -20,13 +20,12 @@
  */
 package de.featjar.cli.configuration;
 
-import java.util.ListIterator;
-import java.util.Random;
-
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.analysis.sat4j.PairWiseConfigurationGenerator;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
+import java.util.ListIterator;
+import java.util.Random;
 
 /**
  * Generates configurations for a given propositional formula such that two-wise
@@ -36,39 +35,38 @@ import de.featjar.util.cli.CLI;
  */
 public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
-	@Override
-	protected PairWiseConfigurationGenerator createAlgorithm() {
-		return new PairWiseConfigurationGenerator();
-	}
+    @Override
+    protected PairWiseConfigurationGenerator createAlgorithm() {
+        return new PairWiseConfigurationGenerator();
+    }
 
-	@Override
-	protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
-		throws IllegalArgumentException {
-		switch (arg) {
-		case "-s":
-			gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
-			break;
-		default:
-			return false;
-		}
-		return true;
-	}
+    @Override
+    protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)
+            throws IllegalArgumentException {
+        switch (arg) {
+            case "-s":
+                gen.setRandom(new Random(Long.parseLong(CLI.getArgValue(iterator, arg))));
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 
-	@Override
-	public String getName() {
-		return "incling";
-	}
+    @Override
+    public String getName() {
+        return "incling";
+    }
 
-	@Override
-	public String getHelp() {
-		final StringBuilder helpBuilder = new StringBuilder();
-		helpBuilder.append("\t");
-		helpBuilder.append(getName());
-		helpBuilder.append(
-			": generates a set of valid configurations such that two-wise feature coverage is achieved\n");
-		helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
-		helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
-		return helpBuilder.toString();
-	}
-
+    @Override
+    public String getHelp() {
+        final StringBuilder helpBuilder = new StringBuilder();
+        helpBuilder.append("\t");
+        helpBuilder.append(getName());
+        helpBuilder.append(
+                ": generates a set of valid configurations such that two-wise feature coverage is achieved\n");
+        helpBuilder.append("\t\t-l <Value>    Specify maximum number of configurations\n");
+        helpBuilder.append("\t\t-s <Value>    Specify random seed\n");
+        return helpBuilder.toString();
+    }
 }

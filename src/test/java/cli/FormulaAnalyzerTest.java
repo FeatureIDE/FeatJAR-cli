@@ -22,13 +22,12 @@ package cli;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import de.featjar.cli.FormulaAnalyzer;
+import de.featjar.util.extension.ExtensionLoader;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-
-import de.featjar.util.extension.ExtensionLoader;
 import org.junit.jupiter.api.*;
-import de.featjar.cli.FormulaAnalyzer;
 
 /**
  * Tests sampling algorithms.
@@ -37,60 +36,61 @@ import de.featjar.cli.FormulaAnalyzer;
  */
 public class FormulaAnalyzerTest {
 
-	static {
-		ExtensionLoader.load();
-	}
+    static {
+        ExtensionLoader.load();
+    }
 
-	private final static Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
-	private final static String resultPrefix = "Result:\n";
+    private static final Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
+    private static final String resultPrefix = "Result:\n";
 
-	private final List<String> modelNames = Arrays.asList( //
-		"basic", //
-		"simple", //
-		"car", //
-		"gpl_medium_model");
+    private final List<String> modelNames = Arrays.asList( //
+            "basic", //
+            "simple", //
+            "car", //
+            "gpl_medium_model");
 
-	private static final ByteArrayOutputStream newOut = new ByteArrayOutputStream();
-	private static final PrintStream orgOut = System.out;
+    private static final ByteArrayOutputStream newOut = new ByteArrayOutputStream();
+    private static final PrintStream orgOut = System.out;
 
-	@BeforeEach
-	public void setStreams() {
-		System.setOut(new PrintStream(newOut));
-	}
+    @BeforeEach
+    public void setStreams() {
+        System.setOut(new PrintStream(newOut));
+    }
 
-	@AfterEach
-	public void restoreInitialStreams() {
-		System.setOut(orgOut);
-	}
+    @AfterEach
+    public void restoreInitialStreams() {
+        System.setOut(orgOut);
+    }
 
-	// @Test
-	public void _void() {
-		final String result = analyze(modelDirectory.resolve(modelNames.get(0) + ".xml"), "void");
-		assertEquals("false", result);
-	}
+    // @Test
+    public void _void() {
+        final String result = analyze(modelDirectory.resolve(modelNames.get(0) + ".xml"), "void");
+        assertEquals("false", result);
+    }
 
-	private static String analyze(final Path modelFile, String algorithm) {
-		try {
-			final Path inFile = Files.createTempFile("input", ".xml");
-			try {
-				Files.write(inFile, Files.readAllBytes(modelFile));
-				final ArrayList<String> args = new ArrayList<>();
-				args.add("-a");
-				args.add(algorithm);
-				args.add("-i");
-				args.add(inFile.toString());
-				new FormulaAnalyzer().run(args);
-				final String output = newOut.toString();
-				final int index = output.indexOf(resultPrefix);
-				return (index < 0) ? null : output.substring(index + resultPrefix.length()).trim();
-			} finally {
-				Files.deleteIfExists(inFile);
-			}
-		} catch (final IOException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		}
-		return null;
-	}
-
+    private static String analyze(final Path modelFile, String algorithm) {
+        try {
+            final Path inFile = Files.createTempFile("input", ".xml");
+            try {
+                Files.write(inFile, Files.readAllBytes(modelFile));
+                final ArrayList<String> args = new ArrayList<>();
+                args.add("-a");
+                args.add(algorithm);
+                args.add("-i");
+                args.add(inFile.toString());
+                new FormulaAnalyzer().run(args);
+                final String output = newOut.toString();
+                final int index = output.indexOf(resultPrefix);
+                return (index < 0)
+                        ? null
+                        : output.substring(index + resultPrefix.length()).trim();
+            } finally {
+                Files.deleteIfExists(inFile);
+            }
+        } catch (final IOException e) {
+            e.printStackTrace();
+            fail(e.getMessage());
+        }
+        return null;
+    }
 }
