@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with cli. If not, see <https://www.gnu.org/licenses/>.
  *
- * See <https://github.com/FeatJAR/cli> for further information.
+ * See <https://github.com/FeatureIDE/FeatJAR-cli> for further information.
  */
 package cli;
 
