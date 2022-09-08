@@ -29,13 +29,18 @@ import de.featjar.util.extension.ExtensionPoint;
  *
  * @author Sebastian Krieter
  */
-public class AnalysisAlgorithmManager extends ExtensionPoint<AlgorithmWrapper<Analysis<?>>> {
+public class AnalysisAlgorithms extends ExtensionPoint<AlgorithmWrapper<Analysis<?>>> {
 
-    private static final AnalysisAlgorithmManager INSTANCE = new AnalysisAlgorithmManager();
+    private static final AnalysisAlgorithms INSTANCE = new AnalysisAlgorithms();
 
-    public static final AnalysisAlgorithmManager getInstance() {
+    public static AnalysisAlgorithms getInstance() {
         return INSTANCE;
     }
 
-    private AnalysisAlgorithmManager() {}
+    private AnalysisAlgorithms() {}
+
+    @Override
+    public ExtensionPoint<AlgorithmWrapper<Analysis<?>>> getExtensionPointInstance() {
+        return INSTANCE;
+    }
 }

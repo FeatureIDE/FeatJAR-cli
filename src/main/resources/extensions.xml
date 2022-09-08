@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <extensions>
-	<point id="de.featjar.util.cli.CLIFunctionManager">
+	<point id="de.featjar.util.cli.CLIFunctions">
 		<extension id="de.featjar.cli.ConfigurationGenerator" />
 		<extension id="de.featjar.cli.FormatConverter" />
 		<extension id="de.featjar.cli.FormulaAnalyzer" />
 	</point>
-	<point id="de.featjar.cli.configuration.ConfigurationGeneratorAlgorithmManager">
+	<point id="de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms">
 		<extension id="de.featjar.cli.configuration.AllAlgorithm" />
 		<extension id="de.featjar.cli.configuration.OneWiseAlgorithm" />
 		<extension id="de.featjar.cli.configuration.PairWiseAlgorithm" />
@@ -14,7 +14,7 @@
 		<extension id="de.featjar.cli.configuration.EnumeratingRandomAlgorithm" />
 		<extension id="de.featjar.cli.configuration.SampleRandomAlgorithm" />
 	</point>
-	<point id="de.featjar.cli.analysis.AnalysisAlgorithmManager">
+	<point id="de.featjar.cli.analysis.AnalysisAlgorithms">
 		<extension id="de.featjar.cli.analysis.VoidAlgorithm" />
 		<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />
 		<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />

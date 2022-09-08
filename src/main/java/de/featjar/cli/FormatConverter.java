@@ -20,7 +20,7 @@
  */
 package de.featjar.cli;
 
-import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.Formulas;
 import de.featjar.util.cli.CLI;
@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  */
 public class FormatConverter implements CLIFunction {
     private final List<Format<Formula>> formats =
-            FormulaFormatManager.getInstance().getExtensions();
+            FormulaFormats.getInstance().getExtensions();
 
     @Override
     public String getName() {
@@ -173,7 +173,7 @@ public class FormatConverter implements CLIFunction {
 
     private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CLI.loadFile(inputFile, FormulaFormatManager.getInstance());
+            final Result<Formula> parse = CLI.loadFile(inputFile, FormulaFormats.getInstance());
             if (parse.isPresent()) {
                 Formula formula = parse.get();
                 if (cnf) {

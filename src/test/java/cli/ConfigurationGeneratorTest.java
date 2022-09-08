@@ -30,8 +30,8 @@ import de.featjar.clauses.solutions.SolutionList;
 import de.featjar.clauses.solutions.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.configuration.list.TWiseCoverageMetrics;
-import de.featjar.formula.io.FormulaFormatManager;
-import de.featjar.util.extension.ExtensionLoader;
+import de.featjar.formula.io.FormulaFormats;
+import de.featjar.util.extension.Extensions;
 import de.featjar.util.io.IO;
 import de.featjar.util.logging.Logger;
 import java.io.IOException;
@@ -51,7 +51,7 @@ import org.junit.jupiter.api.Test;
 public class ConfigurationGeneratorTest {
 
     static {
-        ExtensionLoader.load();
+        Extensions.install();
     }
 
     private static final Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
@@ -263,7 +263,7 @@ public class ConfigurationGeneratorTest {
     }
 
     private static CNF loadCNF(final Path modelFile) {
-        final CNF cnf = IO.load(modelFile, FormulaFormatManager.getInstance())
+        final CNF cnf = IO.load(modelFile, FormulaFormats.getInstance())
                 .map(Clauses::convertToCNF)
                 .orElse(Logger::logProblems);
         if (cnf == null) {

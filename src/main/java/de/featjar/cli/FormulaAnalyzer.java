@@ -21,9 +21,9 @@
 package de.featjar.cli;
 
 import de.featjar.analysis.Analysis;
-import de.featjar.cli.analysis.AnalysisAlgorithmManager;
+import de.featjar.cli.analysis.AnalysisAlgorithms;
 import de.featjar.formula.ModelRepresentation;
-import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
 import de.featjar.util.cli.CLIFunction;
@@ -41,7 +41,7 @@ import java.util.Objects;
  */
 public class FormulaAnalyzer implements CLIFunction {
     private final List<AlgorithmWrapper<Analysis<?>>> algorithms =
-            AnalysisAlgorithmManager.getInstance().getExtensions();
+            AnalysisAlgorithms.getInstance().getExtensions();
 
     @Override
     public String getName() {
@@ -97,7 +97,7 @@ public class FormulaAnalyzer implements CLIFunction {
             throw new IllegalArgumentException("No algorithm specified!");
         }
 
-        final ModelRepresentation rep = CLI.loadFile(input, FormulaFormatManager.getInstance())
+        final ModelRepresentation rep = CLI.loadFile(input, FormulaFormats.getInstance())
                 .map(ModelRepresentation::new)
                 .orElseThrow();
         final Analysis<?> analysis =

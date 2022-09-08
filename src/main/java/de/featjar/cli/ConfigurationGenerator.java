@@ -23,9 +23,9 @@ package de.featjar.cli;
 import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.clauses.solutions.SolutionList;
 import de.featjar.clauses.solutions.io.ListFormat;
-import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithmManager;
+import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.ModelRepresentation;
-import de.featjar.formula.io.FormulaFormatManager;
+import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
 import de.featjar.util.cli.CLIFunction;
@@ -45,7 +45,7 @@ import java.util.Objects;
 public class ConfigurationGenerator implements CLIFunction {
 
     private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms =
-            ConfigurationGeneratorAlgorithmManager.getInstance().getExtensions();
+            ConfigurationGeneratorAlgorithms.getInstance().getExtensions();
 
     @Override
     public String getName() {
@@ -109,7 +109,7 @@ public class ConfigurationGenerator implements CLIFunction {
                 algorithm.parseArguments(remainingArguments).orElse(Logger::logProblems);
         if (generator != null) {
             generator.setLimit(limit);
-            final ModelRepresentation c = CLI.loadFile(input, FormulaFormatManager.getInstance()) //
+            final ModelRepresentation c = CLI.loadFile(input, FormulaFormats.getInstance()) //
                     .map(ModelRepresentation::new) //
                     .orElseThrow(p -> new IllegalArgumentException(
                             p.isEmpty() ? null : p.get(0).toException()));

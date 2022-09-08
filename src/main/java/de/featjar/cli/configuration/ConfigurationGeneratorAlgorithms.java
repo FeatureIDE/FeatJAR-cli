@@ -29,14 +29,19 @@ import de.featjar.util.extension.ExtensionPoint;
  *
  * @author Sebastian Krieter
  */
-public class ConfigurationGeneratorAlgorithmManager
+public class ConfigurationGeneratorAlgorithms
         extends ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
 
-    private static final ConfigurationGeneratorAlgorithmManager INSTANCE = new ConfigurationGeneratorAlgorithmManager();
+    private static final ConfigurationGeneratorAlgorithms INSTANCE = new ConfigurationGeneratorAlgorithms();
 
-    public static final ConfigurationGeneratorAlgorithmManager getInstance() {
+    public static ConfigurationGeneratorAlgorithms getInstance() {
         return INSTANCE;
     }
 
-    private ConfigurationGeneratorAlgorithmManager() {}
+    private ConfigurationGeneratorAlgorithms() {}
+
+    @Override
+    public ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> getExtensionPointInstance() {
+        return INSTANCE;
+    }
 }
