@@ -33,7 +33,7 @@ import de.featjar.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.extension.Extensions;
 import de.featjar.util.io.IO;
-import de.featjar.util.logging.Logger;
+import de.featjar.util.log.Logger;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;

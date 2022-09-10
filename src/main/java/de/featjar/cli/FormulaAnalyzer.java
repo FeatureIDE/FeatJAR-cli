@@ -27,7 +27,7 @@ import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
 import de.featjar.util.cli.CLIFunction;
-import de.featjar.util.logging.Logger;
+import de.featjar.util.log.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
