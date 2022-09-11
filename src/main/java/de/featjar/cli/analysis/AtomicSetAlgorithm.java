@@ -21,7 +21,7 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.analysis.sat4j.AtomicSetAnalysis;
-import de.featjar.clauses.LiteralList;
+import de.featjar.formula.clauses.LiteralList;
 import de.featjar.formula.structure.atomic.literal.VariableMap;
 import de.featjar.base.cli.AlgorithmWrapper;
 import java.util.Arrays;

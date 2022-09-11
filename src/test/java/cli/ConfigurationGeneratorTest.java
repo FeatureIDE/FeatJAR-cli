@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import de.featjar.clauses.CNF;
-import de.featjar.clauses.Clauses;
-import de.featjar.clauses.solutions.SolutionList;
-import de.featjar.clauses.solutions.io.ListFormat;
+import de.featjar.formula.clauses.CNF;
+import de.featjar.formula.clauses.Clauses;
+import de.featjar.formula.clauses.solutions.SolutionList;
+import de.featjar.formula.clauses.solutions.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;

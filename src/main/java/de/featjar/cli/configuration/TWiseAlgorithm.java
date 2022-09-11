@@ -21,8 +21,8 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.analysis.sat4j.twise.TWiseConfigurationGenerator;
-import de.featjar.clauses.ClauseList;
-import de.featjar.clauses.io.ExpressionGroupFormat;
+import de.featjar.formula.clauses.ClauseList;
+import de.featjar.formula.clauses.io.ExpressionGroupFormat;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.io.IO;

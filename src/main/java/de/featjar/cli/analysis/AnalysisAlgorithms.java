@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.analysis.Analysis;
+import de.featjar.formula.analysis.Analysis;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.extension.ExtensionPoint;
 
