@@ -40,7 +40,7 @@ public class AnalysisAlgorithms extends ExtensionPoint<AlgorithmWrapper<Analysis
     private AnalysisAlgorithms() {}
 
     @Override
-    public ExtensionPoint<AlgorithmWrapper<Analysis<?>>> getExtensionPointInstance() {
+    public ExtensionPoint<AlgorithmWrapper<Analysis<?>>> getInstanceAsExtensionPoint() {
         return INSTANCE;
     }
 }

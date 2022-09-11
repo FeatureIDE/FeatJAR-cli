@@ -31,9 +31,9 @@ import de.featjar.clauses.solutions.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.util.extension.Extensions;
+import de.featjar.util.extension.ExtensionManager;
 import de.featjar.util.io.IO;
-import de.featjar.util.log.Logger;
+import de.featjar.util.log.Log;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,7 +51,7 @@ import org.junit.jupiter.api.Test;
 public class ConfigurationGeneratorTest {
 
     static {
-        Extensions.install();
+        ExtensionManager.install();
     }
 
     private static final Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
@@ -244,7 +244,7 @@ public class ConfigurationGeneratorTest {
                     new ConfigurationGenerator().run(args);
 
                     final SolutionList sample =
-                            IO.load(outFile, new ListFormat()).orElse(Logger::logProblems);
+                            IO.load(outFile, new ListFormat()).orElse(Log::problems);
                     if (sample == null) {
                         fail("Sample for " + modelFile.toString() + " could not be read!");
                     }
@@ -265,7 +265,7 @@ public class ConfigurationGeneratorTest {
     private static CNF loadCNF(final Path modelFile) {
         final CNF cnf = IO.load(modelFile, FormulaFormats.getInstance())
                 .map(Clauses::convertToCNF)
-                .orElse(Logger::logProblems);
+                .orElse(Log::problems);
         if (cnf == null) {
             fail("CNF could not be read!");
         }

@@ -27,10 +27,10 @@ import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.util.cli.CLI;
-import de.featjar.util.cli.CLIFunction;
+import de.featjar.util.cli.CommandLine;
+import de.featjar.util.cli.Command;
 import de.featjar.util.data.Result;
-import de.featjar.util.log.Logger;
+import de.featjar.util.log.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -42,7 +42,7 @@ import java.util.Objects;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class ConfigurationGenerator implements CLIFunction {
+public class ConfigurationGenerator implements Command {
 
     private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms =
             ConfigurationGeneratorAlgorithms.getInstance().getExtensions();
@@ -59,11 +59,11 @@ public class ConfigurationGenerator implements CLIFunction {
 
     @Override
     public void run(List<String> args) {
-        String input = CLI.SYSTEM_INPUT;
-        String output = CLI.SYSTEM_OUTPUT;
+        String input = CommandLine.SYSTEM_INPUT;
+        String output = CommandLine.SYSTEM_OUTPUT;
         AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
         int limit = Integer.MAX_VALUE;
-        String verbosity = CLI.DEFAULT_VERBOSITY;
+        String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
 
         final List<String> remainingArguments = new ArrayList<>();
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
@@ -71,7 +71,7 @@ public class ConfigurationGenerator implements CLIFunction {
             switch (arg) {
                 case "-a": {
                     // TODO add plugin for icpl and chvatal
-                    final String name = CLI.getArgValue(iterator, arg).toLowerCase();
+                    final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
                     algorithm = algorithms.stream()
                             .filter(a -> Objects.equals(name, a.getName()))
                             .findFirst()
@@ -79,19 +79,19 @@ public class ConfigurationGenerator implements CLIFunction {
                     break;
                 }
                 case "-o": {
-                    output = CLI.getArgValue(iterator, arg);
+                    output = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-i": {
-                    input = CLI.getArgValue(iterator, arg);
+                    input = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-v": {
-                    verbosity = CLI.getArgValue(iterator, arg);
+                    verbosity = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-l":
-                    limit = Integer.parseInt(CLI.getArgValue(iterator, arg));
+                    limit = Integer.parseInt(CommandLine.getArgValue(iterator, arg));
                     break;
                 default: {
                     remainingArguments.add(arg);
@@ -100,27 +100,27 @@ public class ConfigurationGenerator implements CLIFunction {
             }
         }
 
-        CLI.installLogger(verbosity);
+        CommandLine.installLog(verbosity);
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
         }
         final AbstractConfigurationGenerator generator =
-                algorithm.parseArguments(remainingArguments).orElse(Logger::logProblems);
+                algorithm.parseArguments(remainingArguments).orElse(Log::problems);
         if (generator != null) {
             generator.setLimit(limit);
-            final ModelRepresentation c = CLI.loadFile(input, FormulaFormats.getInstance()) //
+            final ModelRepresentation c = CommandLine.loadFile(input, FormulaFormats.getInstance()) //
                     .map(ModelRepresentation::new) //
                     .orElseThrow(p -> new IllegalArgumentException(
                             p.isEmpty() ? null : p.get(0).toException()));
             final Result<SolutionList> result = c.getResult(generator);
             String finalOutput = output;
-            result.ifPresentOrElse(list -> CLI.saveFile(list, finalOutput, new ListFormat()), Logger::logProblems);
+            result.ifPresentOrElse(list -> CommandLine.saveFile(list, finalOutput, new ListFormat()), Log::problems);
         }
     }
 
     @Override
-    public String getHelp() {
+    public String getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tGeneral Parameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file (default: system:in.xml>)\n");

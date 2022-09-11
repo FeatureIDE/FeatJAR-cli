@@ -23,12 +23,12 @@ package de.featjar.cli;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.Formula;
 import de.featjar.formula.structure.Formulas;
-import de.featjar.util.cli.CLI;
-import de.featjar.util.cli.CLIFunction;
+import de.featjar.util.cli.CommandLine;
+import de.featjar.util.cli.Command;
 import de.featjar.util.data.Result;
 import de.featjar.util.io.IOObject;
 import de.featjar.util.io.format.Format;
-import de.featjar.util.log.Logger;
+import de.featjar.util.log.Log;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class FormatConverter implements CLIFunction {
+public class FormatConverter implements Command {
     private final List<Format<Formula>> formats =
             FormulaFormats.getInstance().getExtensions();
 
@@ -62,20 +62,20 @@ public class FormatConverter implements CLIFunction {
 
     @Override
     public void run(List<String> args) {
-        String input = CLI.SYSTEM_INPUT;
-        String output = CLI.SYSTEM_OUTPUT;
+        String input = CommandLine.SYSTEM_INPUT;
+        String output = CommandLine.SYSTEM_OUTPUT;
         Format<Formula> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
         boolean cnf = false;
         String fileNameFilter = null;
-        String verbosity = CLI.DEFAULT_VERBOSITY;
+        String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
 
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
             final String arg = iterator.next();
             switch (arg) {
                 case "-f": {
-                    final String name = CLI.getArgValue(iterator, arg).toLowerCase();
+                    final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
                     outFormat = formats.stream()
                             .filter(f -> Objects.equals(name, f.getName().toLowerCase()))
                             .findFirst()
@@ -83,11 +83,11 @@ public class FormatConverter implements CLIFunction {
                     break;
                 }
                 case "-o": {
-                    output = CLI.getArgValue(iterator, arg);
+                    output = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-i": {
-                    input = CLI.getArgValue(iterator, arg);
+                    input = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-r": {
@@ -95,11 +95,11 @@ public class FormatConverter implements CLIFunction {
                     break;
                 }
                 case "-name": {
-                    fileNameFilter = CLI.getArgValue(iterator, arg);
+                    fileNameFilter = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-v": {
-                    verbosity = CLI.getArgValue(iterator, arg);
+                    verbosity = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-dry": {
@@ -113,12 +113,12 @@ public class FormatConverter implements CLIFunction {
             }
         }
 
-        CLI.installLogger(verbosity);
+        CommandLine.installLog(verbosity);
 
         if (outFormat == null) {
             throw new IllegalArgumentException("No output format specified!");
         }
-        if (!CLI.isValidInput(input)) {
+        if (!CommandLine.isValidInput(input)) {
             throw new IllegalArgumentException("No input directory or file does not exist!");
         }
         final boolean directory = Files.isDirectory(Paths.get(input));
@@ -150,7 +150,7 @@ public class FormatConverter implements CLIFunction {
                             final Path outputFile = outputDirectory.resolve(
                                     IOObject.getFileNameWithoutExtension(inputFile.getFileName()) + "."
                                             + format.getFileExtension());
-                            Logger.logInfo(inputFile + " -> " + outputFile);
+                            Feat.log().info(inputFile + " -> " + outputFile);
                             if (convert) {
                                 try {
                                     Files.createDirectories(outputDirectory);
@@ -164,7 +164,7 @@ public class FormatConverter implements CLIFunction {
                 throw new RuntimeException(e);
             }
         } else {
-            Logger.logInfo(input + " -> " + output);
+            Feat.log().info(input + " -> " + output);
             if (convert) {
                 convert(input, output, outFormat, cnf);
             }
@@ -173,23 +173,23 @@ public class FormatConverter implements CLIFunction {
 
     private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CLI.loadFile(inputFile, FormulaFormats.getInstance());
+            final Result<Formula> parse = CommandLine.loadFile(inputFile, FormulaFormats.getInstance());
             if (parse.isPresent()) {
                 Formula formula = parse.get();
                 if (cnf) {
                     formula = Formulas.toCNF(formula).get();
                 }
-                CLI.saveFile(formula, outputFile, outFormat);
+                CommandLine.saveFile(formula, outputFile, outFormat);
             } else {
-                Logger.logProblems(parse.getProblems());
+                Log.problems(parse.getProblems());
             }
         } catch (final Exception e) {
-            Logger.logError(e);
+            Feat.log().error(e);
         }
     }
 
     @Override
-    public String getHelp() {
+    public String getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tParameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");

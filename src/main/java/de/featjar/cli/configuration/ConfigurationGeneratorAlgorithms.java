@@ -41,7 +41,7 @@ public class ConfigurationGeneratorAlgorithms
     private ConfigurationGeneratorAlgorithms() {}
 
     @Override
-    public ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> getExtensionPointInstance() {
+    public ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> getInstanceAsExtensionPoint() {
         return INSTANCE;
     }
 }

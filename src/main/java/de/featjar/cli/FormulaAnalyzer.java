@@ -25,9 +25,9 @@ import de.featjar.cli.analysis.AnalysisAlgorithms;
 import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.util.cli.AlgorithmWrapper;
-import de.featjar.util.cli.CLI;
-import de.featjar.util.cli.CLIFunction;
-import de.featjar.util.log.Logger;
+import de.featjar.util.cli.CommandLine;
+import de.featjar.util.cli.Command;
+import de.featjar.util.log.Log;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -39,7 +39,7 @@ import java.util.Objects;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class FormulaAnalyzer implements CLIFunction {
+public class FormulaAnalyzer implements Command {
     private final List<AlgorithmWrapper<Analysis<?>>> algorithms =
             AnalysisAlgorithms.getInstance().getExtensions();
 
@@ -55,17 +55,17 @@ public class FormulaAnalyzer implements CLIFunction {
 
     @Override
     public void run(List<String> args) {
-        String input = CLI.SYSTEM_INPUT;
+        String input = CommandLine.SYSTEM_INPUT;
         AlgorithmWrapper<Analysis<?>> algorithm = null;
         long timeout = 0;
-        String verbosity = CLI.DEFAULT_VERBOSITY;
+        String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
 
         final List<String> remainingArguments = new ArrayList<>();
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
             final String arg = iterator.next();
             switch (arg) {
                 case "-a": {
-                    final String name = CLI.getArgValue(iterator, arg).toLowerCase();
+                    final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
                     algorithm = algorithms.stream()
                             .filter(a -> Objects.equals(name, a.getName()))
                             .findFirst()
@@ -73,15 +73,15 @@ public class FormulaAnalyzer implements CLIFunction {
                     break;
                 }
                 case "-i": {
-                    input = CLI.getArgValue(iterator, arg);
+                    input = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 case "-t": {
-                    timeout = Long.parseLong(CLI.getArgValue(iterator, arg));
+                    timeout = Long.parseLong(CommandLine.getArgValue(iterator, arg));
                     break;
                 }
                 case "-v": {
-                    verbosity = CLI.getArgValue(iterator, arg);
+                    verbosity = CommandLine.getArgValue(iterator, arg);
                     break;
                 }
                 default: {
@@ -91,30 +91,30 @@ public class FormulaAnalyzer implements CLIFunction {
             }
         }
 
-        CLI.installLogger(verbosity);
+        CommandLine.installLog(verbosity);
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
         }
 
-        final ModelRepresentation rep = CLI.loadFile(input, FormulaFormats.getInstance())
+        final ModelRepresentation rep = CommandLine.loadFile(input, FormulaFormats.getInstance())
                 .map(ModelRepresentation::new)
                 .orElseThrow();
         final Analysis<?> analysis =
-                algorithm.parseArguments(remainingArguments).orElse(Logger::logProblems);
+                algorithm.parseArguments(remainingArguments).orElse(Log::problems);
 
         final long localTime = System.nanoTime();
         final Object result =
-                CLI.runInThread(() -> rep.getResult(analysis), timeout).orElse(Logger::logProblems);
+                CommandLine.runInThread(() -> rep.getResult(analysis), timeout).orElse(Log::problems);
         final long timeNeeded = System.nanoTime() - localTime;
 
-        Logger.logInfo("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
-        Logger.logInfo(
+        Feat.log().info("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
+        Feat.log().info(
                 "Result:\n" + algorithm.parseResult(result, rep.getFormula().getVariableMap()));
     }
 
     @Override
-    public String getHelp() {
+    public String getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tGeneral Parameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");

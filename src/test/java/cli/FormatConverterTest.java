@@ -21,14 +21,14 @@
 package cli;
 
 import de.featjar.cli.FormatConverter;
-import de.featjar.util.extension.Extensions;
+import de.featjar.util.extension.ExtensionManager;
 import java.util.*;
 import org.junit.jupiter.api.*;
 
 public class FormatConverterTest {
     @Test
     public void createAuxiliaryRoot() {
-        Extensions.install();
+        ExtensionManager.install();
         new FormatConverter()
                 .run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml", "-f", "dimacs", "-cnf"));
     }

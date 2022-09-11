@@ -23,7 +23,7 @@ package cli;
 import static org.junit.jupiter.api.Assertions.*;
 
 import de.featjar.cli.FormulaAnalyzer;
-import de.featjar.util.extension.Extensions;
+import de.featjar.util.extension.ExtensionManager;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
 public class FormulaAnalyzerTest {
 
     static {
-        Extensions.install();
+        ExtensionManager.install();
     }
 
     private static final Path modelDirectory = Paths.get("src/test/resources/testFeatureModels");
