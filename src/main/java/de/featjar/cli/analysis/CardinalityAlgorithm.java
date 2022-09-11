@@ -21,7 +21,7 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.analysis.sharpsat.CountSolutionsAnalysis;
-import de.featjar.util.cli.AlgorithmWrapper;
+import de.featjar.base.cli.AlgorithmWrapper;
 
 public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {
 

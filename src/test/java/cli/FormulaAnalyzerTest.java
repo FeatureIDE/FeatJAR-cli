@@ -23,7 +23,7 @@ package cli;
 import static org.junit.jupiter.api.Assertions.*;
 
 import de.featjar.cli.FormulaAnalyzer;
-import de.featjar.util.extension.ExtensionManager;
+import de.featjar.base.extension.ExtensionManager;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
