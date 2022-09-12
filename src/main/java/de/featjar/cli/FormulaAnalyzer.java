@@ -22,7 +22,6 @@ package de.featjar.cli;
 
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.cli.analysis.AnalysisAlgorithms;
-import de.featjar.formula.ModelRepresentation;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
