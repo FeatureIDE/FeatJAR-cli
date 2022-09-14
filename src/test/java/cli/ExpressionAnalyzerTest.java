@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
  *
  * @author Sebastian Krieter
  */
-public class FormulaAnalyzerTest {
+public class ExpressionAnalyzerTest {
 
     static {
         ExtensionManager.install();

@@ -21,7 +21,7 @@
 package de.featjar.cli;
 
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.formula.structure.Formula;
+import de.featjar.formula.structure.Expression;
 import de.featjar.formula.tmp.Formulas;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.cli.Command;
@@ -47,7 +47,7 @@ import java.util.stream.Stream;
  * @author Elias Kuiter
  */
 public class FormatConverter implements Command {
-    private final List<Format<Formula>> formats =
+    private final List<Format<Expression>> formats =
             FormulaFormats.getInstance().getExtensions();
 
     @Override
@@ -64,7 +64,7 @@ public class FormatConverter implements Command {
     public void run(List<String> args) {
         String input = CommandLine.SYSTEM_INPUT;
         String output = CommandLine.SYSTEM_OUTPUT;
-        Format<Formula> outFormat = null;
+        Format<Expression> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
         boolean cnf = false;
@@ -133,7 +133,7 @@ public class FormatConverter implements Command {
 
         final boolean convert = !dryRun;
         if (directory) {
-            final Format<Formula> format = outFormat;
+            final Format<Expression> format = outFormat;
             final Path rootIn = Paths.get(input);
             final Path rootOut = Paths.get(output);
             final Predicate<String> fileNamePredicate = fileNameFilter == null
@@ -171,15 +171,15 @@ public class FormatConverter implements Command {
         }
     }
 
-    private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
+    private void convert(String inputFile, String outputFile, Format<Expression> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CommandLine.loadFile(inputFile, FormulaFormats.getInstance());
+            final Result<Expression> parse = CommandLine.loadFile(inputFile, FormulaFormats.getInstance());
             if (parse.isPresent()) {
-                Formula formula = parse.get();
+                Expression expression = parse.get();
                 if (cnf) {
-                    formula = Formulas.toCNF(formula).get();
+                    expression = Formulas.toCNF(expression).get();
                 }
-                CommandLine.saveFile(formula, outputFile, outFormat);
+                CommandLine.saveFile(expression, outputFile, outFormat);
             } else {
                 Log.problems(parse.getProblems());
             }
