@@ -22,7 +22,7 @@ package de.featjar.cli;
 
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.Formula;
-import de.featjar.formula.structure.Formulas;
+import de.featjar.formula.tmp.Formulas;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.cli.Command;
 import de.featjar.base.data.Result;
