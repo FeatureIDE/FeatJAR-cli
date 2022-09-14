@@ -22,7 +22,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.analysis.sat4j.AtomicSetAnalysis;
 import de.featjar.formula.clauses.LiteralList;
-import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.TermMap;
 import de.featjar.base.cli.AlgorithmWrapper;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +40,7 @@ public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
     @Override
     public Object parseResult(Object result, Object arg) {
         List<LiteralList> atomicSets = (List<LiteralList>) result;
-        VariableMap variableMap = (VariableMap) arg;
+        TermMap termMap = (TermMap) arg;
         return atomicSets.stream()
                 .map(atomicSet -> String.format(
                         "{%s}",
@@ -49,7 +49,7 @@ public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
                                                         .getPositiveLiterals()
                                                         .getLiterals())
                                                 .mapToObj(l -> "+"
-                                                        + variableMap
+                                                        + termMap
                                                                 .getVariable(l)
                                                                 .get()
                                                                 .getName()),
@@ -57,7 +57,7 @@ public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
                                                         .getNegativeLiterals()
                                                         .getLiterals())
                                                 .mapToObj(l -> "-"
-                                                        + variableMap
+                                                        + termMap
                                                                 .getVariable(-l)
                                                                 .get()
                                                                 .getName()))

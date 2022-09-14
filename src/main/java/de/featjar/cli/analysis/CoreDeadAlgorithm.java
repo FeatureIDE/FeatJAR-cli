@@ -22,7 +22,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.analysis.sat4j.CoreDeadAnalysis;
 import de.featjar.formula.clauses.LiteralList;
-import de.featjar.formula.structure.VariableMap;
+import de.featjar.formula.structure.TermMap;
 import de.featjar.base.cli.AlgorithmWrapper;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -37,14 +37,14 @@ public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
     @Override
     public Object parseResult(Object result, Object arg) {
         LiteralList literalList = (LiteralList) result;
-        VariableMap variableMap = (VariableMap) arg;
+        TermMap termMap = (TermMap) arg;
         return String.format(
                 "core:\n%s\ndead:\n%s\n",
                 Arrays.stream(literalList.getPositiveLiterals().getLiterals())
-                        .mapToObj(l -> variableMap.getVariable(l).get().getName())
+                        .mapToObj(l -> termMap.getVariable(l).get().getName())
                         .collect(Collectors.joining("\n")),
                 Arrays.stream(literalList.getNegativeLiterals().getLiterals())
-                        .mapToObj(l -> variableMap.getVariable(-l).get().getName())
+                        .mapToObj(l -> termMap.getVariable(-l).get().getName())
                         .collect(Collectors.joining("\n")));
     }
 
