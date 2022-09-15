@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 public class FormatConverterTest {
     @Test
-    public void createAuxiliaryRoot() {
+    public void test() {
         ExtensionManager.install();
         new FormatConverter()
                 .run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml", "-f", "dimacs", "-cnf"));
