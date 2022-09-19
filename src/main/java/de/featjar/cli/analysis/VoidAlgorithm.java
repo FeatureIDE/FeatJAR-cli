@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.analysis.sat4j.HasSolutionAnalysis;
+import de.featjar.formula.analysis.sat4j.HasSolutionAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
 
 public class VoidAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> {

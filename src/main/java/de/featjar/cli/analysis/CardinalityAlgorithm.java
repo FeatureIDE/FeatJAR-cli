@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.analysis.sharpsat.CountSolutionsAnalysis;
+import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
 
 public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {

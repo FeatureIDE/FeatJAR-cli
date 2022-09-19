@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.analysis.sat4j.FastRandomConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.FastRandomConfigurationGenerator;
 
 /**
  * Generates random configurations for a given propositional formula.

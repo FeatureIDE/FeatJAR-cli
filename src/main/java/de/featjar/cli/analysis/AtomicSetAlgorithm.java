@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.analysis.sat4j.AtomicSetAnalysis;
+import de.featjar.formula.analysis.sat4j.AtomicSetAnalysis;
 import de.featjar.formula.clauses.LiteralList;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.cli.AlgorithmWrapper;

@@ -20,8 +20,8 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
-import de.featjar.analysis.sat4j.OneWiseConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.OneWiseConfigurationGenerator;
 import de.featjar.base.cli.AlgorithmWrapper;
 
 /**

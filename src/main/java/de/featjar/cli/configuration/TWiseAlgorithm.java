@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.analysis.sat4j.twise.TWiseConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.twise.TWiseConfigurationGenerator;
 import de.featjar.formula.clauses.ClauseList;
 import de.featjar.formula.clauses.io.ExpressionGroupFormat;
 import de.featjar.base.cli.AlgorithmWrapper;

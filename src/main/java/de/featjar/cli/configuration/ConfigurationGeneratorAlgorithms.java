@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.analysis.sat4j.AbstractConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.AbstractConfigurationGenerator;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.extension.ExtensionPoint;
 

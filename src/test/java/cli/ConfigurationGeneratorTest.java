@@ -29,7 +29,7 @@ import de.featjar.formula.clauses.Clauses;
 import de.featjar.formula.clauses.solutions.SolutionList;
 import de.featjar.formula.clauses.solutions.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
-import de.featjar.configuration.list.TWiseCoverageMetrics;
+import de.featjar.formula.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.extension.ExtensionManager;
 import de.featjar.base.io.IO;
