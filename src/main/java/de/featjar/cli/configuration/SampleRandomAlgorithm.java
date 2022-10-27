@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.SampleRandomConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.configuration.SampleRandomConfigurationGenerator;
 
 /**
  * Finds certain solutions of propositional formulas.
