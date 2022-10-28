@@ -5,12 +5,28 @@ plugins {
 dependencies {
     implementation 'de.featjar:formula'
     implementation 'de.featjar:formula-analysis-sat4j'
-    implementation 'de.featjar:formula-analysis-sharpsat'
+    //implementation 'de.featjar:formula-analysis-sharpsat'
 }
 
 license {
     ext {
         author = 'Elias Kuiter'
         url = 'https://github.com/FeatureIDE/FeatJAR-cli'
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main'
+            exclude '**/CardinalityAlgorithm.java'
+            exclude '**/ConfigurationGenerator.java'
+            exclude '**/configuration/**'
+        }
+    }
+    test {
+        java {
+            srcDir 'src/test'
+        }
     }
 }

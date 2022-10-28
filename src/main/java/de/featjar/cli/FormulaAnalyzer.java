@@ -20,6 +20,7 @@
  */
 package de.featjar.cli;
 
+import de.featjar.base.Feat;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.cli.analysis.AnalysisAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
