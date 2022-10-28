@@ -21,17 +21,18 @@
 package de.featjar.cli;
 
 import de.featjar.base.Feat;
+import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
-import de.featjar.cli.analysis.AnalysisAlgorithms;
+import de.featjar.cli.analysis.Computations;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.cli.Command;
 import de.featjar.base.log.Log;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
+import de.featjar.formula.structure.formula.Formula;
+
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Command line interface for analyses on feature models.
@@ -40,8 +41,8 @@ import java.util.Objects;
  * @author Elias Kuiter
  */
 public class FormulaAnalyzer implements Command {
-    private final List<AlgorithmWrapper<Analysis<?>>> algorithms =
-            AnalysisAlgorithms.getInstance().getExtensions();
+    private final List<AlgorithmWrapper<Function<Formula, Computation<?>>>> algorithms =
+            Computations.getInstance().getExtensions();
 
     @Override
     public String getName() {
@@ -49,14 +50,14 @@ public class FormulaAnalyzer implements Command {
     }
 
     @Override
-    public String getDescription() {
-        return "Performs an analysis on a feature model";
+    public Optional<String> getDescription() {
+        return Optional.of("Performs an analysis on a feature model");
     }
 
     @Override
     public void run(List<String> args) {
         String input = CommandLine.SYSTEM_INPUT;
-        AlgorithmWrapper<Analysis<?>> algorithm = null;
+        AlgorithmWrapper<Function<Formula, Computation<?>>> algorithm = null;
         long timeout = 0;
         String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
 
@@ -91,30 +92,30 @@ public class FormulaAnalyzer implements Command {
             }
         }
 
-        CommandLine.installLog(verbosity);
+        Feat.install(CommandLine.configureVerbosity(verbosity));
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
         }
 
-        final ModelRepresentation rep = CommandLine.loadFile(input, FormulaFormats.getInstance())
-                .map(ModelRepresentation::new)
+        final Formula rep = CommandLine.loadFile(input, FormulaFormats.getInstance())
                 .orElseThrow();
-        final Analysis<?> analysis =
-                algorithm.parseArguments(remainingArguments).orElse(Log::problems);
+        final Function<Formula, Computation<?>> analysis =
+                algorithm.parseArguments(remainingArguments).get();
 
         final long localTime = System.nanoTime();
         final Object result =
-                CommandLine.runInThread(() -> rep.getResult(analysis), timeout).orElse(Log::problems);
+                CommandLine.runInThread(() -> analysis.apply(rep).getResult().get(), timeout)
+                        .orElse(null);
         final long timeNeeded = System.nanoTime() - localTime;
 
         Feat.log().info("Time:\n" + ((timeNeeded / 1_000_000) / 1000.0) + "s");
         Feat.log().info(
-                "Result:\n" + algorithm.parseResult(result, rep.getFormula().getVariableMap()));
+                "Result:\n" + algorithm.parseResult(result, null));
     }
 
     @Override
-    public String getUsage() {
+    public Optional<String> getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tGeneral Parameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");
@@ -125,6 +126,6 @@ public class FormulaAnalyzer implements Command {
         helpBuilder.append("\n");
         helpBuilder.append("\tAlgorithm Specific Parameters:\n\t");
         algorithms.forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
-        return helpBuilder.toString();
+        return Optional.of(helpBuilder.toString());
     }
 }

@@ -20,14 +20,19 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.sat4j.HasSolutionAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
+import de.featjar.formula.clauses.ToCNF;
+import de.featjar.formula.structure.formula.Formula;
 
-public class VoidAlgorithm extends AlgorithmWrapper<HasSolutionAnalysis> {
+import java.util.function.Function;
+
+public class VoidAlgorithm extends AlgorithmWrapper<Function<Formula, HasSolutionAnalysis>> {
 
     @Override
-    protected HasSolutionAnalysis createAlgorithm() {
-        return new HasSolutionAnalysis();
+    protected Function<Formula, HasSolutionAnalysis> createAlgorithm() {
+        return formula -> new HasSolutionAnalysis(Computation.of(formula).then(ToCNF.class));
     }
 
     @Override

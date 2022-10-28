@@ -14,7 +14,7 @@
 		<extension id="de.featjar.cli.configuration.EnumeratingRandomAlgorithm" />
 		<extension id="de.featjar.cli.configuration.SampleRandomAlgorithm" />
 	</point>
-	<point id="de.featjar.cli.analysis.AnalysisAlgorithms">
+	<point id="de.featjar.cli.analysis.Computations">
 		<extension id="de.featjar.cli.analysis.VoidAlgorithm" />
 		<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />
 		<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />

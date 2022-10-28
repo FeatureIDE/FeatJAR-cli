@@ -20,27 +20,32 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.extension.ExtensionPoint;
+import de.featjar.formula.structure.formula.Formula;
+
+import java.util.function.Function;
 
 /**
- * Extension point for analysis algorithms.
+ * Extension point for computations.
  *
  * @author Sebastian Krieter
+ * @author Elias Kuiter
  */
-public class AnalysisAlgorithms extends ExtensionPoint<AlgorithmWrapper<Analysis<?>>> {
+public class Computations extends ExtensionPoint<AlgorithmWrapper<Function<Formula, Computation<?>>>> {
 
-    private static final AnalysisAlgorithms INSTANCE = new AnalysisAlgorithms();
+    private static final Computations INSTANCE = new Computations();
 
-    public static AnalysisAlgorithms getInstance() {
+    public static Computations getInstance() {
         return INSTANCE;
     }
 
-    private AnalysisAlgorithms() {}
+    private Computations() {}
 
     @Override
-    public ExtensionPoint<AlgorithmWrapper<Analysis<?>>> getInstanceAsExtensionPoint() {
+    public ExtensionPoint<AlgorithmWrapper<Function<Formula, Computation<?>>>> getInstanceAsExtensionPoint() {
         return INSTANCE;
     }
 }
