@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <extensions>
 	<point id="de.featjar.base.cli.Commands">
-		<extension id="de.featjar.cli.ConfigurationGenerator" />
-		<extension id="de.featjar.cli.FormatConverter" />
-		<extension id="de.featjar.cli.FormulaAnalyzer" />
-	</point>
-	<point id="de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms">
-		<extension id="de.featjar.cli.configuration.AllAlgorithm" />
-		<extension id="de.featjar.cli.configuration.OneWiseAlgorithm" />
-		<extension id="de.featjar.cli.configuration.PairWiseAlgorithm" />
-		<extension id="de.featjar.cli.configuration.TWiseAlgorithm" />
-		<extension id="de.featjar.cli.configuration.FastRandomAlgorithm" />
-		<extension id="de.featjar.cli.configuration.EnumeratingRandomAlgorithm" />
-		<extension id="de.featjar.cli.configuration.SampleRandomAlgorithm" />
-	</point>
+	<!--<extension id="de.featjar.cli.ConfigurationGenerator" />
+    <extension id="de.featjar.cli.FormatConverter" />
+    <extension id="de.featjar.cli.FormulaAnalyzer" />-->
+</point>
+<!--<point id="de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms">
+    <extension id="de.featjar.cli.configuration.AllAlgorithm" />
+    <extension id="de.featjar.cli.configuration.OneWiseAlgorithm" />
+    <extension id="de.featjar.cli.configuration.PairWiseAlgorithm" />
+    <extension id="de.featjar.cli.configuration.TWiseAlgorithm" />
+    <extension id="de.featjar.cli.configuration.FastRandomAlgorithm" />
+    <extension id="de.featjar.cli.configuration.EnumeratingRandomAlgorithm" />
+    <extension id="de.featjar.cli.configuration.SampleRandomAlgorithm" />
+</point>-->
 	<point id="de.featjar.cli.analysis.Computations">
 		<extension id="de.featjar.cli.analysis.VoidAlgorithm" />
-		<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />
+		<!--<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />
 		<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />
-		<extension id="de.featjar.cli.analysis.AtomicSetAlgorithm" />
+		<extension id="de.featjar.cli.analysis.AtomicSetAlgorithm" />-->
 	</point>
 </extensions>
