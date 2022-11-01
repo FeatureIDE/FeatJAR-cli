@@ -21,7 +21,9 @@
 package de.featjar.cli;
 
 import de.featjar.base.Feat;
+import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Computation;
+import de.featjar.cli.analysis.Computations;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.Expression;
 import de.featjar.formula.structure.formula.Formula;
@@ -52,9 +54,6 @@ import java.util.stream.Stream;
  * @author Elias Kuiter
  */
 public class FormatConverter implements Command {
-    private final List<Format<Formula>> formats =
-            FormulaFormats.getInstance().getExtensions();
-
     @Override
     public String getName() {
         return "convert";
@@ -63,6 +62,10 @@ public class FormatConverter implements Command {
     @Override
     public Optional<String> getDescription() {
         return Optional.of("Converts feature models between various formats");
+    }
+
+    private static List<Format<Formula>> getFormats() {
+        return Feat.extensionPoint(FormulaFormats.class).getExtensions();
     }
 
     @Override
@@ -81,7 +84,7 @@ public class FormatConverter implements Command {
             switch (arg) {
                 case "-f": {
                     final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
-                    outFormat = formats.stream()
+                    outFormat = getFormats().stream()
                             .filter(f -> Objects.equals(name, f.getName().toLowerCase()))
                             .findFirst()
                             .orElseThrow(() -> new IllegalArgumentException("Unknown format: " + name));
@@ -118,7 +121,8 @@ public class FormatConverter implements Command {
             }
         }
 
-        Feat.install(CommandLine.configureVerbosity(verbosity));
+        String finalVerbosity = verbosity;
+        FeatJAR featJAR = new FeatJAR(new FeatJAR.Configuration().log(cfg -> cfg.logAtMost(finalVerbosity)));
 
         if (outFormat == null) {
             throw new IllegalArgumentException("No output format specified!");
@@ -174,11 +178,13 @@ public class FormatConverter implements Command {
                 convert(input, output, outFormat, cnf);
             }
         }
+
+        featJAR.close();
     }
 
     private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CommandLine.loadFile(inputFile, FormulaFormats.getInstance());
+            final Result<Formula> parse = CommandLine.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
             if (parse.isPresent()) {
                 Formula expression = parse.get();
                 if (cnf) {
@@ -200,7 +206,7 @@ public class FormatConverter implements Command {
         helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
         helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: system:out)\n");
         helpBuilder.append("\t\t-f <Format>  Specify format by identifier. One of:\n");
-        formats.forEach(f -> helpBuilder
+        getFormats().forEach(f -> helpBuilder
                 .append("\t\t                 ")
                 .append(f.getName().toLowerCase())
                 .append("\n"));

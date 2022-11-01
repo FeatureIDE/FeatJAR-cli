@@ -35,17 +35,5 @@ import java.util.function.Function;
  * @author Elias Kuiter
  */
 public class Computations extends ExtensionPoint<AlgorithmWrapper<Function<Formula, Computation<?>>>> {
-
-    private static final Computations INSTANCE = new Computations();
-
-    public static Computations getInstance() {
-        return INSTANCE;
-    }
-
-    private Computations() {}
-
-    @Override
-    public ExtensionPoint<AlgorithmWrapper<Function<Formula, Computation<?>>>> getInstanceAsExtensionPoint() {
-        return INSTANCE;
-    }
+    public Computations() {}
 }

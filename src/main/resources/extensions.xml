@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <extensions>
 	<point id="de.featjar.base.cli.Commands">
-	<!--<extension id="de.featjar.cli.ConfigurationGenerator" />
+	<!--<extension id="de.featjar.cli.ConfigurationGenerator" />-->
     <extension id="de.featjar.cli.FormatConverter" />
-    <extension id="de.featjar.cli.FormulaAnalyzer" />-->
+    <extension id="de.featjar.cli.FormulaAnalyzer" />
 </point>
 <!--<point id="de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms">
     <extension id="de.featjar.cli.configuration.AllAlgorithm" />

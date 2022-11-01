@@ -21,6 +21,7 @@
 package de.featjar.cli;
 
 import de.featjar.base.Feat;
+import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.cli.analysis.Computations;
@@ -41,9 +42,6 @@ import java.util.function.Function;
  * @author Elias Kuiter
  */
 public class FormulaAnalyzer implements Command {
-    private final List<AlgorithmWrapper<Function<Formula, Computation<?>>>> algorithms =
-            Computations.getInstance().getExtensions();
-
     @Override
     public String getName() {
         return "analyze";
@@ -52,6 +50,10 @@ public class FormulaAnalyzer implements Command {
     @Override
     public Optional<String> getDescription() {
         return Optional.of("Performs an analysis on a feature model");
+    }
+
+    private static List<AlgorithmWrapper<Function<Formula, Computation<?>>>> getComputations() {
+        return Feat.extensionPoint(Computations.class).getExtensions();
     }
 
     @Override
@@ -67,7 +69,7 @@ public class FormulaAnalyzer implements Command {
             switch (arg) {
                 case "-a": {
                     final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
-                    algorithm = algorithms.stream()
+                    algorithm = getComputations().stream()
                             .filter(a -> Objects.equals(name, a.getName()))
                             .findFirst()
                             .orElseThrow(() -> new IllegalArgumentException("Unknown algorithm: " + name));
@@ -92,13 +94,13 @@ public class FormulaAnalyzer implements Command {
             }
         }
 
-        Feat.install(CommandLine.configureVerbosity(verbosity));
+        Feat.log().setConfiguration(Feat.log().getConfiguration().resetLogStreams().logAtMost(verbosity));
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
         }
 
-        final Formula rep = CommandLine.loadFile(input, FormulaFormats.getInstance())
+        final Formula rep = CommandLine.loadFile(input, Feat.extensionPoint(FormulaFormats.class))
                 .orElseThrow();
         final Function<Formula, Computation<?>> analysis =
                 algorithm.parseArguments(remainingArguments).get();
@@ -121,11 +123,11 @@ public class FormulaAnalyzer implements Command {
         helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");
         helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
         helpBuilder.append("\t\t-a <Name>    Specify algorithm by name. One of:\n");
-        algorithms.forEach(a ->
+        getComputations().forEach(a ->
                 helpBuilder.append("\t\t                 ").append(a.getName()).append("\n"));
         helpBuilder.append("\n");
         helpBuilder.append("\tAlgorithm Specific Parameters:\n\t");
-        algorithms.forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
+        getComputations().forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
         return Optional.of(helpBuilder.toString());
     }
 }
