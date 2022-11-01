@@ -23,6 +23,7 @@ package de.featjar.cli;
 import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.data.Computation;
+import de.featjar.base.data.Result;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.cli.analysis.Computations;
 import de.featjar.formula.io.FormulaFormats;
@@ -94,7 +95,10 @@ public class FormulaAnalyzer implements Command {
             }
         }
 
-        Feat.log().setConfiguration(Feat.log().getConfiguration().resetLogStreams().logAtMost(verbosity));
+        Feat.log().setConfiguration(
+                Feat.log().getConfiguration()
+                        .resetLogStreams()
+                        .logAtMost(verbosity));
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
@@ -107,7 +111,13 @@ public class FormulaAnalyzer implements Command {
 
         final long localTime = System.nanoTime();
         final Object result =
-                CommandLine.runInThread(() -> analysis.apply(rep).getResult().get(), timeout)
+                CommandLine.runInThread(() -> {
+                            Computation<?> computation = analysis.apply(rep);
+                            Feat.log().debug(computation);
+                            Result<?> computationResult = computation.getResult();
+                            Feat.log().debug(computationResult);
+                            return computationResult.orElseThrow();
+                        }, timeout)
                         .orElse(null);
         final long timeNeeded = System.nanoTime() - localTime;
 
