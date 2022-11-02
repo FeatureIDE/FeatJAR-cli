@@ -20,14 +20,19 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
+import de.featjar.formula.clauses.ToCNF;
+import de.featjar.formula.structure.formula.Formula;
 
-public class CardinalityAlgorithm extends AlgorithmWrapper<CountSolutionsAnalysis> {
+import java.util.function.Function;
+
+public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, CountSolutionsAnalysis>> {
 
     @Override
-    protected CountSolutionsAnalysis createAlgorithm() {
-        return new CountSolutionsAnalysis();
+    protected Function<Formula, CountSolutionsAnalysis> createAlgorithm() {
+        return formula -> new CountSolutionsAnalysis(Computation.of(formula).then(ToCNF.class));
     }
 
     @Override
