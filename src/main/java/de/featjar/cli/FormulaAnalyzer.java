@@ -49,8 +49,8 @@ public class FormulaAnalyzer implements Command {
     }
 
     @Override
-    public Optional<String> getDescription() {
-        return Optional.of("Performs an analysis on a feature model");
+    public String getDescription() {
+        return "Performs an analysis on a feature model";
     }
 
     private static List<AlgorithmWrapper<Function<Formula, Computation<?>>>> getComputations() {
@@ -127,7 +127,7 @@ public class FormulaAnalyzer implements Command {
     }
 
     @Override
-    public Optional<String> getUsage() {
+    public String getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tGeneral Parameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to feature model file (default: system:in.xml)\n");
@@ -138,6 +138,6 @@ public class FormulaAnalyzer implements Command {
         helpBuilder.append("\n");
         helpBuilder.append("\tAlgorithm Specific Parameters:\n\t");
         getComputations().forEach(a -> helpBuilder.append(a.getHelp().replace("\n", "\n\t")));
-        return Optional.of(helpBuilder.toString());
+        return helpBuilder.toString();
     }
 }

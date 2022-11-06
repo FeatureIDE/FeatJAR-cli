@@ -32,7 +32,7 @@ public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, Cou
 
     @Override
     protected Function<Formula, CountSolutionsAnalysis> createAlgorithm() {
-        return formula -> new CountSolutionsAnalysis(Computation.of(formula).then(ToCNF.class));
+        return formula -> Computation.of(formula).then(ToCNF::new).then(CountSolutionsAnalysis::new);
     }
 
     @Override

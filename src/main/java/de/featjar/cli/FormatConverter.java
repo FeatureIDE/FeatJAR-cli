@@ -60,8 +60,8 @@ public class FormatConverter implements Command {
     }
 
     @Override
-    public Optional<String> getDescription() {
-        return Optional.of("Converts feature models between various formats");
+    public String getDescription() {
+        return "Converts feature models between various formats";
     }
 
     private static List<Format<Formula>> getFormats() {
@@ -188,7 +188,7 @@ public class FormatConverter implements Command {
             if (parse.isPresent()) {
                 Formula expression = parse.get();
                 if (cnf) {
-                    expression = Computation.of(expression).then(ToCNFFormula.class).getResult().get();
+                    expression = Computation.of(expression).then(ToCNFFormula::new).getResult().get();
                 }
                 CommandLine.saveFile(expression, outputFile, outFormat);
             } else {
@@ -200,7 +200,7 @@ public class FormatConverter implements Command {
     }
 
     @Override
-    public Optional<String> getUsage() {
+    public String getUsage() {
         final StringBuilder helpBuilder = new StringBuilder();
         helpBuilder.append("\tParameters:\n");
         helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
@@ -215,6 +215,6 @@ public class FormatConverter implements Command {
         helpBuilder.append("\t\t-dry         Perform dry run\n");
         helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
         helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
-        return Optional.of(helpBuilder.toString());
+        return helpBuilder.toString();
     }
 }

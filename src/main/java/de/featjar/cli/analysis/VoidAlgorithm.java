@@ -32,7 +32,7 @@ public class VoidAlgorithm extends AlgorithmWrapper<Function<Formula, HasSolutio
 
     @Override
     protected Function<Formula, HasSolutionAnalysis> createAlgorithm() {
-        return formula -> new HasSolutionAnalysis(Computation.of(formula).then(ToCNF.class));
+        return formula -> Computation.of(formula).then(ToCNF::new).then(HasSolutionAnalysis::new);
     }
 
     @Override
