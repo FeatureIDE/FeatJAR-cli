@@ -25,9 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.base.FeatJAR;
-import de.featjar.formula.analysis.todo.Deprecated;
 import de.featjar.formula.analysis.bool.BooleanSolutionList;
-import de.featjar.formula.analysis.todo.io.ListFormat;
+import de.featjar.formula.analysis.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.formula.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
