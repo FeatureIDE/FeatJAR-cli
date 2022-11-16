@@ -21,8 +21,8 @@
 package de.featjar.cli;
 
 import de.featjar.formula.analysis.sat4j.configuration.AbstractConfigurationGenerator;
-import de.featjar.formula.analysis.sat.solution.SolutionList;
-import de.featjar.formula.analysis.sat.solution.io.ListFormat;
+import de.featjar.formula.clauses.solutions.SolutionList;
+import de.featjar.formula.clauses.solutions.io.ListFormat;
 import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.cli.AlgorithmWrapper;
