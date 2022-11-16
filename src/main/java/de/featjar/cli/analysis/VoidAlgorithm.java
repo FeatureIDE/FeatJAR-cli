@@ -23,7 +23,7 @@ package de.featjar.cli.analysis;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.sat4j.HasSolutionAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
-import de.featjar.formula.analysis.sat.clause.ToCNF;
+import de.featjar.formula.analysis.bool.ToLiteralClauseList;
 import de.featjar.formula.structure.formula.Formula;
 
 import java.util.function.Function;
@@ -32,7 +32,7 @@ public class VoidAlgorithm extends AlgorithmWrapper<Function<Formula, HasSolutio
 
     @Override
     protected Function<Formula, HasSolutionAnalysis> createAlgorithm() {
-        return formula -> Computation.of(formula).then(ToCNF::new).then(HasSolutionAnalysis::new);
+        return formula -> Computation.of(formula).then(ToLiteralClauseList::new).then(HasSolutionAnalysis::new);
     }
 
     @Override

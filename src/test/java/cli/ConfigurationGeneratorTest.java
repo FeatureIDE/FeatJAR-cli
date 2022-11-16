@@ -25,10 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.base.FeatJAR;
-import de.featjar.formula.analysis.sat.clause.CNF;
-import de.featjar.formula.analysis.sat.clause.CNFs;
-import de.featjar.formula.analysis.sat.solution.SolutionList;
-import de.featjar.formula.analysis.sat.solution.io.ListFormat;
+import de.featjar.formula.analysis.todo.Deprecated;
+import de.featjar.formula.analysis.bool.BooleanSolutionList;
+import de.featjar.formula.analysis.todo.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.formula.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
@@ -147,7 +146,7 @@ public class ConfigurationGeneratorTest {
         for (final String modelName : modelNameList) {
             final Path modelFile = modelDirectory.resolve(modelName + ".xml");
             final CNF cnf = loadCNF(modelFile);
-            final SolutionList sample = sample(modelFile, algorithmName, t, null);
+            final BooleanSolutionList sample = sample(modelFile, algorithmName, t, null);
             assertTrue(sample.getInvalidSolutions(cnf).findFirst().isEmpty(), "Invalid solutions for " + modelFile);
             final TWiseCoverageMetrics tWiseCoverageMetrics = new TWiseCoverageMetrics();
             tWiseCoverageMetrics.setCNF(cnf);
@@ -157,7 +156,7 @@ public class ConfigurationGeneratorTest {
                     tWiseCoverageMetrics.getTWiseCoverageMetric(t).get(sample),
                     0.0,
                     "Wrong coverage for " + modelName);
-            final SolutionList sample2 = sample(modelFile, algorithmName, t, null);
+            final BooleanSolutionList sample2 = sample(modelFile, algorithmName, t, null);
             assertEquals(sample.getSolutions().size(), sample2.getSolutions().size(), "Wrong size for " + modelName);
         }
     }
@@ -166,7 +165,7 @@ public class ConfigurationGeneratorTest {
         for (final String modelName : modelNameList) {
             final Path modelFile = modelDirectory.resolve(modelName + ".xml");
             final CNF cnf = loadCNF(modelFile);
-            final SolutionList sample = sample(modelFile, algorithmName, null, null);
+            final BooleanSolutionList sample = sample(modelFile, algorithmName, null, null);
             assertTrue(sample.getInvalidSolutions(cnf).findFirst().isEmpty(), "Invalid solutions for " + modelFile);
             final TWiseCoverageMetrics tWiseCoverageMetrics = new TWiseCoverageMetrics();
             tWiseCoverageMetrics.setCNF(cnf);
@@ -176,7 +175,7 @@ public class ConfigurationGeneratorTest {
                     tWiseCoverageMetrics.getTWiseCoverageMetric(2).get(sample),
                     0.0,
                     "Wrong coverage for " + modelName);
-            final SolutionList sample2 = sample(modelFile, algorithmName, null, null);
+            final BooleanSolutionList sample2 = sample(modelFile, algorithmName, null, null);
             assertEquals(sample.getSolutions().size(), sample2.getSolutions().size(), "Wrong size for " + modelName);
         }
     }
@@ -184,7 +183,7 @@ public class ConfigurationGeneratorTest {
     private static void testSize(String modelName, String algorithm, int numberOfConfigurations) {
         final Path modelFile = modelDirectory.resolve(modelName + ".xml");
         final CNF cnf = loadCNF(modelFile);
-        final SolutionList sample = sample(modelFile, algorithm, null, null);
+        final BooleanSolutionList sample = sample(modelFile, algorithm, null, null);
         assertTrue(sample.getInvalidSolutions(cnf).findFirst().isEmpty(), "Invalid solutions for " + modelFile);
         assertEquals(
                 numberOfConfigurations,
@@ -195,7 +194,7 @@ public class ConfigurationGeneratorTest {
     private static void testLimitedSize(String modelName, String algorithm, int numberOfConfigurations, int limit) {
         final Path modelFile = modelDirectory.resolve(modelName + ".xml");
         final CNF cnf = loadCNF(modelFile);
-        final SolutionList sample = sample(modelFile, algorithm, null, limit);
+        final BooleanSolutionList sample = sample(modelFile, algorithm, null, limit);
         assertTrue(sample.getInvalidSolutions(cnf).findFirst().isEmpty(), "Invalid solutions for " + modelFile);
         assertTrue(
                 limit >= sample.getSolutions().size(), "Number of configurations larger than limit for " + modelName);
@@ -206,7 +205,7 @@ public class ConfigurationGeneratorTest {
 
     private static void testTWiseLimitedSize(String modelName, String algorithm, int t, int limit) {
         final Path modelFile = modelDirectory.resolve(modelName + ".xml");
-        final SolutionList sample = sample(modelFile, algorithm, t, limit);
+        final BooleanSolutionList sample = sample(modelFile, algorithm, t, limit);
         assertTrue(
                 limit >= sample.getSolutions().size(), "Number of configurations larger than limit for " + modelName);
     }
@@ -214,13 +213,13 @@ public class ConfigurationGeneratorTest {
     private static void testPairWiseLimitedSize(String modelName, String algorithm, int limit) {
         final Path modelFile = modelDirectory.resolve(modelName + ".xml");
         final CNF cnf = loadCNF(modelFile);
-        final SolutionList sample = sample(modelFile, algorithm, null, limit);
+        final BooleanSolutionList sample = sample(modelFile, algorithm, null, limit);
         assertTrue(sample.getInvalidSolutions(cnf).findFirst().isEmpty(), "Invalid solutions for " + modelFile);
         assertTrue(
                 limit >= sample.getSolutions().size(), "Number of configurations larger than limit for " + modelName);
     }
 
-    private static SolutionList sample(final Path modelFile, String algorithm, Integer t, Integer limit) {
+    private static BooleanSolutionList sample(final Path modelFile, String algorithm, Integer t, Integer limit) {
         try {
             final Path inFile = Files.createTempFile("input", ".xml");
             try {
@@ -245,7 +244,7 @@ public class ConfigurationGeneratorTest {
                     }
                     new ConfigurationGenerator().run(args);
 
-                    final SolutionList sample =
+                    final BooleanSolutionList sample =
                             IO.load(outFile, new ListFormat()).orElse(Log::problems);
                     if (sample == null) {
                         fail("Sample for " + modelFile.toString() + " could not be read!");
@@ -266,7 +265,7 @@ public class ConfigurationGeneratorTest {
 
     private static CNF loadCNF(final Path modelFile) {
         final CNF cnf = IO.load(modelFile, FeatJAR.extensionPoint(FormulaFormats.class))
-                .map(CNFs::convertToCNF)
+                .map(Deprecated::convertToCNF)
                 .orElse(Log::problems);
         if (cnf == null) {
             fail("CNF could not be read!");
