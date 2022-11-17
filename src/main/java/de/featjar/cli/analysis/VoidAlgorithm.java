@@ -25,6 +25,7 @@ import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.formula.analysis.bool.ToLiteralClauseList;
 import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.transformer.ToCNF;
 
 import java.util.function.Function;
 
@@ -32,7 +33,7 @@ public class VoidAlgorithm extends AlgorithmWrapper<Function<Formula, SAT4JHasSo
 
     @Override
     protected Function<Formula, SAT4JHasSolutionAnalysis> newAlgorithm() {
-        return formula -> Computation.of(formula).then(ToLiteralClauseList::new).then(SAT4JHasSolutionAnalysis::new);
+        return formula -> Computation.of(formula).then(ToCNF::new).then(ToLiteralClauseList::new).then(SAT4JHasSolutionAnalysis::new);
     }
 
     @Override
