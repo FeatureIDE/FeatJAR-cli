@@ -25,11 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import de.featjar.base.FeatJAR;
-import de.featjar.base.extension.Initializers;
-import de.featjar.formula.clauses.CNF;
-import de.featjar.formula.clauses.Clauses;
-import de.featjar.formula.clauses.solutions.SolutionList;
-import de.featjar.formula.clauses.solutions.io.ListFormat;
+import de.featjar.formula.analysis.sat.clause.CNF;
+import de.featjar.formula.analysis.sat.clause.CNFs;
+import de.featjar.formula.analysis.sat.solution.SolutionList;
+import de.featjar.formula.analysis.sat.solution.io.ListFormat;
 import de.featjar.cli.ConfigurationGenerator;
 import de.featjar.formula.configuration.list.TWiseCoverageMetrics;
 import de.featjar.formula.io.FormulaFormats;
@@ -44,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.featjar.formula.io.xml.XMLFeatureModelCNFFormulaFormat;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -268,7 +266,7 @@ public class ConfigurationGeneratorTest {
 
     private static CNF loadCNF(final Path modelFile) {
         final CNF cnf = IO.load(modelFile, FeatJAR.extensionPoint(FormulaFormats.class))
-                .map(Clauses::convertToCNF)
+                .map(CNFs::convertToCNF)
                 .orElse(Log::problems);
         if (cnf == null) {
             fail("CNF could not be read!");

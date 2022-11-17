@@ -21,7 +21,6 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.formula.analysis.sat4j.AtomicSetAnalysis;
-import de.featjar.formula.clauses.LiteralList;
 import de.featjar.formula.structure.map.TermMap;
 import de.featjar.base.cli.AlgorithmWrapper;
 import java.util.Arrays;
@@ -39,23 +38,23 @@ public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
     @SuppressWarnings("unchecked")
     @Override
     public Object parseResult(Object result, Object arg) {
-        List<LiteralList> atomicSets = (List<LiteralList>) result;
+        List<SortedIntegerList> atomicSets = (List<SortedIntegerList>) result;
         TermMap termMap = (TermMap) arg;
         return atomicSets.stream()
                 .map(atomicSet -> String.format(
                         "{%s}",
                         Stream.concat(
                                         Arrays.stream(atomicSet
-                                                        .getPositiveLiterals()
-                                                        .getLiterals())
+                                                        .getPositives()
+                                                        .getIntegers())
                                                 .mapToObj(l -> "+"
                                                         + termMap
                                                                 .getVariable(l)
                                                                 .get()
                                                                 .getName()),
                                         Arrays.stream(atomicSet
-                                                        .getNegativeLiterals()
-                                                        .getLiterals())
+                                                        .getNegatives()
+                                                        .getIntegers())
                                                 .mapToObj(l -> "-"
                                                         + termMap
                                                                 .getVariable(-l)
