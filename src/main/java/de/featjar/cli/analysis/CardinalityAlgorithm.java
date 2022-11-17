@@ -23,7 +23,7 @@ package de.featjar.cli.analysis;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
 import de.featjar.base.cli.AlgorithmWrapper;
-import de.featjar.formula.analysis.sat.clause.ToCNF;
+import de.featjar.formula.analysis.bool.ToLiteralClauseList;
 import de.featjar.formula.structure.formula.Formula;
 
 import java.util.function.Function;
@@ -31,8 +31,8 @@ import java.util.function.Function;
 public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, CountSolutionsAnalysis>> {
 
     @Override
-    protected Function<Formula, CountSolutionsAnalysis> createAlgorithm() {
-        return formula -> Computation.of(formula).then(ToCNF::new).then(CountSolutionsAnalysis::new);
+    protected Function<Formula, CountSolutionsAnalysis> newAlgorithm() {
+        return formula -> Computation.of(formula).then(ToLiteralClauseList::new).then(CountSolutionsAnalysis::new);
     }
 
     @Override

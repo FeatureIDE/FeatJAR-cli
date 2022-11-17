@@ -20,9 +20,9 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.twise.TWiseConfigurationGenerator;
-import de.featjar.formula.analysis.sat.LiteralMatrix;
-import de.featjar.formula.analysis.sat.io.ExpressionGroupFormat;
+import de.featjar.formula.analysis.sat4j.todo.twise.TWiseConfigurationGenerator;
+import de.featjar.formula.analysis.bool.BooleanAssignmentList;
+import de.featjar.formula.analysis.io.ExpressionGroupFormat;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.io.IO;
@@ -41,7 +41,7 @@ import java.util.Random;
 public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator> {
 
     @Override
-    protected TWiseConfigurationGenerator createAlgorithm() {
+    protected TWiseConfigurationGenerator newAlgorithm() {
         return new TWiseConfigurationGenerator();
     }
 
@@ -69,8 +69,8 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
         return true;
     }
 
-    private List<List<LiteralMatrix>> readExpressionFile(Path expressionFile) {
-        final List<List<LiteralMatrix>> expressionGroups;
+    private List<List<BooleanAssignmentList>> readExpressionFile(Path expressionFile) {
+        final List<List<BooleanAssignmentList>> expressionGroups;
         if (expressionFile != null) {
             expressionGroups = IO.load(expressionFile, new ExpressionGroupFormat())
                     .orElseThrow(p -> new IllegalArgumentException(

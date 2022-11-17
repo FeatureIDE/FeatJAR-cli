@@ -20,9 +20,9 @@
  */
 package de.featjar.cli;
 
-import de.featjar.formula.analysis.sat4j.configuration.AbstractConfigurationGenerator;
-import de.featjar.formula.analysis.sat.solution.SolutionList;
-import de.featjar.formula.analysis.sat.solution.io.ListFormat;
+import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
+import de.featjar.formula.analysis.bool.BooleanSolutionList;
+import de.featjar.formula.analysis.io.ListFormat;
 import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.cli.AlgorithmWrapper;
@@ -112,7 +112,7 @@ public class ConfigurationGenerator implements Command {
                     .map(ModelRepresentation::new) //
                     .orElseThrow(p -> new IllegalArgumentException(
                             p.isEmpty() ? null : p.get(0).toException()));
-            final Result<SolutionList> result = c.getResult(generator);
+            final Result<BooleanSolutionList> result = c.getResult(generator);
             String finalOutput = output;
             result.ifPresentOrElse(list -> CommandLine.saveFile(list, finalOutput, new ListFormat()), Log::problems);
         }

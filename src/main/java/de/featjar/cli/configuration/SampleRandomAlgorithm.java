@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.configuration.SampleRandomConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.SampleRandomConfigurationGenerator;
 
 /**
  * Finds certain solutions of propositional formulas.
@@ -30,7 +30,7 @@ import de.featjar.formula.analysis.sat4j.configuration.SampleRandomConfiguration
 public class SampleRandomAlgorithm extends RandomAlgorithm {
 
     @Override
-    protected SampleRandomConfigurationGenerator createAlgorithm() {
+    protected SampleRandomConfigurationGenerator newAlgorithm() {
         return new SampleRandomConfigurationGenerator();
     }
 
