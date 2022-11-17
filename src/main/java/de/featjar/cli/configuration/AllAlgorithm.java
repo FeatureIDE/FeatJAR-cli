@@ -20,8 +20,8 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.configuration.AbstractConfigurationGenerator;
-import de.featjar.formula.analysis.sat4j.configuration.AllConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.AllConfigurationGenerator;
 import de.featjar.base.cli.AlgorithmWrapper;
 
 /**
@@ -32,7 +32,7 @@ import de.featjar.base.cli.AlgorithmWrapper;
 public class AllAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
     @Override
-    protected AllConfigurationGenerator createAlgorithm() {
+    protected AllConfigurationGenerator newAlgorithm() {
         return new AllConfigurationGenerator();
     }
 

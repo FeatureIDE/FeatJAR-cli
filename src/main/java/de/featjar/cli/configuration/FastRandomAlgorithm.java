@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.configuration.FastRandomConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.FastRandomConfigurationGenerator;
 
 /**
  * Generates random configurations for a given propositional formula.
@@ -30,7 +30,7 @@ import de.featjar.formula.analysis.sat4j.configuration.FastRandomConfigurationGe
 public class FastRandomAlgorithm extends RandomAlgorithm {
 
     @Override
-    protected FastRandomConfigurationGenerator createAlgorithm() {
+    protected FastRandomConfigurationGenerator newAlgorithm() {
         return new FastRandomConfigurationGenerator();
     }
 

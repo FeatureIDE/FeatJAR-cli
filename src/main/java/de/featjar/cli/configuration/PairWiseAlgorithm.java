@@ -20,8 +20,8 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.configuration.AbstractConfigurationGenerator;
-import de.featjar.formula.analysis.sat4j.configuration.PairWiseConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.configuration.PairWiseConfigurationGenerator;
 import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
 import java.util.ListIterator;
@@ -36,7 +36,7 @@ import java.util.Random;
 public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
     @Override
-    protected PairWiseConfigurationGenerator createAlgorithm() {
+    protected PairWiseConfigurationGenerator newAlgorithm() {
         return new PairWiseConfigurationGenerator();
     }
 

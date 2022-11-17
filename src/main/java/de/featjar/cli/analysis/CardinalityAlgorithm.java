@@ -31,7 +31,7 @@ import java.util.function.Function;
 public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, CountSolutionsAnalysis>> {
 
     @Override
-    protected Function<Formula, CountSolutionsAnalysis> createAlgorithm() {
+    protected Function<Formula, CountSolutionsAnalysis> newAlgorithm() {
         return formula -> Computation.of(formula).then(ToLiteralClauseList::new).then(CountSolutionsAnalysis::new);
     }
 

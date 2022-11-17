@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class CoreDeadAlgorithm extends AlgorithmWrapper<CoreDeadAnalysis> {
 
     @Override
-    protected CoreDeadAnalysis createAlgorithm() {
+    protected CoreDeadAnalysis newAlgorithm() {
         return new CoreDeadAnalysis();
     }
 

@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.configuration;
 
-import de.featjar.formula.analysis.sat4j.twise.TWiseConfigurationGenerator;
+import de.featjar.formula.analysis.sat4j.todo.twise.TWiseConfigurationGenerator;
 import de.featjar.formula.analysis.bool.BooleanAssignmentList;
 import de.featjar.formula.analysis.io.ExpressionGroupFormat;
 import de.featjar.base.cli.AlgorithmWrapper;
@@ -41,7 +41,7 @@ import java.util.Random;
 public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator> {
 
     @Override
-    protected TWiseConfigurationGenerator createAlgorithm() {
+    protected TWiseConfigurationGenerator newAlgorithm() {
         return new TWiseConfigurationGenerator();
     }
 
