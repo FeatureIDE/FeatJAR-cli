@@ -22,7 +22,6 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
-import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.formula.analysis.bool.ToLiteralClauseList;
 import de.featjar.formula.structure.formula.Formula;
 

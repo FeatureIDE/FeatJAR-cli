@@ -21,37 +21,32 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.base.data.Computation;
-import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
-import de.featjar.base.cli.AlgorithmWrapper;
+import de.featjar.formula.analysis.Analysis;
+import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.bool.ToLiteralClauseList;
-import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
 import de.featjar.formula.transformer.ToCNF;
 
-import java.util.function.Function;
 
-public class VoidAlgorithm extends AlgorithmWrapper<Function<Formula, SAT4JHasSolutionAnalysis>> {
-
+public class HasSolution extends AnalysisCommand<Boolean> {
     @Override
-    protected Function<Formula, SAT4JHasSolutionAnalysis> newAlgorithm() {
-        return formula -> Computation.of(formula).then(ToCNF::new).then(ToLiteralClauseList::new).then(SAT4JHasSolutionAnalysis::new);
+    public String getDescription() {
+        return "Computes whether the given formula has a solution";
     }
 
     @Override
-    public Object parseResult(Object result, Object arg) {
-        return !((Boolean) result);
+    protected Analysis<BooleanClauseList, Boolean> newAnalysis() {
+        return new SAT4JHasSolutionAnalysis(
+                Computation.of(formula)
+                        .then(ToCNF::new)
+                        .then(ToLiteralClauseList::new))
+                .setTimeout(parseTimeout());
+        //todo: also pass assignment, clause list, and seed (for those analyses that support it)
+
     }
 
     @Override
-    public String getName() {
-        return "void";
-    }
-
-    @Override
-    public String getHelp() {
-        final StringBuilder helpBuilder = new StringBuilder();
-        helpBuilder.append("\t");
-        helpBuilder.append(getName());
-        helpBuilder.append(": reports whether the feature model has a valid configuration\n");
-        return helpBuilder.toString();
+    public String serializeResult(Boolean result) {
+        return result.toString();
     }
 }

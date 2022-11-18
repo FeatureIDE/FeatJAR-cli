@@ -22,7 +22,6 @@ package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
 import de.featjar.formula.analysis.sat4j.todo.configuration.OneWiseConfigurationGenerator;
-import de.featjar.base.cli.AlgorithmWrapper;
 
 /**
  * Generates configurations for a given propositional formula such that one-wise

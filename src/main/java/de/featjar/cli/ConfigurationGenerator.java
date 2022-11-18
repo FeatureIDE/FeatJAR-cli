@@ -25,7 +25,6 @@ import de.featjar.formula.analysis.bool.BooleanSolutionList;
 import de.featjar.formula.analysis.io.ListFormat;
 import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.base.cli.AlgorithmWrapper;
 import de.featjar.base.cli.CommandLine;
 import de.featjar.base.cli.Command;
 import de.featjar.base.data.Result;
