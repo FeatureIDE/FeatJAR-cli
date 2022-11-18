@@ -25,8 +25,7 @@ import de.featjar.formula.analysis.bool.BooleanSolutionList;
 import de.featjar.formula.analysis.io.ListFormat;
 import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.base.cli.AlgorithmWrapper;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.cli.Command;
 import de.featjar.base.data.Result;
 import de.featjar.base.log.Log;
@@ -58,11 +57,11 @@ public class ConfigurationGenerator implements Command {
 
     @Override
     public void run(List<String> args) {
-        String input = CommandLine.SYSTEM_INPUT;
-        String output = CommandLine.SYSTEM_OUTPUT;
+        String input = CommandLineInterface.SYSTEM_INPUT;
+        String output = CommandLineInterface.SYSTEM_OUTPUT;
         AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
         int limit = Integer.MAX_VALUE;
-        String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
+        String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
 
         final List<String> remainingArguments = new ArrayList<>();
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
@@ -70,7 +69,7 @@ public class ConfigurationGenerator implements Command {
             switch (arg) {
                 case "-a": {
                     // TODO add plugin for icpl and chvatal
-                    final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
+                    final String name = CommandLineInterface.getArgValue(iterator, arg).toLowerCase();
                     algorithm = algorithms.stream()
                             .filter(a -> Objects.equals(name, a.getName()))
                             .findFirst()
@@ -78,19 +77,19 @@ public class ConfigurationGenerator implements Command {
                     break;
                 }
                 case "-o": {
-                    output = CommandLine.getArgValue(iterator, arg);
+                    output = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-i": {
-                    input = CommandLine.getArgValue(iterator, arg);
+                    input = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-v": {
-                    verbosity = CommandLine.getArgValue(iterator, arg);
+                    verbosity = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-l":
-                    limit = Integer.parseInt(CommandLine.getArgValue(iterator, arg));
+                    limit = Integer.parseInt(CommandLineInterface.getArgValue(iterator, arg));
                     break;
                 default: {
                     remainingArguments.add(arg);
@@ -99,7 +98,7 @@ public class ConfigurationGenerator implements Command {
             }
         }
 
-        CommandLine.installLog(verbosity);
+        CommandLineInterface.installLog(verbosity);
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
@@ -108,13 +107,13 @@ public class ConfigurationGenerator implements Command {
                 algorithm.parseArguments(remainingArguments).orElse(Log::problems);
         if (generator != null) {
             generator.setLimit(limit);
-            final ModelRepresentation c = CommandLine.loadFile(input, FormulaFormats.getInstance()) //
+            final ModelRepresentation c = CommandLineInterface.loadFile(input, FormulaFormats.getInstance()) //
                     .map(ModelRepresentation::new) //
                     .orElseThrow(p -> new IllegalArgumentException(
                             p.isEmpty() ? null : p.get(0).toException()));
             final Result<BooleanSolutionList> result = c.getResult(generator);
             String finalOutput = output;
-            result.ifPresentOrElse(list -> CommandLine.saveFile(list, finalOutput, new ListFormat()), Log::problems);
+            result.ifPresentOrElse(list -> CommandLineInterface.saveFile(list, finalOutput, new ListFormat()), Log::problems);
         }
     }
 

@@ -21,8 +21,7 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
-import de.featjar.base.cli.AlgorithmWrapper;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -38,7 +37,7 @@ public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigura
             throws IllegalArgumentException {
         switch (arg) {
             case "-s":
-                gen.setRandom(new Random(Long.parseLong(CommandLine.getArgValue(iterator, arg))));
+                gen.setRandom(new Random(Long.parseLong(CommandLineInterface.getArgValue(iterator, arg))));
                 break;
             default:
                 return false;

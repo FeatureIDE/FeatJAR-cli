@@ -14,9 +14,9 @@
     <extension id="de.featjar.cli.configuration.EnumeratingRandomAlgorithm" />
     <extension id="de.featjar.cli.configuration.SampleRandomAlgorithm" />
 </point>-->
-	<point id="de.featjar.cli.analysis.Computations">
-		<extension id="de.featjar.cli.analysis.VoidAlgorithm" />
-		<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />
+	<point id="de.featjar.cli.analysis.AnalysisCommands">
+		<extension id="de.featjar.cli.analysis.SAT4JHasSolution" />
+		<!--<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />-->
 		<!--<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />
 		<extension id="de.featjar.cli.analysis.AtomicSetAlgorithm" />-->
 	</point>

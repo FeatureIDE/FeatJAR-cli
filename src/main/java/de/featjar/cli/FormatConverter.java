@@ -22,10 +22,12 @@ package de.featjar.cli;
 
 import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
+import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.data.Computation;
+import de.featjar.base.log.IndentStringBuilder;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.cli.Command;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IOObject;
@@ -36,6 +38,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
@@ -51,11 +54,6 @@ import java.util.stream.Stream;
  */
 public class FormatConverter implements Command {
     @Override
-    public String getName() {
-        return "convert";
-    }
-
-    @Override
     public String getDescription() {
         return "Converts feature models between various formats";
     }
@@ -65,21 +63,23 @@ public class FormatConverter implements Command {
     }
 
     @Override
-    public void run(List<String> args) {
-        String input = CommandLine.SYSTEM_INPUT;
-        String output = CommandLine.SYSTEM_OUTPUT;
+    public void run(CLIArgumentParser argumentParser) {
+        String input = CommandLineInterface.SYSTEM_INPUT;
+        String output = CommandLineInterface.SYSTEM_OUTPUT;
         Format<Formula> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
         boolean cnf = false;
         String fileNameFilter = null;
-        String verbosity = CommandLine.DEFAULT_MAXIMUM_VERBOSITY;
+        String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
+
+        List<String> args = new ArrayList<>(); //todo: rewrite all of this to use the argumentParser
 
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
             final String arg = iterator.next();
             switch (arg) {
                 case "-f": {
-                    final String name = CommandLine.getArgValue(iterator, arg).toLowerCase();
+                    final String name = CommandLineInterface.getArgValue(iterator, arg).toLowerCase();
                     outFormat = getFormats().stream()
                             .filter(f -> Objects.equals(name, f.getName().toLowerCase()))
                             .findFirst()
@@ -87,11 +87,11 @@ public class FormatConverter implements Command {
                     break;
                 }
                 case "-o": {
-                    output = CommandLine.getArgValue(iterator, arg);
+                    output = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-i": {
-                    input = CommandLine.getArgValue(iterator, arg);
+                    input = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-r": {
@@ -99,11 +99,11 @@ public class FormatConverter implements Command {
                     break;
                 }
                 case "-name": {
-                    fileNameFilter = CommandLine.getArgValue(iterator, arg);
+                    fileNameFilter = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-v": {
-                    verbosity = CommandLine.getArgValue(iterator, arg);
+                    verbosity = CommandLineInterface.getArgValue(iterator, arg);
                     break;
                 }
                 case "-dry": {
@@ -123,7 +123,7 @@ public class FormatConverter implements Command {
         if (outFormat == null) {
             throw new IllegalArgumentException("No output format specified!");
         }
-        if (!CommandLine.isValidInput(input)) {
+        if (!CommandLineInterface.isValidInput(input)) {
             throw new IllegalArgumentException("No input directory or file does not exist!");
         }
         final boolean directory = Files.isDirectory(Paths.get(input));
@@ -180,13 +180,13 @@ public class FormatConverter implements Command {
 
     private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CommandLine.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
+            final Result<Formula> parse = CommandLineInterface.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
             if (parse.isPresent()) {
                 Formula expression = parse.get();
                 if (cnf) {
                     expression = Computation.of(expression).then(ToCNF::new).getResult().get();
                 }
-                CommandLine.saveFile(expression, outputFile, outFormat);
+                CommandLineInterface.saveFile(expression, outputFile, outFormat);
             } else {
                 Feat.log().problems(parse.getProblems());
             }
@@ -196,21 +196,22 @@ public class FormatConverter implements Command {
     }
 
     @Override
-    public String getUsage() {
-        final StringBuilder helpBuilder = new StringBuilder();
-        helpBuilder.append("\tParameters:\n");
-        helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
-        helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: system:out)\n");
-        helpBuilder.append("\t\t-f <Format>  Specify format by identifier. One of:\n");
-        getFormats().forEach(f -> helpBuilder
-                .append("\t\t                 ")
-                .append(f.getName().toLowerCase())
-                .append("\n"));
-        helpBuilder.append("\t\t-r           Proceed recursively\n");
-        helpBuilder.append("\t\t-name        Specify file name filter as regular expression\n");
-        helpBuilder.append("\t\t-dry         Perform dry run\n");
-        helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
-        helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
-        return helpBuilder.toString();
+    public boolean appendUsage(IndentStringBuilder sb) {
+        return false;
+//        final StringBuilder helpBuilder = new StringBuilder();
+//        helpBuilder.append("\tParameters:\n");
+//        helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
+//        helpBuilder.append("\t\t-o <Path>    Specify path to output feature model file(s) (default: system:out)\n");
+//        helpBuilder.append("\t\t-f <Format>  Specify format by identifier. One of:\n");
+//        getFormats().forEach(f -> helpBuilder
+//                .append("\t\t                 ")
+//                .append(f.getName().toLowerCase())
+//                .append("\n"));
+//        helpBuilder.append("\t\t-r           Proceed recursively\n");
+//        helpBuilder.append("\t\t-name        Specify file name filter as regular expression\n");
+//        helpBuilder.append("\t\t-dry         Perform dry run\n");
+//        helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
+//        helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
+//        return helpBuilder.toString();
     }
 }
