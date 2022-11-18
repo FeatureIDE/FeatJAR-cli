@@ -49,17 +49,9 @@ public class FormulaAnalyzer implements Command {
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
-        // todo: general verbosity handling
-        String input = argumentParser.parseValue("--input").orElse(CommandLine.SYSTEM_INPUT);
-        final String analysisCommandName = argumentParser.parseRequiredValue("--analysis");
+        String input = argumentParser.parseOption("--input").orElse(CommandLine.SYSTEM_INPUT);
+        final String analysisCommandName = argumentParser.parseRequiredOption("--analysis");
         analysisCommand = argumentParser.parseRequiredExtension(Feat.extensionPoint(AnalysisCommands.class), analysisCommandName);
-
-// todo        Feat.log().setConfiguration(
-//                Feat.log().getConfiguration()
-//                        .resetLogStreams()
-//                        .logAtMost(verbosity));
-
-
         final Formula formula = CommandLine.loadFile(input, Feat.extensionPoint(FormulaFormats.class)).orElseThrow();
         analysisCommand.setFormula(formula);
         analysisCommand.run(argumentParser);
@@ -69,7 +61,6 @@ public class FormulaAnalyzer implements Command {
     public boolean appendUsage(IndentStringBuilder sb) {
         // todo: abstract this away into a helper that is passed the name, value, description, and default (if any)
         sb.appendLine("--input <path>: Path to formula file (default: " + CommandLine.SYSTEM_INPUT + ")");
-        // todo: sb.appendLine(prefix +"-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
         sb.appendLine("--analysis <Name>: Analysis whose result to compute. One of:").addIndent();
         Feat.extensionPoint(AnalysisCommands.class).getExtensions().forEach(a ->
                 sb.appendLine(String.format("%s: %s", a.getIdentifier(), Optional.ofNullable(a.getDescription()).orElse(""))));

@@ -20,7 +20,7 @@ public abstract class AnalysisCommand<T> implements Command {
     }
 
     protected Long parseTimeout() {
-        Long timeout = argumentParser.parseValue("--timeout").map(Long::valueOf).orElse(null);
+        Long timeout = argumentParser.parseOption("--timeout").map(Long::valueOf).orElse(null);
         if (timeout != null && timeout < 0)
             throw new IllegalArgumentException("negative timeout is invalid");
         return timeout;
