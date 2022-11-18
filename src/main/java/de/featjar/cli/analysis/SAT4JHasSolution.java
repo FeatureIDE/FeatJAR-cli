@@ -28,7 +28,7 @@ import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
 import de.featjar.formula.transformer.ToCNF;
 
 
-public class HasSolution extends AnalysisCommand<Boolean> {
+public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
     @Override
     public String getDescription() {
         return "Computes whether the given formula has a solution";

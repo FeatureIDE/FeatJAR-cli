@@ -4,7 +4,7 @@ package de.featjar.cli.analysis;
 import de.featjar.base.Feat;
 import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.cli.Command;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.data.Result;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.structure.formula.Formula;
@@ -38,7 +38,7 @@ public abstract class AnalysisCommand<T> implements Command {
         argumentParser.close();
         final long localTime = System.nanoTime();
         // todo: helper for flattening optional and result
-        final Optional<Result<T>> result = CommandLine.runInThread(analysis::getResult, parseTimeout());
+        final Optional<Result<T>> result = CommandLineInterface.runInThread(analysis::getResult, parseTimeout());
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent() && result.get().isPresent()) {
             System.out.println("Time needed for analysis:");

@@ -23,7 +23,7 @@ package de.featjar.cli.configuration;
 import de.featjar.formula.analysis.sat4j.todo.twise.TWiseConfigurationGenerator;
 import de.featjar.formula.analysis.bool.BooleanAssignmentList;
 import de.featjar.formula.analysis.io.ExpressionGroupFormat;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.io.IO;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,16 +50,16 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
         if (!super.parseArgument(gen, arg, iterator)) {
             switch (arg) {
                 case "-s":
-                    gen.setRandom(new Random(Long.parseLong(CommandLine.getArgValue(iterator, arg))));
+                    gen.setRandom(new Random(Long.parseLong(CommandLineInterface.getArgValue(iterator, arg))));
                     break;
                 case "-t":
-                    gen.setT(Integer.parseInt(CommandLine.getArgValue(iterator, arg)));
+                    gen.setT(Integer.parseInt(CommandLineInterface.getArgValue(iterator, arg)));
                     break;
                 case "-m":
-                    gen.setIterations(Integer.parseInt(CommandLine.getArgValue(iterator, arg)));
+                    gen.setIterations(Integer.parseInt(CommandLineInterface.getArgValue(iterator, arg)));
                     break;
                 case "-e":
-                    gen.setNodes(readExpressionFile(Paths.get(CommandLine.getArgValue(iterator, arg))));
+                    gen.setNodes(readExpressionFile(Paths.get(CommandLineInterface.getArgValue(iterator, arg))));
                     break;
                 default:
                     return false;

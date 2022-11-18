@@ -23,7 +23,7 @@ package de.featjar.cli;
 import de.featjar.base.Feat;
 import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.cli.Command;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.log.IndentStringBuilder;
 import de.featjar.cli.analysis.AnalysisCommand;
 import de.featjar.cli.analysis.AnalysisCommands;
@@ -49,10 +49,10 @@ public class FormulaAnalyzer implements Command {
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
-        String input = argumentParser.parseOption("--input").orElse(CommandLine.SYSTEM_INPUT);
+        String input = argumentParser.parseOption("--input").orElse(CommandLineInterface.SYSTEM_INPUT);
         final String analysisCommandName = argumentParser.parseRequiredOption("--analysis");
-        analysisCommand = argumentParser.parseRequiredExtension(Feat.extensionPoint(AnalysisCommands.class), analysisCommandName);
-        final Formula formula = CommandLine.loadFile(input, Feat.extensionPoint(FormulaFormats.class)).orElseThrow();
+        analysisCommand = argumentParser.getRequiredExtension(Feat.extensionPoint(AnalysisCommands.class), analysisCommandName);
+        final Formula formula = CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)).orElseThrow();
         analysisCommand.setFormula(formula);
         analysisCommand.run(argumentParser);
     }
@@ -60,7 +60,7 @@ public class FormulaAnalyzer implements Command {
     @Override
     public boolean appendUsage(IndentStringBuilder sb) {
         // todo: abstract this away into a helper that is passed the name, value, description, and default (if any)
-        sb.appendLine("--input <path>: Path to formula file (default: " + CommandLine.SYSTEM_INPUT + ")");
+        sb.appendLine("--input <path>: Path to formula file (default: " + CommandLineInterface.SYSTEM_INPUT + ")");
         sb.appendLine("--analysis <Name>: Analysis whose result to compute. One of:").addIndent();
         Feat.extensionPoint(AnalysisCommands.class).getExtensions().forEach(a ->
                 sb.appendLine(String.format("%s: %s", a.getIdentifier(), Optional.ofNullable(a.getDescription()).orElse(""))));

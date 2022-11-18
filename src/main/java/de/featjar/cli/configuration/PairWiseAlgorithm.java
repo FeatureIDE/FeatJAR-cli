@@ -22,7 +22,7 @@ package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
 import de.featjar.formula.analysis.sat4j.todo.configuration.PairWiseConfigurationGenerator;
-import de.featjar.base.cli.CommandLine;
+import de.featjar.base.cli.CommandLineInterface;
 import java.util.ListIterator;
 import java.util.Random;
 
@@ -44,7 +44,7 @@ public class PairWiseAlgorithm extends AlgorithmWrapper<AbstractConfigurationGen
             throws IllegalArgumentException {
         switch (arg) {
             case "-s":
-                gen.setRandom(new Random(Long.parseLong(CommandLine.getArgValue(iterator, arg))));
+                gen.setRandom(new Random(Long.parseLong(CommandLineInterface.getArgValue(iterator, arg))));
                 break;
             default:
                 return false;
