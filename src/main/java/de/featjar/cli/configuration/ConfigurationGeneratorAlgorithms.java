@@ -30,17 +30,4 @@ import de.featjar.base.extension.ExtensionPoint;
  */
 public class ConfigurationGeneratorAlgorithms
         extends ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
-
-    private static final ConfigurationGeneratorAlgorithms INSTANCE = new ConfigurationGeneratorAlgorithms();
-
-    public static ConfigurationGeneratorAlgorithms getInstance() {
-        return INSTANCE;
-    }
-
-    private ConfigurationGeneratorAlgorithms() {}
-
-    @Override
-    public ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> getInstanceAsExtensionPoint() {
-        return INSTANCE;
-    }
 }

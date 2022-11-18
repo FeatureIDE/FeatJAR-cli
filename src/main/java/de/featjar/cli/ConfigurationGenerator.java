@@ -57,8 +57,8 @@ public class ConfigurationGenerator implements Command {
 
     @Override
     public void run(List<String> args) {
-        String input = CommandLineInterface.SYSTEM_INPUT;
-        String output = CommandLineInterface.SYSTEM_OUTPUT;
+        String input = CommandLineInterface.STANDARD_INPUT;
+        String output = CommandLineInterface.STANDARD_OUTPUT;
         AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
         int limit = Integer.MAX_VALUE;
         String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;

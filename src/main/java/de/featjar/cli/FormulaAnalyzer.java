@@ -49,7 +49,7 @@ public class FormulaAnalyzer implements Command {
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
-        String input = argumentParser.parseOption("--input").orElse(CommandLineInterface.SYSTEM_INPUT);
+        String input = argumentParser.parseOption("--input").orElse(CommandLineInterface.STANDARD_INPUT);
         final String analysisCommandName = argumentParser.parseRequiredOption("--analysis");
         analysisCommand = argumentParser.getRequiredExtension(Feat.extensionPoint(AnalysisCommands.class), analysisCommandName);
         final Formula formula = CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)).orElseThrow();
@@ -60,7 +60,7 @@ public class FormulaAnalyzer implements Command {
     @Override
     public boolean appendUsage(IndentStringBuilder sb) {
         // todo: abstract this away into a helper that is passed the name, value, description, and default (if any)
-        sb.appendLine("--input <path>: Path to formula file (default: " + CommandLineInterface.SYSTEM_INPUT + ")");
+        sb.appendLine("--input <path>: Path to formula file (default: " + CommandLineInterface.STANDARD_INPUT + ")");
         sb.appendLine("--analysis <Name>: Analysis whose result to compute. One of:").addIndent();
         Feat.extensionPoint(AnalysisCommands.class).getExtensions().forEach(a ->
                 sb.appendLine(String.format("%s: %s", a.getIdentifier(), Optional.ofNullable(a.getDescription()).orElse(""))));

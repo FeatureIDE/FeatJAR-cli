@@ -40,8 +40,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -64,8 +62,8 @@ public class FormatConverter implements Command {
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
-        String input = CommandLineInterface.SYSTEM_INPUT;
-        String output = CommandLineInterface.SYSTEM_OUTPUT;
+        String input = CommandLineInterface.STANDARD_INPUT;
+        String output = CommandLineInterface.STANDARD_OUTPUT;
         Format<Formula> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
@@ -75,47 +73,47 @@ public class FormatConverter implements Command {
 
         List<String> args = new ArrayList<>(); //todo: rewrite all of this to use the argumentParser
 
-        for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
-            final String arg = iterator.next();
-            switch (arg) {
-                case "-f": {
-                    final String name = CommandLineInterface.getArgValue(iterator, arg).toLowerCase();
-                    outFormat = getFormats().stream()
-                            .filter(f -> Objects.equals(name, f.getName().toLowerCase()))
-                            .findFirst()
-                            .orElseThrow(() -> new IllegalArgumentException("Unknown format: " + name));
-                    break;
-                }
-                case "-o": {
-                    output = CommandLineInterface.getArgValue(iterator, arg);
-                    break;
-                }
-                case "-i": {
-                    input = CommandLineInterface.getArgValue(iterator, arg);
-                    break;
-                }
-                case "-r": {
-                    recursive = true;
-                    break;
-                }
-                case "-name": {
-                    fileNameFilter = CommandLineInterface.getArgValue(iterator, arg);
-                    break;
-                }
-                case "-v": {
-                    verbosity = CommandLineInterface.getArgValue(iterator, arg);
-                    break;
-                }
-                case "-dry": {
-                    dryRun = true;
-                    break;
-                }
-                case "-cnf": {
-                    cnf = true;
-                    break;
-                }
-            }
-        }
+//        for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
+//            final String arg = iterator.next();
+//            switch (arg) {
+//                case "-f": {
+//                    final String name = CommandLineInterface.getArgValue(iterator, arg).toLowerCase();
+//                    outFormat = getFormats().stream()
+//                            .filter(f -> Objects.equals(name, f.getName().toLowerCase()))
+//                            .findFirst()
+//                            .orElseThrow(() -> new IllegalArgumentException("Unknown format: " + name));
+//                    break;
+//                }
+//                case "-o": {
+//                    output = CommandLineInterface.getArgValue(iterator, arg);
+//                    break;
+//                }
+//                case "-i": {
+//                    input = CommandLineInterface.getArgValue(iterator, arg);
+//                    break;
+//                }
+//                case "-r": {
+//                    recursive = true;
+//                    break;
+//                }
+//                case "-name": {
+//                    fileNameFilter = CommandLineInterface.getArgValue(iterator, arg);
+//                    break;
+//                }
+//                case "-v": {
+//                    verbosity = CommandLineInterface.getArgValue(iterator, arg);
+//                    break;
+//                }
+//                case "-dry": {
+//                    dryRun = true;
+//                    break;
+//                }
+//                case "-cnf": {
+//                    cnf = true;
+//                    break;
+//                }
+//            }
+//        }
 
         String finalVerbosity = verbosity;
         FeatJAR featJAR = new FeatJAR(new FeatJAR.Configuration().log(cfg -> cfg.logAtMost(finalVerbosity)));

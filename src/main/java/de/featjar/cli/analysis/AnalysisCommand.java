@@ -37,20 +37,19 @@ public abstract class AnalysisCommand<T> implements Command {
         Feat.log().debug(analysis);
         argumentParser.close();
         final long localTime = System.nanoTime();
-        // todo: helper for flattening optional and result
-        final Optional<Result<T>> result = CommandLineInterface.runInThread(analysis::getResult, parseTimeout());
+        final Result<T> result = analysis.getResult();
         final long timeNeeded = System.nanoTime() - localTime;
-        if (result.isPresent() && result.get().isPresent()) {
+        if (result.isPresent() && result.isPresent()) {
             System.out.println("Time needed for analysis:");
             System.out.println(((timeNeeded / 1_000_000) / 1000.0) + "s");
             System.out.println("Result for analysis:");
-            System.out.println(serializeResult(result.get().get()));
+            System.out.println(serializeResult(result.get()));
         } else {
             // todo: currently this is not shown for some reason
             System.err.println("Could not compute result for analysis.");
-            if (result.isPresent() && !result.get().getProblems().isEmpty()) {
+            if (result.isPresent() && !result.getProblems().isEmpty()) {
                 System.err.println("The following problem(s) occurred:");
-                result.get().getProblems().forEach(System.err::println);
+                result.getProblems().forEach(System.err::println);
             }
         }
         this.argumentParser = null;
