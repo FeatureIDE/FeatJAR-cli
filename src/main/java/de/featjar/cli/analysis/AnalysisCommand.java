@@ -40,16 +40,16 @@ public abstract class AnalysisCommand<T> implements Command {
         final Result<T> result = analysis.getResult();
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent() && result.isPresent()) {
-            System.out.println("Time needed for analysis:");
-            System.out.println(((timeNeeded / 1_000_000) / 1000.0) + "s");
-            System.out.println("Result for analysis:");
-            System.out.println(serializeResult(result.get()));
+            Feat.log().info("Time needed for analysis:");
+            Feat.log().info(((timeNeeded / 1_000_000) / 1000.0) + "s");
+            Feat.log().info("Result for analysis:");
+            Feat.log().info(serializeResult(result.get()));
         } else {
             // todo: currently this is not shown for some reason
-            System.err.println("Could not compute result for analysis.");
+            Feat.log().error("Could not compute result for analysis.");
             if (result.isPresent() && !result.getProblems().isEmpty()) {
-                System.err.println("The following problem(s) occurred:");
-                result.getProblems().forEach(System.err::println);
+                Feat.log().error("The following problem(s) occurred:");
+                result.getProblems().forEach(p -> Feat.log().error(p.toString()));
             }
         }
         this.argumentParser = null;
