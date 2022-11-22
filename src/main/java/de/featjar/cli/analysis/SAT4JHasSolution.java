@@ -41,7 +41,7 @@ public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
                         .then(ToCNF::new)
                         .then(ToLiteralClauseList::new))
                 .setTimeout(parseTimeout());
-        //todo: also pass assignment, clause list, and seed (for those analyses that support it)
+        //TODO: also pass assignment, clause list, and seed (for those analyses that support it)
 
     }
 

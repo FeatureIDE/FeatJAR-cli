@@ -26,7 +26,7 @@ public abstract class AnalysisCommand<T> implements Command {
         return timeout;
     }
 
-    // todo: also parse other typical parameters, such as assignment, clause list, and seed
+    // TODO: also parse other typical parameters, such as assignment, clause list, and seed
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
@@ -45,7 +45,7 @@ public abstract class AnalysisCommand<T> implements Command {
             System.out.println("Result for analysis:");
             System.out.println(serializeResult(result.get()));
         } else {
-            // todo: currently this is not shown for some reason
+            // TODO: currently this is not shown for some reason
             System.err.println("Could not compute result for analysis.");
             if (result.isPresent() && !result.getProblems().isEmpty()) {
                 System.err.println("The following problem(s) occurred:");

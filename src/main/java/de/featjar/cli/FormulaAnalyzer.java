@@ -59,7 +59,7 @@ public class FormulaAnalyzer implements Command {
 
     @Override
     public boolean appendUsage(IndentStringBuilder sb) {
-        // todo: abstract this away into a helper that is passed the name, value, description, and default (if any)
+        // TODO: abstract this away into a helper that is passed the name, value, description, and default (if any)
         sb.appendLine("--input <path>: Path to formula file (default: " + CommandLineInterface.STANDARD_INPUT + ")");
         sb.appendLine("--analysis <Name>: Analysis whose result to compute. One of:").addIndent();
         Feat.extensionPoint(AnalysisCommands.class).getExtensions().forEach(a ->

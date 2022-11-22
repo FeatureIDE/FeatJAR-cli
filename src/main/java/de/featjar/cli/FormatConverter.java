@@ -71,7 +71,7 @@ public class FormatConverter implements Command {
         String fileNameFilter = null;
         String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
 
-        List<String> args = new ArrayList<>(); //todo: rewrite all of this to use the argumentParser
+        List<String> args = new ArrayList<>(); //TODO: rewrite all of this to use the argumentParser
 
 //        for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
 //            final String arg = iterator.next();
