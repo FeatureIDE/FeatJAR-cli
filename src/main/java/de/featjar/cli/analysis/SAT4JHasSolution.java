@@ -23,26 +23,30 @@ package de.featjar.cli.analysis;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.bool.ToLiteralClauseList;
+import de.featjar.formula.analysis.bool.ToBooleanClauseList;
 import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
+import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.transformer.ToCNF;
+
+import java.util.stream.Collectors;
 
 
 public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
     @Override
     public String getDescription() {
-        return "Computes whether the given formula has a solution";
+        return "Computes whether the given formula has a solution (with SAT4J)";
     }
 
     @Override
     protected Analysis<BooleanClauseList, Boolean> newAnalysis() {
-        return new SAT4JHasSolutionAnalysis(
-                Computation.of(formula)
-                        .then(ToCNF::new)
-                        .then(ToLiteralClauseList::new))
-                .setTimeout(parseTimeout());
-        //TODO: also pass assignment, clause list, and seed (for those analyses that support it)
-
+        System.out.println(parseValueClauseList().getAll().stream().map(ValueAssignment::getAll).collect(Collectors.toList()));
+        return Computation.of(formula)
+                .then(ToCNF::new)
+                .then(ToBooleanClauseList::new)
+                .then(booleanClauseListComputation -> new SAT4JHasSolutionAnalysis(booleanClauseListComputation)
+                        .setTimeout(parseTimeout())
+                        .setAssumedValueAssignment(Computation.of(parseValueAssignment()))
+                        .setAssumedValueClauseList(Computation.of(parseValueClauseList())));
     }
 
     @Override

@@ -4,13 +4,20 @@ package de.featjar.cli.analysis;
 import de.featjar.base.Feat;
 import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.cli.Command;
-import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.data.Result;
+import de.featjar.base.io.IO;
 import de.featjar.formula.analysis.Analysis;
+import de.featjar.formula.analysis.io.ValueAssignmentFormat;
+import de.featjar.formula.analysis.io.ValueClauseListFormat;
+import de.featjar.formula.analysis.value.ValueAssignment;
+import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.structure.formula.Formula;
 
-import java.util.Optional;
-
+/**
+ * Analyzes a formula.
+ *
+ * @param <T> the type of the analysis result
+ */
 public abstract class AnalysisCommand<T> implements Command {
     protected Formula formula;
     protected CLIArgumentParser argumentParser;
@@ -24,6 +31,23 @@ public abstract class AnalysisCommand<T> implements Command {
         if (timeout != null && timeout < 0)
             throw new IllegalArgumentException("negative timeout is invalid");
         return timeout;
+    }
+
+    protected ValueAssignment parseValueAssignment() {
+        // todo: add documentation for options (or even extract a dedicated class for options)
+        return Result.ofOptional(argumentParser.parseOption("--assignment"))
+                .flatMap(s -> IO.load(s, new ValueAssignmentFormat()))
+                .orElse(new ValueAssignment());
+    }
+
+    protected ValueClauseList parseValueClauseList() {
+        return Result.ofOptional(argumentParser.parseOption("--clauses"))
+                .flatMap(s -> IO.load(s, new ValueClauseListFormat()))
+                .orElse(new ValueClauseList());
+    }
+
+    protected Long parseSeed() {
+        return argumentParser.parseOption("--seed").map(Long::valueOf).orElse(null);
     }
 
     // TODO: also parse other typical parameters, such as assignment, clause list, and seed
@@ -45,12 +69,12 @@ public abstract class AnalysisCommand<T> implements Command {
             System.out.println("Result for analysis:");
             System.out.println(serializeResult(result.get()));
         } else {
-            // TODO: currently this is not shown for some reason
             System.err.println("Could not compute result for analysis.");
             if (result.isPresent() && !result.getProblems().isEmpty()) {
                 System.err.println("The following problem(s) occurred:");
                 result.getProblems().forEach(System.err::println);
             }
+            System.exit(1);
         }
         this.argumentParser = null;
     }

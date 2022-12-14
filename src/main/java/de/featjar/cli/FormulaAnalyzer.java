@@ -33,7 +33,9 @@ import de.featjar.formula.structure.formula.Formula;
 import java.util.Optional;
 
 /**
- * ...
+ * Computes an analysis result for a given formula.
+ * TODO: it would probably be better to integrate this class with the actual analysis commands
+ *  (so no --analysis is needed).
  *
  * @author Sebastian Krieter
  * @author Elias Kuiter
