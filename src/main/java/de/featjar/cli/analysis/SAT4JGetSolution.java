@@ -23,34 +23,33 @@ package de.featjar.cli.analysis;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
+import de.featjar.formula.analysis.bool.BooleanSolution;
 import de.featjar.formula.analysis.bool.ToBooleanClauseList;
+import de.featjar.formula.analysis.sat4j.SAT4JGetSolutionAnalysis;
 import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
-import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.transformer.ToCNF;
 
-import java.util.stream.Collectors;
 
-
-public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
+public class SAT4JGetSolution extends AnalysisCommand<BooleanSolution> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for whether the given formula has a solution";
+        return "Queries SAT4J for a solution of the given formula, if any";
     }
 
     @Override
-    protected Analysis<BooleanClauseList, Boolean> newAnalysis() {
+    protected Analysis<BooleanClauseList, BooleanSolution> newAnalysis() {
         return Computation.of(formula)
                 .then(ToCNF::new)
                 .then(ToBooleanClauseList::new)
                 .then(clauseListComputation ->
-                        new SAT4JHasSolutionAnalysis(clauseListComputation)
+                        new SAT4JGetSolutionAnalysis(clauseListComputation)
                                 .setTimeout(parseTimeout())
                                 .setAssumedValueAssignment(Computation.of(parseValueAssignment()))
                                 .setAssumedValueClauseList(Computation.of(parseValueClauseList())));
     }
 
     @Override
-    public String serializeResult(Boolean result) {
-        return result.toString();
+    public String serializeResult(BooleanSolution result) {
+        return result.print();
     }
 }

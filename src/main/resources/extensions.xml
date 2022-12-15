@@ -16,6 +16,7 @@
 </point>-->
 	<point id="de.featjar.cli.analysis.AnalysisCommands">
 		<extension id="de.featjar.cli.analysis.SAT4JHasSolution" />
+		<extension id="de.featjar.cli.analysis.SAT4JGetSolution" />
 		<!--<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />-->
 		<!--<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />
 		<extension id="de.featjar.cli.analysis.AtomicSetAlgorithm" />-->
