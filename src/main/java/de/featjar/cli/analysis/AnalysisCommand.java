@@ -50,15 +50,13 @@ public abstract class AnalysisCommand<T> implements Command {
         return argumentParser.parseOption("--seed").map(Long::valueOf).orElse(null);
     }
 
-    // TODO: also parse other typical parameters, such as assignment, clause list, and seed
-
     @Override
     public void run(CLIArgumentParser argumentParser) {
         if (this.formula == null)
             throw new IllegalArgumentException("no formula given");
         this.argumentParser = argumentParser;
         Analysis<?, T> analysis = newAnalysis();
-        Feat.log().debug(analysis);
+        Feat.log().debug("running " + analysis);
         argumentParser.close();
         final long localTime = System.nanoTime();
         final Result<T> result = analysis.getResult();
