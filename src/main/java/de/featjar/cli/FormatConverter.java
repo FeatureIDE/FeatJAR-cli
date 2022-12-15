@@ -25,6 +25,7 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.data.Computation;
 import de.featjar.base.log.IndentStringBuilder;
+import de.featjar.base.log.Log;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
 import de.featjar.base.cli.CommandLineInterface;
@@ -69,7 +70,7 @@ public class FormatConverter implements Command {
         boolean dryRun = false;
         boolean cnf = false;
         String fileNameFilter = null;
-        String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
+        Log.Verbosity verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
 
         List<String> args = new ArrayList<>(); //TODO: rewrite all of this to use the argumentParser
 
@@ -115,7 +116,7 @@ public class FormatConverter implements Command {
 //            }
 //        }
 
-        String finalVerbosity = verbosity;
+        Log.Verbosity finalVerbosity = verbosity;
         FeatJAR featJAR = new FeatJAR(new FeatJAR.Configuration().log(cfg -> cfg.logAtMost(finalVerbosity)));
 
         if (outFormat == null) {
@@ -193,9 +194,9 @@ public class FormatConverter implements Command {
         }
     }
 
-    @Override
-    public boolean appendUsage(IndentStringBuilder sb) {
-        return false;
+//    @Override
+//    public boolean appendUsage(IndentStringBuilder sb) {
+//        return false;
 //        final StringBuilder helpBuilder = new StringBuilder();
 //        helpBuilder.append("\tParameters:\n");
 //        helpBuilder.append("\t\t-i <Path>    Specify path to input feature model file(s) (default: system:in.xml)\n");
@@ -211,5 +212,5 @@ public class FormatConverter implements Command {
 //        helpBuilder.append("\t\t-cnf         Transform into CNF before conversion\n");
 //        helpBuilder.append("\t\t-v <Level>   Specify verbosity. One of: none, error, info, debug, progress\n");
 //        return helpBuilder.toString();
-    }
+   // }
 }

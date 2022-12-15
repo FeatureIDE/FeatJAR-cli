@@ -20,21 +20,26 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.base.cli.ArgumentParser;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.bool.ToBooleanClauseList;
 import de.featjar.formula.analysis.sat4j.SAT4JHasSolutionAnalysis;
-import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.transformer.ToCNF;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 
 public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for whether the given formula has a solution";
+        return "Queries SAT4J for whether a given formula has a solution";
+    }
+
+    @Override
+    public List<ArgumentParser.Option<?>> getOptions() {
+        return List.of(INPUT_OPTION, ASSIGNMENT_OPTION, CLAUSES_OPTION, TIMEOUT_OPTION);
     }
 
     @Override
@@ -44,9 +49,9 @@ public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
                 .then(ToBooleanClauseList::new)
                 .then(clauseListComputation ->
                         new SAT4JHasSolutionAnalysis(clauseListComputation)
-                                .setTimeout(parseTimeout())
-                                .setAssumedValueAssignment(Computation.of(parseValueAssignment()))
-                                .setAssumedValueClauseList(Computation.of(parseValueClauseList())));
+                                .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser))
+                                .setAssumedValueAssignment(Computation.of(ASSIGNMENT_OPTION.parseFrom(argumentParser)))
+                                .setAssumedValueClauseList(Computation.of(CLAUSES_OPTION.parseFrom(argumentParser))));
     }
 
     @Override

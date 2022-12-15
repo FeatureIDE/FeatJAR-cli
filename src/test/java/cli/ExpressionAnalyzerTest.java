@@ -22,7 +22,6 @@ package cli;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.featjar.cli.FormulaAnalyzer;
 import de.featjar.base.extension.ExtensionManager;
 import java.io.*;
 import java.nio.file.*;
@@ -78,7 +77,7 @@ public class ExpressionAnalyzerTest {
                 args.add(algorithm);
                 args.add("-i");
                 args.add(inFile.toString());
-                new FormulaAnalyzer().run(args);
+                new AnalysisCommand().run(args);
                 final String output = newOut.toString();
                 final int index = output.indexOf(resultPrefix);
                 return (index < 0)
