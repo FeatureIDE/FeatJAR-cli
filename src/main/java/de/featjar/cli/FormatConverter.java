@@ -24,7 +24,6 @@ import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.CLIArgumentParser;
 import de.featjar.base.data.Computation;
-import de.featjar.base.log.IndentStringBuilder;
 import de.featjar.base.log.Log;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
@@ -183,7 +182,7 @@ public class FormatConverter implements Command {
             if (parse.isPresent()) {
                 Formula expression = parse.get();
                 if (cnf) {
-                    expression = Computation.of(expression).then(ToCNF::new).getResult().get();
+                    expression = Computation.of(expression).map(ToCNF::new).getResult().get();
                 }
                 CommandLineInterface.saveFile(expression, outputFile, outFormat);
             } else {

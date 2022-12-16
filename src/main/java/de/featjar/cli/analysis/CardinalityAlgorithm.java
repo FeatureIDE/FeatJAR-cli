@@ -31,7 +31,7 @@ public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, Cou
 
     @Override
     protected Function<Formula, CountSolutionsAnalysis> newAlgorithm() {
-        return formula -> Computation.of(formula).then(ToBooleanClauseList::new).then(CountSolutionsAnalysis::new);
+        return formula -> Computation.of(formula).map(ToBooleanClauseList::new).map(CountSolutionsAnalysis::new);
     }
 
     @Override

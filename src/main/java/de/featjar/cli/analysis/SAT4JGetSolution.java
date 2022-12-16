@@ -20,16 +20,17 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.cli.ArgumentParser;
+import de.featjar.base.cli.Option;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
-import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.bool.BooleanSolution;
-import de.featjar.formula.analysis.bool.ToBooleanClauseList;
+import de.featjar.formula.analysis.bool.*;
+import de.featjar.formula.analysis.mapping.VariableMap;
 import de.featjar.formula.analysis.sat4j.SAT4JGetSolutionAnalysis;
 import de.featjar.formula.transformer.ToCNF;
 
 import java.util.List;
+
+import static de.featjar.base.data.Computations.*;
 
 
 public class SAT4JGetSolution extends AnalysisCommand<BooleanSolution> {
@@ -39,21 +40,41 @@ public class SAT4JGetSolution extends AnalysisCommand<BooleanSolution> {
     }
 
     @Override
-    public List<ArgumentParser.Option<?>> getOptions() {
+    public List<Option<?>> getOptions() {
         return List.of(INPUT_OPTION, ASSIGNMENT_OPTION, CLAUSES_OPTION, TIMEOUT_OPTION);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected Analysis<BooleanClauseList, BooleanSolution> newAnalysis() {
-        return Computation.of(formula)
-                .then(ToCNF::new)
-                .then(ToBooleanClauseList::new)
-                .then(clauseListComputation ->
-                        new SAT4JGetSolutionAnalysis(clauseListComputation)
-                                .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser))
-                                .setAssumedValueAssignment(Computation.of(ASSIGNMENT_OPTION.parseFrom(argumentParser)))
-                                .setAssumedValueClauseList(Computation.of(CLAUSES_OPTION.parseFrom(argumentParser))));
+        Computation.Pair<BooleanClauseList, VariableMap> computation =
+                Computation.of(formula)
+                        .map(ToCNF::new)
+                        .map(ToBooleanClauseList::new);
+        Computation<BooleanClauseList> booleanClauseListComputation = computation.getFirst();
+        Computation<VariableMap> variableMapComputation = computation.getSecond();
+        return new SAT4JGetSolutionAnalysis()
+                .setInput(booleanClauseListComputation)
+                .setAssumedAssignment((Computation<BooleanAssignment>) ASSIGNMENT_OPTION.parseFrom(argumentParser).toBoolean(variableMapComputation))
+                .setAssumedClauseList(CLAUSES_OPTION.parseFrom(argumentParser).toBoolean(variableMapComputation))
+                .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser));
     }
+
+//    protected Analysis<BooleanClauseList, BooleanSolution> newAnalysis2() {
+//        var pair =
+//                await(async(formula)
+//                        .map(ToCNF::new)
+//                        .map(ToBooleanClauseList::new));
+//        BooleanClauseList booleanClauseListComputation = pair.getKey();
+//        VariableMap variableMapComputation = pair.getValue();
+//        BooleanSolution solution = await(
+//                new SAT4JGetSolutionAnalysis()
+//                        .setInput(async(booleanClauseListComputation))
+//                        .setAssumedAssignment(async(ASSIGNMENT_OPTION.parseFrom(argumentParser).toBoolean(variableMapComputation).get()))
+//                        .setAssumedClauseList(async(CLAUSES_OPTION.parseFrom(argumentParser).toBoolean(variableMapComputation).get()))
+//                        .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser)));
+//        return null;
+//    }
 
     @Override
     public String serializeResult(BooleanSolution result) {

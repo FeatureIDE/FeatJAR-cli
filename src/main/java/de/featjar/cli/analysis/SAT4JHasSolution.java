@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.cli.ArgumentParser;
+import de.featjar.base.cli.Option;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
@@ -38,16 +38,16 @@ public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
     }
 
     @Override
-    public List<ArgumentParser.Option<?>> getOptions() {
+    public List<Option<?>> getOptions() {
         return List.of(INPUT_OPTION, ASSIGNMENT_OPTION, CLAUSES_OPTION, TIMEOUT_OPTION);
     }
 
     @Override
     protected Analysis<BooleanClauseList, Boolean> newAnalysis() {
         return Computation.of(formula)
-                .then(ToCNF::new)
-                .then(ToBooleanClauseList::new)
-                .then(clauseListComputation ->
+                .map(ToCNF::new)
+                .map(ToBooleanClauseList::new)
+                .map(clauseListComputation ->
                         new SAT4JHasSolutionAnalysis(clauseListComputation)
                                 .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser))
                                 .setAssumedValueAssignment(Computation.of(ASSIGNMENT_OPTION.parseFrom(argumentParser)))

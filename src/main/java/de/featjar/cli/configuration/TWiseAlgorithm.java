@@ -22,7 +22,7 @@ package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.twise.TWiseConfigurationGenerator;
 import de.featjar.formula.analysis.bool.BooleanAssignmentList;
-import de.featjar.formula.analysis.io.ExpressionGroupFormat;
+import de.featjar.formula.io.ExpressionGroupFormat;
 import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.io.IO;
 import java.nio.file.Path;
