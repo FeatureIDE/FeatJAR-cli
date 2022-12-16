@@ -44,14 +44,15 @@ public class SAT4JHasSolution extends AnalysisCommand<Boolean> {
 
     @Override
     protected Analysis<BooleanClauseList, Boolean> newAnalysis() {
-        return Computation.of(formula)
-                .map(ToCNF::new)
-                .map(ToBooleanClauseList::new)
-                .map(clauseListComputation ->
-                        new SAT4JHasSolutionAnalysis(clauseListComputation)
-                                .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser))
-                                .setAssumedValueAssignment(Computation.of(ASSIGNMENT_OPTION.parseFrom(argumentParser)))
-                                .setAssumedValueClauseList(Computation.of(CLAUSES_OPTION.parseFrom(argumentParser))));
+        return null;
+//        Computation.of(formula)
+//                .map(ToCNF::new)
+//                .map(ToBooleanClauseList::new)
+//                .map(clauseListComputation ->
+//                        new SAT4JHasSolutionAnalysis(clauseListComputation)
+//                                .setTimeout(TIMEOUT_OPTION.parseFrom(argumentParser))
+//                                .setAssumedValueAssignment(Computation.of(ASSIGNMENT_OPTION.parseFrom(argumentParser)))
+//                                .setAssumedValueClauseList(Computation.of(CLAUSES_OPTION.parseFrom(argumentParser))));
     }
 
     @Override

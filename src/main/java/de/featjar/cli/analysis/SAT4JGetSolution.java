@@ -24,13 +24,11 @@ import de.featjar.base.cli.Option;
 import de.featjar.base.data.Computation;
 import de.featjar.formula.analysis.Analysis;
 import de.featjar.formula.analysis.bool.*;
-import de.featjar.formula.analysis.mapping.VariableMap;
+import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.sat4j.SAT4JGetSolutionAnalysis;
 import de.featjar.formula.transformer.ToCNF;
 
 import java.util.List;
-
-import static de.featjar.base.data.Computations.*;
 
 
 public class SAT4JGetSolution extends AnalysisCommand<BooleanSolution> {
