@@ -3,8 +3,10 @@
 	<point id="de.featjar.base.cli.Commands">
 		<!--<extension id="de.featjar.cli.ConfigurationGenerator" />-->
 		<extension id="de.featjar.cli.FormatConverter" />
-		<extension id="de.featjar.cli.analysis.SAT4JHasSolution" />
-		<extension id="de.featjar.cli.analysis.SAT4JGetSolution" />
+		<extension id="de.featjar.cli.analysis.AnalyzeCountSolutionsSAT4J" />
+		<extension id="de.featjar.cli.analysis.AnalyzeGetSolutionSAT4J" />
+		<extension id="de.featjar.cli.analysis.AnalyzeGetSolutionsSAT4J" />
+		<extension id="de.featjar.cli.analysis.AnalyzeHasSolutionSAT4J" />
 		<!--<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />-->
 		<!--<extension id="de.featjar.cli.analysis.CoreDeadAlgorithm" />
 		<extension id="de.featjar.cli.analysis.AtomicSetAlgorithm" />-->

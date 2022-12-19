@@ -21,32 +21,22 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.base.data.Computation;
-import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
-import de.featjar.formula.analysis.bool.ComputeBooleanRepresentation;
-import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.analysis.VariableMap;
 
-import java.util.function.Function;
 
-import static de.featjar.base.data.Computations.async;
-
-public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, CountSolutionsAnalysis>> {
-
+public class AnalyzeHasSolutionSAT4J extends SAT4JAnalysisCommand<Boolean, Boolean> {
     @Override
-    protected Function<Formula, CountSolutionsAnalysis> newAlgorithm() {
-        return formula -> async(formula).map(ComputeBooleanRepresentation::new).map(CountSolutionsAnalysis::new);
+    public String getDescription() {
+        return "Queries SAT4J for whether a given formula has a solution";
     }
 
     @Override
-    public String getName() {
-        return "cardinality";
+    public de.featjar.formula.analysis.sat4j.AnalyzeHasSolutionSAT4J newAnalysis() {
+        return new de.featjar.formula.analysis.sat4j.AnalyzeHasSolutionSAT4J();
     }
 
     @Override
-    public String getHelp() {
-        final StringBuilder helpBuilder = new StringBuilder();
-        helpBuilder.append("\t");
-        helpBuilder.append(getName());
-        helpBuilder.append(": reports the feature model's number of valid configurations\n");
-        return helpBuilder.toString();
+    public Computation<Boolean> interpretResult(Computation<Boolean> bool, Computation<VariableMap> variableMap) {
+        return bool;
     }
 }

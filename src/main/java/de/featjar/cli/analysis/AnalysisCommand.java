@@ -3,6 +3,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.Feat;
 import de.featjar.base.cli.*;
+import de.featjar.base.data.Computation;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.formula.analysis.Analysis;
@@ -13,8 +14,12 @@ import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
 
+import java.util.List;
+
+import static de.featjar.base.data.Computations.*;
+
 /**
- * Analyzes a formula.
+ * Computes an analysis result for a formula.
  *
  * @param <T> the type of the analysis result
  */
@@ -43,27 +48,30 @@ public abstract class AnalysisCommand<T> implements Command {
                     .setDescription("Seed for pseudorandom number generator")
                     .setDefaultValue(Analysis.WithRandom.DEFAULT_RANDOM_SEED);
 
-    protected Formula formula;
+    protected Computation<Formula> formula;
     protected CLIArgumentParser argumentParser;
+
+    @Override
+    public List<Option<?>> getOptions() {
+        return List.of(INPUT_OPTION);
+    }
 
     @Override
     public void run(CLIArgumentParser argumentParser) {
         this.argumentParser = argumentParser;
         String input = INPUT_OPTION.parseFrom(argumentParser);
-        this.formula = CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)).orElseThrow();
-        Analysis<?, T> analysis = newAnalysis();
-        Feat.log().debug("running " + analysis);
+        this.formula = async(CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)));
+        Computation<T> computation = newComputation();
+        Feat.log().debug("running " + computation);
         argumentParser.close();
         final long localTime = System.nanoTime();
-        final Result<T> result = analysis.getResult();
+        final Result<T> result = computation.getResult();
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent() && result.isPresent()) {
-            System.out.println("Time needed for analysis:");
-            System.out.println(((timeNeeded / 1_000_000) / 1000.0) + "s");
-            System.out.println("Result for analysis:");
+            Feat.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");
             System.out.println(serializeResult(result.get()));
         } else {
-            System.err.println("Could not compute result for analysis.");
+            System.err.println("Could not compute result.");
             if (result.isPresent() && !result.getProblems().isEmpty()) {
                 System.err.println("The following problem(s) occurred:");
                 result.getProblems().forEach(System.err::println);
@@ -73,7 +81,9 @@ public abstract class AnalysisCommand<T> implements Command {
         this.argumentParser = null;
     }
 
-    protected abstract Analysis<?, T> newAnalysis();
+    public abstract Computation<T> newComputation();
 
-    protected abstract String serializeResult(T result);
+    public String serializeResult(T result) {
+        return result.toString();
+    }
 }
