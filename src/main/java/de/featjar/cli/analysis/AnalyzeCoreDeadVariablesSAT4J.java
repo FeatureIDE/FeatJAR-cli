@@ -21,32 +21,33 @@
 package de.featjar.cli.analysis;
 
 import de.featjar.base.data.Computation;
-import de.featjar.formula.analysis.sharpsat.CountSolutionsAnalysis;
-import de.featjar.formula.analysis.bool.ComputeBooleanRepresentation;
-import de.featjar.formula.structure.formula.Formula;
-
-import java.util.function.Function;
+import de.featjar.formula.analysis.VariableMap;
+import de.featjar.formula.analysis.bool.BooleanAssignment;
+import de.featjar.formula.analysis.value.*;
 
 import static de.featjar.base.data.Computations.async;
 
-public class CardinalityAlgorithm extends AlgorithmWrapper<Function<Formula, CountSolutionsAnalysis>> {
 
+public class AnalyzeCoreDeadVariablesSAT4J extends SAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
     @Override
-    protected Function<Formula, CountSolutionsAnalysis> newAlgorithm() {
-        return formula -> async(formula).map(ComputeBooleanRepresentation::new).map(CountSolutionsAnalysis::new);
+    public String getDescription() {
+        return "Queries SAT4J for all core and dead variables of a given formula, if any";
     }
 
     @Override
-    public String getName() {
-        return "cardinality";
+    public de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J newAnalysis() {
+        return new de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J();
     }
 
     @Override
-    public String getHelp() {
-        final StringBuilder helpBuilder = new StringBuilder();
-        helpBuilder.append("\t");
-        helpBuilder.append(getName());
-        helpBuilder.append(": reports the feature model's number of valid configurations\n");
-        return helpBuilder.toString();
+    public Computation<ValueAssignment> interpretResult(Computation<BooleanAssignment> booleanAssignment, Computation<VariableMap> variableMap) {
+        return async(booleanAssignment, variableMap)
+                .map(ComputeValueRepresentation.OfAssignment::new);
     }
+
+    @Override
+    public String serializeResult(ValueAssignment valueAssignment) {
+        return valueAssignment.print();
+    }
+
 }

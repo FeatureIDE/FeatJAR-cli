@@ -3,6 +3,7 @@
 	<point id="de.featjar.base.cli.Commands">
 		<!--<extension id="de.featjar.cli.ConfigurationGenerator" />-->
 		<extension id="de.featjar.cli.FormatConverter" />
+		<extension id="de.featjar.cli.analysis.AnalyzeCoreDeadVariablesSAT4J" />
 		<extension id="de.featjar.cli.analysis.AnalyzeCountSolutionsSAT4J" />
 		<extension id="de.featjar.cli.analysis.AnalyzeGetSolutionSAT4J" />
 		<extension id="de.featjar.cli.analysis.AnalyzeGetSolutionsSAT4J" />

@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.formula.analysis.sat4j.todo.AtomicSetAnalysis;
+import de.featjar.formula.analysis.sat4j.todo.AnalyzeAtomicSetsSAT4J;
 import de.featjar.formula.structure.map.TermMap;
 
 import java.util.Arrays;
@@ -28,11 +28,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AtomicSetAlgorithm extends AlgorithmWrapper<AtomicSetAnalysis> {
+public class AtomicSetAlgorithm extends AlgorithmWrapper<AnalyzeAtomicSetsSAT4J> {
 
     @Override
-    protected AtomicSetAnalysis newAlgorithm() {
-        return new AtomicSetAnalysis();
+    protected AnalyzeAtomicSetsSAT4J newAlgorithm() {
+        return new AnalyzeAtomicSetsSAT4J();
     }
 
     @SuppressWarnings("unchecked")
