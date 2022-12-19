@@ -8,6 +8,7 @@ import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.ComputeBooleanRepresentation;
 import de.featjar.formula.analysis.sat4j.SAT4JAnalysis;
 import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformer.ComputeNNFFormula;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public abstract class SAT4JAnalysisCommand<T, U> extends AnalysisCommand<T> {
     public Computation<T> newComputation() {
         var booleanRepresentation =
                 async(formula)
+                        .map(ComputeNNFFormula::new)
                         .map(ComputeCNFFormula::new)
                         .map(ComputeBooleanRepresentation.OfFormula::new);
         var booleanClauseList = getKey(booleanRepresentation);
