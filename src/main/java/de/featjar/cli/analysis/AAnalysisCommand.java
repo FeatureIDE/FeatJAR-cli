@@ -11,7 +11,7 @@ import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.structure.formula.IFormula;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ import static de.featjar.base.computation.Computations.*;
  *
  * @param <T> the type of the analysis result
  */
-public abstract class AnalysisCommand<T> implements ICommand {
+public abstract class AAnalysisCommand<T> implements ICommand {
     public static final Option<String> INPUT_OPTION =
             new Option.StringOption("--input")
                     .setDescription("Path to formula file")
@@ -47,7 +47,7 @@ public abstract class AnalysisCommand<T> implements ICommand {
                     .setDescription("Seed for pseudorandom number generator")
                     .setDefaultValue(IComputation.WithRandom.DEFAULT_RANDOM_SEED);
 
-    protected IComputation<Formula> formula;
+    protected IComputation<IFormula> formula;
     protected ArgumentParser argumentParser;
 
     @Override

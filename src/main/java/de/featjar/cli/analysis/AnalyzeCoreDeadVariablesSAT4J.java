@@ -29,7 +29,7 @@ import de.featjar.formula.analysis.value.*;
 import static de.featjar.base.computation.Computations.async;
 
 
-public class AnalyzeCoreDeadVariablesSAT4J extends SAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
+public class AnalyzeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
     @Override
     public String getDescription() {
         return "Queries SAT4J for all core and dead variables of a given formula, if any";
@@ -43,7 +43,7 @@ public class AnalyzeCoreDeadVariablesSAT4J extends SAT4JAnalysisCommand<ValueAss
     @Override
     public IComputation<ValueAssignment> interpret(IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
         return async(booleanAssignment, variableMap)
-                .map(ComputeValueRepresentation.OfAssignment::new);
+                .map(AComputeValueRepresentation.OfAssignment::new);
     }
 
     @Override

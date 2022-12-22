@@ -21,7 +21,7 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.twise.TWiseConfigurationGenerator;
-import de.featjar.formula.analysis.bool.BooleanAssignmentList;
+import de.featjar.formula.analysis.bool.ABooleanAssignmentList;
 import de.featjar.formula.io.ExpressionGroupFormat;
 import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.io.IO;
@@ -68,8 +68,8 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
         return true;
     }
 
-    private List<List<BooleanAssignmentList>> readExpressionFile(Path expressionFile) {
-        final List<List<BooleanAssignmentList>> expressionGroups;
+    private List<List<ABooleanAssignmentList>> readExpressionFile(Path expressionFile) {
+        final List<List<ABooleanAssignmentList>> expressionGroups;
         if (expressionFile != null) {
             expressionGroups = IO.load(expressionFile, new ExpressionGroupFormat())
                     .orElseThrow(p -> new IllegalArgumentException(

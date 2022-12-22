@@ -27,7 +27,7 @@ import de.featjar.formula.analysis.sat4j.todo.configuration.SampleRandomConfigur
  *
  * @author Sebastian Krieter
  */
-public class SampleRandomAlgorithm extends RandomAlgorithm {
+public class SampleRandomAlgorithm extends ARandomAlgorithm {
 
     @Override
     protected SampleRandomConfigurationGenerator newAlgorithm() {

@@ -30,7 +30,7 @@ import java.util.Random;
  *
  * @author Sebastian Krieter
  */
-public abstract class RandomAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
+public abstract class ARandomAlgorithm extends AlgorithmWrapper<AbstractConfigurationGenerator> {
 
     @Override
     protected boolean parseArgument(AbstractConfigurationGenerator gen, String arg, ListIterator<String> iterator)

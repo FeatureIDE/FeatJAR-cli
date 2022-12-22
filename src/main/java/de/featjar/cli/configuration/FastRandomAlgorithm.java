@@ -27,7 +27,7 @@ import de.featjar.formula.analysis.sat4j.todo.configuration.FastRandomConfigurat
  *
  * @author Sebastian Krieter
  */
-public class FastRandomAlgorithm extends RandomAlgorithm {
+public class FastRandomAlgorithm extends ARandomAlgorithm {
 
     @Override
     protected FastRandomConfigurationGenerator newAlgorithm() {

@@ -25,7 +25,7 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.ArgumentParser;
 import de.featjar.base.log.Log;
 import de.featjar.formula.io.FormulaFormats;
-import de.featjar.formula.structure.formula.Formula;
+import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.cli.ICommand;
 import de.featjar.base.data.Result;
@@ -57,7 +57,7 @@ public class FormatConverter implements ICommand {
         return "Converts feature models between various formats";
     }
 
-    private static List<IFormat<Formula>> getFormats() {
+    private static List<IFormat<IFormula>> getFormats() {
         return Feat.extensionPoint(FormulaFormats.class).getExtensions();
     }
 
@@ -65,7 +65,7 @@ public class FormatConverter implements ICommand {
     public void run(ArgumentParser argumentParser) {
         String input = CommandLineInterface.STANDARD_INPUT;
         String output = CommandLineInterface.STANDARD_OUTPUT;
-        IFormat<Formula> outFormat = null;
+        IFormat<IFormula> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
         boolean cnf = false;
@@ -137,7 +137,7 @@ public class FormatConverter implements ICommand {
 
         final boolean convert = !dryRun;
         if (directory) {
-            final IFormat<Formula> format = outFormat;
+            final IFormat<IFormula> format = outFormat;
             final Path rootIn = Paths.get(input);
             final Path rootOut = Paths.get(output);
             final Predicate<String> fileNamePredicate = fileNameFilter == null
@@ -177,11 +177,11 @@ public class FormatConverter implements ICommand {
         featJAR.close();
     }
 
-    private void convert(String inputFile, String outputFile, IFormat<Formula> outFormat, boolean cnf) {
+    private void convert(String inputFile, String outputFile, IFormat<IFormula> outFormat, boolean cnf) {
         try {
-            final Result<Formula> parse = CommandLineInterface.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
+            final Result<IFormula> parse = CommandLineInterface.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
             if (parse.isPresent()) {
-                Formula expression = parse.get();
+                IFormula expression = parse.get();
                 if (cnf) {
                     expression = async(expression).map(TransformCNFFormula::new).getResult().get();
                 }

@@ -6,7 +6,7 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.bool.ComputeBooleanRepresentation;
+import de.featjar.formula.analysis.bool.AComputeBooleanRepresentation;
 import de.featjar.formula.analysis.sat4j.ASAT4JAnalysis;
 import de.featjar.formula.transformer.TransformCNFFormula;
 import de.featjar.formula.transformer.TransformNNFFormula;
@@ -16,7 +16,7 @@ import java.util.List;
 import static de.featjar.base.computation.Computations.*;
 import static de.featjar.base.computation.Computations.async;
 
-public abstract class SAT4JAnalysisCommand<T, U> extends AnalysisCommand<T> {
+public abstract class ASAT4JAnalysisCommand<T, U> extends AAnalysisCommand<T> {
     @Override
     public List<Option<?>> getOptions() {
         return ICommand.addOptions(super.getOptions(), ASSIGNMENT_OPTION, CLAUSES_OPTION, TIMEOUT_OPTION);
@@ -28,7 +28,7 @@ public abstract class SAT4JAnalysisCommand<T, U> extends AnalysisCommand<T> {
                 async(formula)
                         .map(TransformNNFFormula::new)
                         .map(TransformCNFFormula::new)
-                        .map(ComputeBooleanRepresentation.OfFormula::new);
+                        .map(AComputeBooleanRepresentation.OfFormula::new);
         var booleanClauseList = getKey(booleanRepresentation);
         var variableMap = getValue(booleanRepresentation);
         var analysis = newAnalysis(booleanClauseList);

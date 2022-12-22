@@ -27,7 +27,7 @@ import de.featjar.formula.analysis.bool.BooleanClauseList;
 import java.math.BigInteger;
 
 
-public class AnalyzeCountSolutionsSAT4J extends SAT4JAnalysisCommand<BigInteger, BigInteger> {
+public class AnalyzeCountSolutionsSAT4J extends ASAT4JAnalysisCommand<BigInteger, BigInteger> {
     @Override
     public String getDescription() {
         return "Queries SAT4J for the number of solutions of a given formula, if any";

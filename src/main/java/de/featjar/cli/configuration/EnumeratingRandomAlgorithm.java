@@ -27,7 +27,7 @@ import de.featjar.formula.analysis.sat4j.todo.configuration.EnumeratingRandomCon
  *
  * @author Sebastian Krieter
  */
-public class EnumeratingRandomAlgorithm extends RandomAlgorithm {
+public class EnumeratingRandomAlgorithm extends ARandomAlgorithm {
 
     @Override
     protected EnumeratingRandomConfigurationGenerator newAlgorithm() {

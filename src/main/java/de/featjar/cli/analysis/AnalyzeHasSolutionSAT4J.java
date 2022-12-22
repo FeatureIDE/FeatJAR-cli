@@ -25,7 +25,7 @@ import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 
 
-public class AnalyzeHasSolutionSAT4J extends SAT4JAnalysisCommand<Boolean, Boolean> {
+public class AnalyzeHasSolutionSAT4J extends ASAT4JAnalysisCommand<Boolean, Boolean> {
     @Override
     public String getDescription() {
         return "Queries SAT4J for whether a given formula has a solution";
