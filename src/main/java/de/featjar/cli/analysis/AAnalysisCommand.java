@@ -3,6 +3,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.Feat;
 import de.featjar.base.cli.*;
+import de.featjar.base.computation.ConstantComputation;
 import de.featjar.base.computation.IComputation;
 import de.featjar.base.computation.IRandomDependency;
 import de.featjar.base.data.Result;
@@ -15,8 +16,11 @@ import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
+import de.featjar.formula.structure.formula.connective.And;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static de.featjar.base.computation.Computations.*;
 
@@ -51,21 +55,26 @@ public abstract class AAnalysisCommand<T> implements ICommand {
                     .setDescription("Seed for pseudorandom number generator")
                     .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
 
+    public static final Option<Boolean> BROWSE_CACHE_OPTION =
+            new Option.Flag("--browse-cache")
+                    .setDescription("Show cache contents in default browser");
+
     protected IComputation<IFormula> formula;
     protected ArgumentParser argumentParser;
 
     @Override
     public List<Option<?>> getOptions() {
-        return List.of(INPUT_OPTION);
+        return List.of(INPUT_OPTION, BROWSE_CACHE_OPTION);
     }
 
     @Override
     public void run(ArgumentParser argumentParser) {
         this.argumentParser = argumentParser;
         String input = INPUT_OPTION.parseFrom(argumentParser);
+        Boolean browseCache = BROWSE_CACHE_OPTION.parseFrom(argumentParser);
         this.formula = async(CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)));
         IComputation<T> computation = newComputation();
-        Feat.log().debug("running " + computation);
+        Feat.log().info("running " + computation);
         argumentParser.close();
         final long localTime = System.nanoTime();
         final Result<T> result = computation.getResult();
@@ -73,6 +82,14 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         if (result.isPresent() && result.isPresent()) {
             Feat.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");
             System.out.println(serializeResult(result.get()));
+            List<IComputation<?>> l = Feat.cache().getCachedComputations();
+            List<?> y = (l.stream()
+                            .filter(x -> x.getClass().equals(ConstantComputation.class))
+                    .map(i -> i.getResult().get())
+                    .filter(x -> x.getClass().isAssignableFrom(And.class))
+                    .map(o -> ((And) o))).collect(Collectors.toList());
+            if (browseCache)
+                Feat.cache().browse(new GraphVizComputationTreeFormat());
         } else {
             System.err.println("Could not compute result.");
             if (result.isPresent() && !result.getProblems().isEmpty()) {
