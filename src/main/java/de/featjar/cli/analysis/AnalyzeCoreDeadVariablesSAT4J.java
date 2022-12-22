@@ -43,7 +43,7 @@ public class AnalyzeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAs
     @Override
     public IComputation<ValueAssignment> interpret(IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
         return async(booleanAssignment, variableMap)
-                .map(AComputeValueRepresentation.OfAssignment::new);
+                .map(ComputeValueRepresentationOfAssignment::new);
     }
 
     @Override

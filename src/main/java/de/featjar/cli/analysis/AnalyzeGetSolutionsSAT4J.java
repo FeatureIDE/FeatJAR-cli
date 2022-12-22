@@ -24,7 +24,7 @@ import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.bool.BooleanSolutionList;
-import de.featjar.formula.analysis.value.AComputeValueRepresentation;
+import de.featjar.formula.analysis.value.ComputeValueRepresentationOfSolutionList;
 import de.featjar.formula.analysis.value.ValueSolutionList;
 
 import static de.featjar.base.computation.Computations.async;
@@ -44,7 +44,7 @@ public class AnalyzeGetSolutionsSAT4J extends ASAT4JAnalysisCommand<ValueSolutio
     @Override
     public IComputation<ValueSolutionList> interpret(IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
         return async(booleanSolutionList, variableMap)
-                .map(AComputeValueRepresentation.OfSolutionList::new);
+                .map(ComputeValueRepresentationOfSolutionList::new);
     }
 
     @Override

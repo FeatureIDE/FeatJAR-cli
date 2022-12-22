@@ -4,8 +4,11 @@ package de.featjar.cli.analysis;
 import de.featjar.base.Feat;
 import de.featjar.base.cli.*;
 import de.featjar.base.computation.IComputation;
+import de.featjar.base.computation.IRandomDependency;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
+import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
+import de.featjar.base.io.graphviz.GraphVizTreeFormat;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.analysis.value.ValueAssignment;
@@ -40,12 +43,13 @@ public abstract class AAnalysisCommand<T> implements ICommand {
     public static final Option<Long> TIMEOUT_OPTION =
             new Option<>("--timeout", Result.wrapInResult(Long::valueOf))
                     .setDescription("Analysis timeout in milliseconds")
-                    .setValidator(timeout -> timeout >= 0);
+                    .setValidator(timeout -> timeout >= 0)
+                    .setDefaultValue((long) Integer.MAX_VALUE); // todo: better: allow null value
 
     public static final Option<Long> SEED_OPTION =
             new Option<>("--seed", Result.wrapInResult(Long::valueOf))
                     .setDescription("Seed for pseudorandom number generator")
-                    .setDefaultValue(IComputation.WithRandom.DEFAULT_RANDOM_SEED);
+                    .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
 
     protected IComputation<IFormula> formula;
     protected ArgumentParser argumentParser;
