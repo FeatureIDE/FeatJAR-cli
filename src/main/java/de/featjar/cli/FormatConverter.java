@@ -29,8 +29,8 @@ import de.featjar.formula.structure.formula.Formula;
 import de.featjar.base.cli.CommandLineInterface;
 import de.featjar.base.cli.ICommand;
 import de.featjar.base.data.Result;
-import de.featjar.base.io.IOObject;
-import de.featjar.base.io.format.Format;
+import de.featjar.base.io.IIOObject;
+import de.featjar.base.io.format.IFormat;
 import de.featjar.formula.transformer.TransformCNFFormula;
 
 import java.io.IOException;
@@ -57,7 +57,7 @@ public class FormatConverter implements ICommand {
         return "Converts feature models between various formats";
     }
 
-    private static List<Format<Formula>> getFormats() {
+    private static List<IFormat<Formula>> getFormats() {
         return Feat.extensionPoint(FormulaFormats.class).getExtensions();
     }
 
@@ -65,7 +65,7 @@ public class FormatConverter implements ICommand {
     public void run(ArgumentParser argumentParser) {
         String input = CommandLineInterface.STANDARD_INPUT;
         String output = CommandLineInterface.STANDARD_OUTPUT;
-        Format<Formula> outFormat = null;
+        IFormat<Formula> outFormat = null;
         boolean recursive = false;
         boolean dryRun = false;
         boolean cnf = false;
@@ -137,7 +137,7 @@ public class FormatConverter implements ICommand {
 
         final boolean convert = !dryRun;
         if (directory) {
-            final Format<Formula> format = outFormat;
+            final IFormat<Formula> format = outFormat;
             final Path rootIn = Paths.get(input);
             final Path rootOut = Paths.get(output);
             final Predicate<String> fileNamePredicate = fileNameFilter == null
@@ -152,7 +152,7 @@ public class FormatConverter implements ICommand {
                         .forEach(inputFile -> {
                             final Path outputDirectory = rootOut.resolve(rootIn.relativize(inputFile.getParent()));
                             final Path outputFile = outputDirectory.resolve(
-                                    IOObject.getFileNameWithoutExtension(inputFile.getFileName()) + "."
+                                    IIOObject.getFileNameWithoutExtension(inputFile.getFileName()) + "."
                                             + format.getFileExtension());
                             Feat.log().info(inputFile + " -> " + outputFile);
                             if (convert) {
@@ -177,7 +177,7 @@ public class FormatConverter implements ICommand {
         featJAR.close();
     }
 
-    private void convert(String inputFile, String outputFile, Format<Formula> outFormat, boolean cnf) {
+    private void convert(String inputFile, String outputFile, IFormat<Formula> outFormat, boolean cnf) {
         try {
             final Result<Formula> parse = CommandLineInterface.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
             if (parse.isPresent()) {

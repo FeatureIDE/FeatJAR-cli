@@ -21,7 +21,7 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.formula.analysis.sat4j.todo.configuration.AbstractConfigurationGenerator;
-import de.featjar.base.extension.ExtensionPoint;
+import de.featjar.base.extension.AExtensionPoint;
 
 /**
  * Extension point for sampling algorithms.
@@ -29,5 +29,5 @@ import de.featjar.base.extension.ExtensionPoint;
  * @author Sebastian Krieter
  */
 public class ConfigurationGeneratorAlgorithms
-        extends ExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
+        extends AExtensionPoint<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> {
 }
