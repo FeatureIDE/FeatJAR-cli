@@ -20,12 +20,13 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.data.Computation;
+import de.featjar.base.computation.Computable;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanAssignment;
+import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.value.*;
 
-import static de.featjar.base.data.Computations.async;
+import static de.featjar.base.computation.Computations.async;
 
 
 public class AnalyzeCoreDeadVariablesSAT4J extends SAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
@@ -35,12 +36,12 @@ public class AnalyzeCoreDeadVariablesSAT4J extends SAT4JAnalysisCommand<ValueAss
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J newAnalysis() {
-        return new de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J();
+    public de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J newAnalysis(Computable<BooleanClauseList> clauseList) {
+        return new de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J(clauseList);
     }
 
     @Override
-    public Computation<ValueAssignment> interpretResult(Computation<BooleanAssignment> booleanAssignment, Computation<VariableMap> variableMap) {
+    public Computable<ValueAssignment> interpret(Computable<BooleanAssignment> booleanAssignment, Computable<VariableMap> variableMap) {
         return async(booleanAssignment, variableMap)
                 .map(ComputeValueRepresentation.OfAssignment::new);
     }

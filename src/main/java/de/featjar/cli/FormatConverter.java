@@ -23,7 +23,6 @@ package de.featjar.cli;
 import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.CLIArgumentParser;
-import de.featjar.base.data.Computation;
 import de.featjar.base.log.Log;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
@@ -32,7 +31,7 @@ import de.featjar.base.cli.Command;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IOObject;
 import de.featjar.base.io.format.Format;
-import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformer.TransformCNFFormula;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -44,7 +43,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static de.featjar.base.data.Computations.async;
+import static de.featjar.base.computation.Computations.async;
 
 /**
  * ...
@@ -184,7 +183,7 @@ public class FormatConverter implements Command {
             if (parse.isPresent()) {
                 Formula expression = parse.get();
                 if (cnf) {
-                    expression = async(expression).map(ComputeCNFFormula::new).getResult().get();
+                    expression = async(expression).map(TransformCNFFormula::new).getResult().get();
                 }
                 CommandLineInterface.saveFile(expression, outputFile, outFormat);
             } else {

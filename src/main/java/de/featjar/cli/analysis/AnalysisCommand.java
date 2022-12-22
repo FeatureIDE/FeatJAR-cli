@@ -3,10 +3,10 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.Feat;
 import de.featjar.base.cli.*;
-import de.featjar.base.data.Computation;
+import de.featjar.base.computation.Computable;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
-import de.featjar.formula.analysis.Analysis;
+import de.featjar.formula.analysis.FormulaAnalysis;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.analysis.value.ValueAssignment;
@@ -16,7 +16,7 @@ import de.featjar.formula.structure.formula.Formula;
 
 import java.util.List;
 
-import static de.featjar.base.data.Computations.*;
+import static de.featjar.base.computation.Computations.*;
 
 /**
  * Computes an analysis result for a formula.
@@ -46,9 +46,9 @@ public abstract class AnalysisCommand<T> implements Command {
     public static final Option<Long> SEED_OPTION =
             new Option<>("--seed", Result.wrapInResult(Long::valueOf))
                     .setDescription("Seed for pseudorandom number generator")
-                    .setDefaultValue(Analysis.WithRandom.DEFAULT_RANDOM_SEED);
+                    .setDefaultValue(Computable.WithRandom.DEFAULT_RANDOM_SEED);
 
-    protected Computation<Formula> formula;
+    protected Computable<Formula> formula;
     protected CLIArgumentParser argumentParser;
 
     @Override
@@ -61,11 +61,11 @@ public abstract class AnalysisCommand<T> implements Command {
         this.argumentParser = argumentParser;
         String input = INPUT_OPTION.parseFrom(argumentParser);
         this.formula = async(CommandLineInterface.loadFile(input, Feat.extensionPoint(FormulaFormats.class)));
-        Computation<T> computation = newComputation();
-        Feat.log().debug("running " + computation);
+        Computable<T> computable = newComputation();
+        Feat.log().debug("running " + computable);
         argumentParser.close();
         final long localTime = System.nanoTime();
-        final Result<T> result = computation.getResult();
+        final Result<T> result = computable.getResult();
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent() && result.isPresent()) {
             Feat.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");
@@ -81,7 +81,7 @@ public abstract class AnalysisCommand<T> implements Command {
         this.argumentParser = null;
     }
 
-    public abstract Computation<T> newComputation();
+    public abstract Computable<T> newComputation();
 
     public String serializeResult(T result) {
         return result.toString();
