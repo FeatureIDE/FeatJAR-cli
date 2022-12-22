@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.computation.Computable;
+import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 
@@ -32,12 +32,12 @@ public class AnalyzeHasSolutionSAT4J extends SAT4JAnalysisCommand<Boolean, Boole
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeHasSolutionSAT4J newAnalysis(Computable<BooleanClauseList> clauseList) {
+    public de.featjar.formula.analysis.sat4j.AnalyzeHasSolutionSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
         return new de.featjar.formula.analysis.sat4j.AnalyzeHasSolutionSAT4J(clauseList);
     }
 
     @Override
-    public Computable<Boolean> interpret(Computable<Boolean> bool, Computable<VariableMap> variableMap) {
+    public IComputation<Boolean> interpret(IComputation<Boolean> bool, IComputation<VariableMap> variableMap) {
         return bool;
     }
 }

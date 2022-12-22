@@ -20,7 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.computation.Computable;
+import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 
@@ -34,12 +34,12 @@ public class AnalyzeCountSolutionsSAT4J extends SAT4JAnalysisCommand<BigInteger,
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeCountSolutionsSAT4J newAnalysis(Computable<BooleanClauseList> clauseList) {
+    public de.featjar.formula.analysis.sat4j.AnalyzeCountSolutionsSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
         return new de.featjar.formula.analysis.sat4j.AnalyzeCountSolutionsSAT4J(clauseList);
     }
 
     @Override
-    public Computable<BigInteger> interpret(Computable<BigInteger> count, Computable<VariableMap> variableMap) {
+    public IComputation<BigInteger> interpret(IComputation<BigInteger> count, IComputation<VariableMap> variableMap) {
         return count;
     }
 }

@@ -26,7 +26,7 @@ import de.featjar.formula.io.ListFormat;
 import de.featjar.cli.configuration.ConfigurationGeneratorAlgorithms;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.cli.CommandLineInterface;
-import de.featjar.base.cli.Command;
+import de.featjar.base.cli.ICommand;
 import de.featjar.base.data.Result;
 import de.featjar.base.log.Log;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import java.util.Objects;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class ConfigurationGenerator implements Command {
+public class ConfigurationGenerator implements ICommand {
 
     private final List<AlgorithmWrapper<? extends AbstractConfigurationGenerator>> algorithms =
             ConfigurationGeneratorAlgorithms.getInstance().getExtensions();

@@ -22,12 +22,12 @@ package de.featjar.cli;
 
 import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
-import de.featjar.base.cli.CLIArgumentParser;
+import de.featjar.base.cli.ArgumentParser;
 import de.featjar.base.log.Log;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.Formula;
 import de.featjar.base.cli.CommandLineInterface;
-import de.featjar.base.cli.Command;
+import de.featjar.base.cli.ICommand;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IOObject;
 import de.featjar.base.io.format.Format;
@@ -51,7 +51,7 @@ import static de.featjar.base.computation.Computations.async;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class FormatConverter implements Command {
+public class FormatConverter implements ICommand {
     @Override
     public String getDescription() {
         return "Converts feature models between various formats";
@@ -62,7 +62,7 @@ public class FormatConverter implements Command {
     }
 
     @Override
-    public void run(CLIArgumentParser argumentParser) {
+    public void run(ArgumentParser argumentParser) {
         String input = CommandLineInterface.STANDARD_INPUT;
         String output = CommandLineInterface.STANDARD_OUTPUT;
         Format<Formula> outFormat = null;
