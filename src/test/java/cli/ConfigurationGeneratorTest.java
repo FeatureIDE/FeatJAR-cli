@@ -244,7 +244,7 @@ public class ConfigurationGeneratorTest {
                     new ConfigurationGenerator().run(args);
 
                     final BooleanSolutionList sample =
-                            IO.load(outFile, new ListFormat()).orElse(Log::problems);
+                            IO.load(outFile, new ListFormat()).orElseGet(Log::problem);
                     if (sample == null) {
                         fail("Sample for " + modelFile.toString() + " could not be read!");
                     }
@@ -265,7 +265,7 @@ public class ConfigurationGeneratorTest {
     private static CNF loadCNF(final Path modelFile) {
         final CNF cnf = IO.load(modelFile, FeatJAR.extensionPoint(FormulaFormats.class))
                 .map(Deprecated::convertToCNF)
-                .orElse(Log::problems);
+                .orElseGet(Log::problem);
         if (cnf == null) {
             fail("CNF could not be read!");
         }

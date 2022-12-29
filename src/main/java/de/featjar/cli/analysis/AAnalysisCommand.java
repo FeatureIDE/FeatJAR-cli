@@ -3,9 +3,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.Feat;
 import de.featjar.base.cli.*;
-import de.featjar.base.computation.ConstantComputation;
-import de.featjar.base.computation.IComputation;
-import de.featjar.base.computation.IRandomDependency;
+import de.featjar.base.computation.*;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
@@ -19,7 +17,6 @@ import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.formula.structure.formula.connective.And;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static de.featjar.base.computation.Computations.*;
@@ -31,7 +28,7 @@ import static de.featjar.base.computation.Computations.*;
  */
 public abstract class AAnalysisCommand<T> implements ICommand {
     public static final Option<String> INPUT_OPTION =
-            new Option.StringOption("--input")
+            new StringOption("--input")
                     .setDescription("Path to formula file")
                     .setDefaultValue(CommandLineInterface.STANDARD_INPUT);
 
@@ -45,18 +42,18 @@ public abstract class AAnalysisCommand<T> implements ICommand {
                     .setDescription("An additional clause list to assume")
                     .setDefaultValue(new ValueClauseList());
     public static final Option<Long> TIMEOUT_OPTION =
-            new Option<>("--timeout", Result.wrapInResult(Long::valueOf))
+            new Option<>("--timeout", Result.mapReturnValue(Long::valueOf))
                     .setDescription("Analysis timeout in milliseconds")
-                    .setValidator(timeout -> timeout >= 0)
-                    .setDefaultValue((long) Integer.MAX_VALUE); // todo: better: allow null value
+                    .setValidator(timeout -> timeout >= -1)
+                    .setDefaultValue(ITimeoutDependency.DEFAULT_TIMEOUT);
 
     public static final Option<Long> SEED_OPTION =
-            new Option<>("--seed", Result.wrapInResult(Long::valueOf))
+            new Option<>("--seed", Result.mapReturnValue(Long::valueOf))
                     .setDescription("Seed for pseudorandom number generator")
                     .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
 
     public static final Option<Boolean> BROWSE_CACHE_OPTION =
-            new Option.Flag("--browse-cache")
+            new Flag("--browse-cache")
                     .setDescription("Show cache contents in default browser");
 
     protected IComputation<IFormula> formula;
@@ -79,24 +76,18 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         final long localTime = System.nanoTime();
         final Result<T> result = computation.getResult();
         final long timeNeeded = System.nanoTime() - localTime;
-        if (result.isPresent() && result.isPresent()) {
+        if (result.isPresent()) {
             Feat.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");
             System.out.println(serializeResult(result.get()));
-            List<IComputation<?>> l = Feat.cache().getCachedComputations();
-            List<?> y = (l.stream()
-                            .filter(x -> x.getClass().equals(ConstantComputation.class))
-                    .map(i -> i.getResult().get())
-                    .filter(x -> x.getClass().isAssignableFrom(And.class))
-                    .map(o -> ((And) o))).collect(Collectors.toList());
             if (browseCache)
                 Feat.cache().browse(new GraphVizComputationTreeFormat());
         } else {
             System.err.println("Could not compute result.");
-            if (result.isPresent() && !result.getProblems().isEmpty()) {
-                System.err.println("The following problem(s) occurred:");
-                result.getProblems().forEach(System.err::println);
-            }
-            System.exit(1);
+            // System.exit(1); // todo: only do this at the very end of running all commands to signal an error
+        }
+        if (!result.getProblem().isEmpty()) {
+            System.err.println("The following problem(s) occurred:");
+            System.err.println(result.getProblem().get());
         }
         this.argumentParser = null;
     }

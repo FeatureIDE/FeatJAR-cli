@@ -104,7 +104,7 @@ public class ConfigurationGenerator implements ICommand {
             throw new IllegalArgumentException("No algorithm specified!");
         }
         final AbstractConfigurationGenerator generator =
-                algorithm.parseArguments(remainingArguments).orElse(Log::problems);
+                algorithm.parseArguments(remainingArguments).orElse(Log::problem);
         if (generator != null) {
             generator.setLimit(limit);
             final ModelRepresentation c = CommandLineInterface.loadFile(input, FormulaFormats.getInstance()) //
@@ -113,7 +113,7 @@ public class ConfigurationGenerator implements ICommand {
                             p.isEmpty() ? null : p.get(0).toException()));
             final Result<BooleanSolutionList> result = c.getResult(generator);
             String finalOutput = output;
-            result.ifPresentOrElse(list -> CommandLineInterface.saveFile(list, finalOutput, new ListFormat()), Log::problems);
+            result.ifPresentOrElse(list -> CommandLineInterface.saveFile(list, finalOutput, new ListFormat()), Log::problem);
         }
     }
 

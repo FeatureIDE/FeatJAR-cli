@@ -20,6 +20,7 @@
  */
 package de.featjar.cli.analysis;
 
+import de.featjar.base.computation.Computations;
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanAssignment;
@@ -42,8 +43,7 @@ public class AnalyzeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAs
 
     @Override
     public IComputation<ValueAssignment> interpret(IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
-        return async(booleanAssignment, variableMap)
-                .map(ComputeValueRepresentationOfAssignment::new);
+        return new ComputeValueRepresentationOfAssignment(booleanAssignment, variableMap);
     }
 
     @Override

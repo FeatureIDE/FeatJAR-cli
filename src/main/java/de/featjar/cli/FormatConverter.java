@@ -186,9 +186,9 @@ public class FormatConverter implements ICommand {
                     expression = async(expression).map(TransformCNFFormula::new).getResult().get();
                 }
                 CommandLineInterface.saveFile(expression, outputFile, outFormat);
-            } else {
-                Feat.log().problems(parse.getProblems());
             }
+            if (parse.hasProblem())
+                Feat.log().problem(parse.getProblem().get());
         } catch (final Exception e) {
             Feat.log().error(e);
         }

@@ -43,8 +43,7 @@ public class AnalyzeGetSolutionSAT4J extends ASAT4JAnalysisCommand<ValueSolution
 
     @Override
     public IComputation<ValueSolution> interpret(IComputation<BooleanSolution> booleanSolution, IComputation<VariableMap> variableMap) {
-        return async(booleanSolution, variableMap)
-                .map(ComputeValueRepresentationOfSolution::new);
+        return new ComputeValueRepresentationOfSolution(booleanSolution, variableMap);
     }
 
     @Override
