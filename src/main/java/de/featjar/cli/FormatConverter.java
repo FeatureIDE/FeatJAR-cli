@@ -70,7 +70,7 @@ public class FormatConverter implements ICommand {
         boolean dryRun = false;
         boolean cnf = false;
         String fileNameFilter = null;
-        Log.Verbosity verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
+        Log.Verbosity verbosity = CommandLineInterface.DEFAULT_VERBOSITY;
 
         List<String> args = new ArrayList<>(); //TODO: rewrite all of this to use the argumentParser
 

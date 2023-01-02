@@ -61,7 +61,7 @@ public class ConfigurationGenerator implements ICommand {
         String output = CommandLineInterface.STANDARD_OUTPUT;
         AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
         int limit = Integer.MAX_VALUE;
-        String verbosity = CommandLineInterface.DEFAULT_MAXIMUM_VERBOSITY;
+        String verbosity = CommandLineInterface.DEFAULT_VERBOSITY;
 
         final List<String> remainingArguments = new ArrayList<>();
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
