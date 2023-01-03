@@ -20,7 +20,6 @@
  */
 package de.featjar.cli;
 
-import de.featjar.base.Feat;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.ArgumentParser;
 import de.featjar.base.log.Log;
@@ -58,7 +57,7 @@ public class FormatConverter implements ICommand {
     }
 
     private static List<IFormat<IFormula>> getFormats() {
-        return Feat.extensionPoint(FormulaFormats.class).getExtensions();
+        return FeatJAR.extensionPoint(FormulaFormats.class).getExtensions();
     }
 
     @Override
@@ -154,7 +153,7 @@ public class FormatConverter implements ICommand {
                             final Path outputFile = outputDirectory.resolve(
                                     IIOObject.getFileNameWithoutExtension(inputFile.getFileName()) + "."
                                             + format.getFileExtension());
-                            Feat.log().info(inputFile + " -> " + outputFile);
+                            FeatJAR.log().info(inputFile + " -> " + outputFile);
                             if (convert) {
                                 try {
                                     Files.createDirectories(outputDirectory);
@@ -168,7 +167,7 @@ public class FormatConverter implements ICommand {
                 throw new RuntimeException(e);
             }
         } else {
-            Feat.log().info(input + " -> " + output);
+            FeatJAR.log().info(input + " -> " + output);
             if (convert) {
                 convert(input, output, outFormat, cnf);
             }
@@ -179,7 +178,7 @@ public class FormatConverter implements ICommand {
 
     private void convert(String inputFile, String outputFile, IFormat<IFormula> outFormat, boolean cnf) {
         try {
-            final Result<IFormula> parse = CommandLineInterface.loadFile(inputFile, Feat.extensionPoint(FormulaFormats.class));
+            final Result<IFormula> parse = CommandLineInterface.loadFile(inputFile, FeatJAR.extensionPoint(FormulaFormats.class));
             if (parse.isPresent()) {
                 IFormula expression = parse.get();
                 if (cnf) {
@@ -188,9 +187,9 @@ public class FormatConverter implements ICommand {
                 CommandLineInterface.saveFile(expression, outputFile, outFormat);
             }
             if (parse.hasProblem())
-                Feat.log().problem(parse.getProblem().get());
+                FeatJAR.log().problem(parse.getProblem().get());
         } catch (final Exception e) {
-            Feat.log().error(e);
+            FeatJAR.log().error(e);
         }
     }
 

@@ -31,8 +31,8 @@ public abstract class ASAT4JAnalysisCommand<T, U> extends AAnalysisCommand<T> {
         var booleanClauseList = getKey(booleanRepresentation);
         var variableMap = getValue(booleanRepresentation);
         var analysis = newAnalysis(booleanClauseList);
-        analysis.setAssumedAssignment((IComputation<BooleanAssignment>) ASSIGNMENT_OPTION.parseFrom(argumentParser).toBoolean(variableMap)); // todo: eliminate cast?
-        analysis.setAssumedClauseList(CLAUSES_OPTION.parseFrom(argumentParser).toBoolean(variableMap));
+        analysis.setAssumedAssignment((IComputation<BooleanAssignment>) ASSIGNMENT_OPTION.parseFrom(argumentParser).get().toBoolean(variableMap)); // todo: eliminate cast?
+        analysis.setAssumedClauseList(CLAUSES_OPTION.parseFrom(argumentParser).get().toBoolean(variableMap));
         analysis.setTimeout(async(TIMEOUT_OPTION.parseFrom(argumentParser)));
         return interpret(analysis, variableMap);
     }
