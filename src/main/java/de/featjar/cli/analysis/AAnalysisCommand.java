@@ -7,6 +7,7 @@ import de.featjar.base.computation.*;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
+import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.analysis.value.ValueAssignment;
@@ -23,12 +24,7 @@ import static de.featjar.base.computation.Computations.*;
  *
  * @param <T> the type of the analysis result
  */
-public abstract class AAnalysisCommand<T> implements ICommand {
-    public static final Option<String> INPUT_OPTION =
-            new StringOption("--input")
-                    .setDescription("Path to formula file")
-                    .setDefaultValue(CommandLineInterface.STANDARD_INPUT);
-
+public abstract class AAnalysisCommand<T> implements IFormulaCommand {
     public static final Option<ValueAssignment> ASSIGNMENT_OPTION =
             new Option<>("--assignment", s -> IO.load(s, new ValueAssignmentFormat()))
                     .setDescription("An additional assignment to assume")
@@ -69,7 +65,8 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         Boolean browseCache = BROWSE_CACHE_OPTION.parseFrom(argumentParser).get();
         this.formula = async(CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class)));
         IComputation<T> computation = newComputation();
-        FeatJAR.log().info("running " + computation);
+        FeatJAR.log().info("running computation");
+        FeatJAR.log().debug(computation.print());
         argumentParser.close();
         final long localTime = System.nanoTime();
         final Result<T> result = computation.getResult();

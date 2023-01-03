@@ -20,7 +20,7 @@
  */
 package cli;
 
-import de.featjar.cli.FormatConverter;
+import de.featjar.cli.io.FormatConverter;
 import de.featjar.base.extension.ExtensionManager;
 import java.util.*;
 import org.junit.jupiter.api.*;

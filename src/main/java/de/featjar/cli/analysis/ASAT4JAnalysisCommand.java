@@ -21,6 +21,7 @@ public abstract class ASAT4JAnalysisCommand<T, U> extends AAnalysisCommand<T> {
         return ICommand.addOptions(super.getOptions(), ASSIGNMENT_OPTION, CLAUSES_OPTION, TIMEOUT_OPTION);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public IComputation<T> newComputation() {
         var booleanRepresentation =

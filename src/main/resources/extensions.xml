@@ -2,7 +2,7 @@
 <extensions>
 	<point id="de.featjar.base.cli.Commands">
 		<!--<extension id="de.featjar.cli.ConfigurationGenerator" />-->
-		<extension id="de.featjar.cli.FormatConverter" />
+		<extension id="de.featjar.cli.io.FormatConverter" />
 		<extension id="de.featjar.cli.analysis.ComputeCoreDeadVariablesSAT4J" />
 		<extension id="de.featjar.cli.analysis.ComputeSolutionCountSAT4J" />
 		<extension id="de.featjar.cli.analysis.ComputeSolutionSAT4J" />
