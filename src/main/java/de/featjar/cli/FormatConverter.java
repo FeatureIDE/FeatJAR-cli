@@ -30,7 +30,7 @@ import de.featjar.base.cli.ICommand;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IIOObject;
 import de.featjar.base.io.format.IFormat;
-import de.featjar.formula.transformer.TransformCNFFormula;
+import de.featjar.formula.transformer.ComputeCNFFormula;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -182,7 +182,7 @@ public class FormatConverter implements ICommand {
             if (parse.isPresent()) {
                 IFormula expression = parse.get();
                 if (cnf) {
-                    expression = async(expression).map(TransformCNFFormula::new).getResult().get();
+                    expression = async(expression).map(ComputeCNFFormula::new).getResult().get();
                 }
                 CommandLineInterface.saveFile(expression, outputFile, outFormat);
             }

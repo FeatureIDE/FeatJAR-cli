@@ -27,15 +27,15 @@ import de.featjar.formula.analysis.bool.BooleanClauseList;
 import java.math.BigInteger;
 
 
-public class AnalyzeCountSolutionsSAT4J extends ASAT4JAnalysisCommand<BigInteger, BigInteger> {
+public class ComputeSolutionCountSAT4J extends ASAT4JAnalysisCommand<BigInteger, BigInteger> {
     @Override
     public String getDescription() {
         return "Queries SAT4J for the number of solutions of a given formula, if any";
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeCountSolutionsSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
-        return new de.featjar.formula.analysis.sat4j.AnalyzeCountSolutionsSAT4J(clauseList);
+    public de.featjar.formula.analysis.sat4j.ComputeSolutionCountSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+        return new de.featjar.formula.analysis.sat4j.ComputeSolutionCountSAT4J(clauseList);
     }
 
     @Override

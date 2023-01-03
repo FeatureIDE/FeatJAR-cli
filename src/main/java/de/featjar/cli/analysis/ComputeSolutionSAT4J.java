@@ -20,35 +20,34 @@
  */
 package de.featjar.cli.analysis;
 
-import de.featjar.base.computation.Computations;
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
-import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.value.*;
+import de.featjar.formula.analysis.bool.BooleanSolution;
+import de.featjar.formula.analysis.value.ComputeValueRepresentationOfSolution;
+import de.featjar.formula.analysis.value.ValueSolution;
 
 import static de.featjar.base.computation.Computations.async;
 
 
-public class AnalyzeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
+public class ComputeSolutionSAT4J extends ASAT4JAnalysisCommand<ValueSolution, BooleanSolution> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for all core and dead variables of a given formula, if any";
+        return "Queries SAT4J for a solution of a given formula, if any";
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
-        return new de.featjar.formula.analysis.sat4j.AnalyzeCoreDeadVariablesSAT4J(clauseList);
+    public de.featjar.formula.analysis.sat4j.ComputeSolutionSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+        return new de.featjar.formula.analysis.sat4j.ComputeSolutionSAT4J(clauseList);
     }
 
     @Override
-    public IComputation<ValueAssignment> interpret(IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
-        return new ComputeValueRepresentationOfAssignment(booleanAssignment, variableMap);
+    public IComputation<ValueSolution> interpret(IComputation<BooleanSolution> booleanSolution, IComputation<VariableMap> variableMap) {
+        return new ComputeValueRepresentationOfSolution(booleanSolution, variableMap);
     }
 
     @Override
-    public String serializeResult(ValueAssignment valueAssignment) {
-        return valueAssignment.print();
+    public String serializeResult(ValueSolution valueSolution) {
+        return valueSolution.print();
     }
-
 }

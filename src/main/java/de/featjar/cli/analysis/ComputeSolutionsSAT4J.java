@@ -23,31 +23,31 @@ package de.featjar.cli.analysis;
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.bool.BooleanSolution;
-import de.featjar.formula.analysis.value.ComputeValueRepresentationOfSolution;
-import de.featjar.formula.analysis.value.ValueSolution;
+import de.featjar.formula.analysis.bool.BooleanSolutionList;
+import de.featjar.formula.analysis.value.ComputeValueRepresentationOfSolutionList;
+import de.featjar.formula.analysis.value.ValueSolutionList;
 
 import static de.featjar.base.computation.Computations.async;
 
 
-public class AnalyzeGetSolutionSAT4J extends ASAT4JAnalysisCommand<ValueSolution, BooleanSolution> {
+public class ComputeSolutionsSAT4J extends ASAT4JAnalysisCommand<ValueSolutionList, BooleanSolutionList> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for a solution of a given formula, if any";
+        return "Queries SAT4J for all solutions of a given formula, if any";
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.AnalyzeGetSolutionSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
-        return new de.featjar.formula.analysis.sat4j.AnalyzeGetSolutionSAT4J(clauseList);
+    public de.featjar.formula.analysis.sat4j.ComputeSolutionsSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+        return new de.featjar.formula.analysis.sat4j.ComputeSolutionsSAT4J(clauseList);
     }
 
     @Override
-    public IComputation<ValueSolution> interpret(IComputation<BooleanSolution> booleanSolution, IComputation<VariableMap> variableMap) {
-        return new ComputeValueRepresentationOfSolution(booleanSolution, variableMap);
+    public IComputation<ValueSolutionList> interpret(IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
+        return new ComputeValueRepresentationOfSolutionList(booleanSolutionList, variableMap);
     }
 
     @Override
-    public String serializeResult(ValueSolution valueSolution) {
-        return valueSolution.print();
+    public String serializeResult(ValueSolutionList valueSolutionList) {
+        return valueSolutionList.print();
     }
 }
