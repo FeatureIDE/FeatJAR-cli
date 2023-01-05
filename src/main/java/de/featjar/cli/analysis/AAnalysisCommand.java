@@ -15,6 +15,7 @@ import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
 
+import java.time.Duration;
 import java.util.List;
 
 import static de.featjar.base.computation.Computations.*;
@@ -68,26 +69,13 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
         FeatJAR.log().info("running computation");
         FeatJAR.log().debug(computation.print());
         argumentParser.close();
-
-        FutureResult<?> r = computation.get();
-        System.out.println("fut");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("sleep over");
-        r.cancel(true);
-
         final long localTime = System.nanoTime();
-        final Result<T> result = computation.getResult();
-        computation.getResult();
+        final FutureResult<T> futureResult = computation.get();
+        final Result<T> result = futureResult.get();
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent()) {
             FeatJAR.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");
             System.out.println(serializeResult(result.get()));
-            if (browseCache)
-                FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
         } else {
             System.err.println("Could not compute result.");
             // System.exit(1); // todo: only do this at the very end of running all commands to signal an error
@@ -96,6 +84,8 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             System.err.println("The following problem(s) occurred:");
             System.out.println(result.getProblem().get().print());
         }
+        if (browseCache)
+            FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
         this.argumentParser = null;
     }
 
