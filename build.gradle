@@ -19,10 +19,7 @@ sourceSets {
     main {
         java {
             srcDir 'src/main'
-            exclude '**/ConfigurationGenerator.java'
             exclude '**/AtomicSetAlgorithm.java'
-            exclude '**/CoreDeadAlgorithm.java'
-            exclude '**/CardinalityAlgorithm.java'
             exclude '**/configuration/**'
         }
     }

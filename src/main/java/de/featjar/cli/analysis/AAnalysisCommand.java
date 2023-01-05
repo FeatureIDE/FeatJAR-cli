@@ -68,6 +68,17 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
         FeatJAR.log().info("running computation");
         FeatJAR.log().debug(computation.print());
         argumentParser.close();
+
+        FutureResult<?> r = computation.get();
+        System.out.println("fut");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("sleep over");
+        r.cancel(true);
+
         final long localTime = System.nanoTime();
         final Result<T> result = computation.getResult();
         computation.getResult();

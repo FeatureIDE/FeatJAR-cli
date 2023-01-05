@@ -8,10 +8,11 @@ import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.bool.ComputeBooleanRepresentationOfFormula;
 import de.featjar.formula.analysis.sat4j.ASAT4JAnalysis;
-import de.featjar.formula.transformer.ComputeCNFFormula;
-import de.featjar.formula.transformer.ComputeNNFFormula;
+import de.featjar.formula.transformation.ComputeCNFFormula;
+import de.featjar.formula.transformation.ComputeNNFFormula;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static de.featjar.base.computation.Computations.*;
 

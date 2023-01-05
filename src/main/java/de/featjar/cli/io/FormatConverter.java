@@ -22,29 +22,17 @@ package de.featjar.cli.io;
 
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.*;
-import de.featjar.base.computation.IComputation;
-import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
-import de.featjar.base.log.Log;
 import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.base.data.Result;
-import de.featjar.base.io.IIOObject;
 import de.featjar.base.io.format.IFormat;
-import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformation.ComputeCNFFormula;
+import de.featjar.formula.transformation.ComputeNNFFormula;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static de.featjar.base.computation.Computations.async;
 
@@ -101,8 +89,10 @@ public class FormatConverter implements IFormulaCommand {
         if (!CommandLineInterface.isValidInput(input)) {
             throw new IllegalArgumentException("input file invalid");
         }
-        FeatJAR.log().info(input + " -> " + output);
-        if (!dryRun) {
+        FeatJAR.log().info("converting " + input + " into " + outputFormatString);
+        if (dryRun) {
+            FeatJAR.log().debug("skipping due to dry run");
+        } else {
             convert(input, output, outputFormat, CNF);
         }
     }
@@ -117,8 +107,11 @@ public class FormatConverter implements IFormulaCommand {
                 FeatJAR.log().problem(formula.getProblem().get());
             IFormula expression = formula.get();
             if (CNF) {
-                expression = async(expression).map(ComputeCNFFormula::new).getResult().get();
+                expression = async(expression)
+                        .map(ComputeNNFFormula::new)
+                        .map(ComputeCNFFormula::new).getResult().get();
             }
+            FeatJAR.log().debug(expression.print());
             CommandLineInterface.saveFile(expression, output, outputFormat);
         } catch (final Exception e) {
             FeatJAR.log().error(e);
