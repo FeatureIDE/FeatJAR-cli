@@ -70,8 +70,7 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
         FeatJAR.log().debug(computation.print());
         argumentParser.close();
         final long localTime = System.nanoTime();
-        final FutureResult<T> futureResult = computation.get();
-        final Result<T> result = futureResult.get();
+        final Result<T> result = computation.parallelComputeResult();
         final long timeNeeded = System.nanoTime() - localTime;
         if (result.isPresent()) {
             FeatJAR.log().info("time needed for computation: " + ((timeNeeded / 1_000_000) / 1000.0) + "s");

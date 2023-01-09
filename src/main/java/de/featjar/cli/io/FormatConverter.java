@@ -109,7 +109,7 @@ public class FormatConverter implements IFormulaCommand {
             if (CNF) {
                 expression = async(expression)
                         .map(ComputeNNFFormula::new)
-                        .map(ComputeCNFFormula::new).getResult().get();
+                        .map(ComputeCNFFormula::new).get().get();
             }
             FeatJAR.log().debug(expression.print());
             CommandLineInterface.saveFile(expression, output, outputFormat);
