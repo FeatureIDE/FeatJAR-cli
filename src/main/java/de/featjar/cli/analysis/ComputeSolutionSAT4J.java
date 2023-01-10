@@ -33,7 +33,7 @@ import static de.featjar.base.computation.Computations.async;
 public class ComputeSolutionSAT4J extends ASAT4JAnalysisCommand<ValueSolution, BooleanSolution> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for a solution of a given formula, if any";
+        return "Queries SAT4J for a solution of a given formula";
     }
 
     @Override

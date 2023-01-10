@@ -32,7 +32,7 @@ import static de.featjar.base.computation.Computations.async;
 public class ComputeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
     @Override
     public String getDescription() {
-        return "Queries SAT4J for all core and dead variables of a given formula, if any";
+        return "Queries SAT4J for all core and dead variables of a given formula";
     }
 
     @Override

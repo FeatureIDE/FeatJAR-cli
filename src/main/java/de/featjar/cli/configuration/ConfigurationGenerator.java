@@ -107,8 +107,8 @@ public class ConfigurationGenerator implements ICommand {
             if (!formula.isPresent()) {
                 FeatJAR.log().error("formula file could not be parsed");
             }
-            if (formula.hasProblem())
-                FeatJAR.log().problem(formula.getProblem().get());
+            if (formula.hasProblems())
+                FeatJAR.log().problem(formula.getProblems().get());
             IFormula expression = formula.get();
             if (CNF) {
                 expression = async(expression).map(ComputeCNFFormula::new).getResult().get();

@@ -103,8 +103,8 @@ public class FormatConverter implements IFormulaCommand {
             if (!formula.isPresent()) {
                 FeatJAR.log().error("formula file could not be parsed");
             }
-            if (formula.hasProblem())
-                FeatJAR.log().problem(formula.getProblem().get());
+            if (formula.hasProblems())
+                FeatJAR.log().problem(formula.getProblems());
             IFormula expression = formula.get();
             if (CNF) {
                 expression = async(expression)

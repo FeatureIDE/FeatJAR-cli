@@ -15,7 +15,6 @@ import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
 
-import java.time.Duration;
 import java.util.List;
 
 import static de.featjar.base.computation.Computations.*;
@@ -79,9 +78,9 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             System.err.println("Could not compute result.");
             // System.exit(1); // todo: only do this at the very end of running all commands to signal an error
         }
-        if (!result.getProblem().isEmpty()) {
+        if (result.hasProblems()) {
             System.err.println("The following problem(s) occurred:");
-            System.out.println(result.getProblem().get().print());
+            result.getProblems().forEach(System.out::println);
         }
         if (browseCache)
             FeatJAR.cache().browse(new GraphVizComputationTreeFormat());

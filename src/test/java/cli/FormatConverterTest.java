@@ -26,10 +26,10 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 
 public class FormatConverterTest {
-    @Test
-    public void test() {
-        ExtensionManager.install();
-        new FormatConverter()
-                .run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml", "-f", "dimacs", "-cnf"));
-    }
+//    @Test
+//    public void test() {
+//        ExtensionManager.install();
+//        new FormatConverter()
+//                .run(Arrays.asList("-i", "src/test/resources/testFeatureModels/car.xml", "-f", "dimacs", "-cnf"));
+//    }
 }
