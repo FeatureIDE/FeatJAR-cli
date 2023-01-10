@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2022 Elias Kuiter
+ * Copyright (C) 2023 Elias Kuiter
  *
- * This file is part of cli.
+ * This file is part of FeatJAR-cli.
  *
  * cli is free software: you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
