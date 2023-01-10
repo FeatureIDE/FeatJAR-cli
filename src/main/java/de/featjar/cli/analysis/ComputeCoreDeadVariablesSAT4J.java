@@ -26,9 +26,6 @@ import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.value.*;
 
-import static de.featjar.base.computation.Computations.async;
-
-
 public class ComputeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAssignment, BooleanAssignment> {
     @Override
     public String getDescription() {
@@ -36,12 +33,14 @@ public class ComputeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAs
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.ComputeCoreDeadVariablesSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+    public de.featjar.formula.analysis.sat4j.ComputeCoreDeadVariablesSAT4J newAnalysis(
+            IComputation<BooleanClauseList> clauseList) {
         return new de.featjar.formula.analysis.sat4j.ComputeCoreDeadVariablesSAT4J(clauseList);
     }
 
     @Override
-    public IComputation<ValueAssignment> interpret(IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
+    public IComputation<ValueAssignment> interpret(
+            IComputation<BooleanAssignment> booleanAssignment, IComputation<VariableMap> variableMap) {
         return new ComputeValueRepresentationOfAssignment(booleanAssignment, variableMap);
     }
 
@@ -49,5 +48,4 @@ public class ComputeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAs
     public String serializeResult(ValueAssignment valueAssignment) {
         return valueAssignment.print();
     }
-
 }

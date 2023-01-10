@@ -20,21 +20,20 @@
  */
 package de.featjar.cli.io;
 
+import static de.featjar.base.computation.Computations.async;
+
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.*;
+import de.featjar.base.data.Result;
+import de.featjar.base.io.format.IFormat;
 import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
-import de.featjar.base.data.Result;
-import de.featjar.base.io.format.IFormat;
 import de.featjar.formula.transformation.ComputeCNFFormula;
 import de.featjar.formula.transformation.ComputeNNFFormula;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import static de.featjar.base.computation.Computations.async;
 
 /**
  * ...
@@ -45,20 +44,18 @@ import static de.featjar.base.computation.Computations.async;
 public class FormatConverter implements IFormulaCommand {
     public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("--format")
             .setRequired(true)
-            .setDescription(() -> "Specify format by identifier. One of " +
-                    getFormats().stream()
+            .setDescription(() -> "Specify format by identifier. One of "
+                    + getFormats().stream()
                             .map(IFormat::getName)
                             .map(String::toLowerCase)
                             .collect(Collectors.joining(", ")));
 
-    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("--dry-run")
-            .setDescription("Perform dry run");
+    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("--dry-run").setDescription("Perform dry run");
 
-    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("--recursive")
-            .setDescription("");
+    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("--recursive").setDescription("");
 
-    public static final Option<Boolean> CNF_OPTION = new Flag("--cnf")
-            .setDescription("Transform into CNF before conversion");
+    public static final Option<Boolean> CNF_OPTION =
+            new Flag("--cnf").setDescription("Transform into CNF before conversion");
 
     @Override
     public List<Option<?>> getOptions() {
@@ -78,7 +75,8 @@ public class FormatConverter implements IFormulaCommand {
     public void run(ArgumentParser argumentParser) {
         String input = INPUT_OPTION.parseFrom(argumentParser).get();
         String output = OUTPUT_OPTION.parseFrom(argumentParser).get();
-        String outputFormatString = OUTPUT_FORMAT_OPTION.parseFrom(argumentParser).get();
+        String outputFormatString =
+                OUTPUT_FORMAT_OPTION.parseFrom(argumentParser).get();
         IFormat<IFormula> outputFormat = getFormats().stream() // todo: find by extension ID
                 .filter(f -> Objects.equals(outputFormatString, f.getName().toLowerCase()))
                 .findFirst()
@@ -99,17 +97,19 @@ public class FormatConverter implements IFormulaCommand {
 
     private void convert(String input, String output, IFormat<IFormula> outputFormat, boolean CNF) {
         try {
-            final Result<IFormula> formula = CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
+            final Result<IFormula> formula =
+                    CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
             if (!formula.isPresent()) {
                 FeatJAR.log().error("formula file could not be parsed");
             }
-            if (formula.hasProblems())
-                FeatJAR.log().problem(formula.getProblems());
+            if (formula.hasProblems()) FeatJAR.log().problem(formula.getProblems());
             IFormula expression = formula.get();
             if (CNF) {
                 expression = async(expression)
                         .map(ComputeNNFFormula::new)
-                        .map(ComputeCNFFormula::new).get().get();
+                        .map(ComputeCNFFormula::new)
+                        .get()
+                        .get();
             }
             FeatJAR.log().debug(expression.print());
             CommandLineInterface.saveFile(expression, output, outputFormat);

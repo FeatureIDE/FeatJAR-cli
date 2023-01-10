@@ -34,12 +34,14 @@ public class ComputeAtomicSetsSAT4J extends ASAT4JAnalysisCommand<ValueSolutionL
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.ComputeAtomicSetsSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+    public de.featjar.formula.analysis.sat4j.ComputeAtomicSetsSAT4J newAnalysis(
+            IComputation<BooleanClauseList> clauseList) {
         return new de.featjar.formula.analysis.sat4j.ComputeAtomicSetsSAT4J(clauseList);
     }
 
     @Override
-    public IComputation<ValueSolutionList> interpret(IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
+    public IComputation<ValueSolutionList> interpret(
+            IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
         return new ComputeValueRepresentationOfSolutionList(booleanSolutionList, variableMap);
     }
 
@@ -48,31 +50,31 @@ public class ComputeAtomicSetsSAT4J extends ASAT4JAnalysisCommand<ValueSolutionL
         return valueSolutionList.print();
     }
 
-//    @Override
-//    public Object parseResult(Object result, Object arg) {
-//        List<SortedIntegerList> atomicSets = (List<SortedIntegerList>) result;
-//        TermMap termMap = (TermMap) arg;
-//        return atomicSets.stream()
-//                .map(atomicSet -> String.format(
-//                        "{%s}",
-//                        Stream.concat(
-//                                        Arrays.stream(atomicSet
-//                                                        .getPositives()
-//                                                        .getIntegers())
-//                                                .mapToObj(l -> "+"
-//                                                        + termMap
-//                                                                .getVariable(l)
-//                                                                .get()
-//                                                                .getName()),
-//                                        Arrays.stream(atomicSet
-//                                                        .getNegatives()
-//                                                        .getIntegers())
-//                                                .mapToObj(l -> "-"
-//                                                        + termMap
-//                                                                .getVariable(-l)
-//                                                                .get()
-//                                                                .getName()))
-//                                .collect(Collectors.joining(", "))))
-//                .collect(Collectors.joining("\n"));
-//    }
+    //    @Override
+    //    public Object parseResult(Object result, Object arg) {
+    //        List<SortedIntegerList> atomicSets = (List<SortedIntegerList>) result;
+    //        TermMap termMap = (TermMap) arg;
+    //        return atomicSets.stream()
+    //                .map(atomicSet -> String.format(
+    //                        "{%s}",
+    //                        Stream.concat(
+    //                                        Arrays.stream(atomicSet
+    //                                                        .getPositives()
+    //                                                        .getIntegers())
+    //                                                .mapToObj(l -> "+"
+    //                                                        + termMap
+    //                                                                .getVariable(l)
+    //                                                                .get()
+    //                                                                .getName()),
+    //                                        Arrays.stream(atomicSet
+    //                                                        .getNegatives()
+    //                                                        .getIntegers())
+    //                                                .mapToObj(l -> "-"
+    //                                                        + termMap
+    //                                                                .getVariable(-l)
+    //                                                                .get()
+    //                                                                .getName()))
+    //                                .collect(Collectors.joining(", "))))
+    //                .collect(Collectors.joining("\n"));
+    //    }
 }

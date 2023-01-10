@@ -1,5 +1,6 @@
 package de.featjar.cli.analysis;
 
+import static de.featjar.base.computation.Computations.*;
 
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.*;
@@ -8,16 +9,13 @@ import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
 import de.featjar.cli.IFormulaCommand;
-import de.featjar.formula.io.value.ValueAssignmentFormat;
-import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
+import de.featjar.formula.io.value.ValueAssignmentFormat;
+import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.structure.formula.IFormula;
-
 import java.util.List;
-
-import static de.featjar.base.computation.Computations.*;
 
 /**
  * Computes an analysis result for a formula.
@@ -25,30 +23,27 @@ import static de.featjar.base.computation.Computations.*;
  * @param <T> the type of the analysis result
  */
 public abstract class AAnalysisCommand<T> implements IFormulaCommand {
-    public static final Option<ValueAssignment> ASSIGNMENT_OPTION =
-            new Option<>("--assignment", s -> IO.load(s, new ValueAssignmentFormat()))
-                    .setDescription("An additional assignment to assume")
-                    .setDefaultValue(new ValueAssignment());
+    public static final Option<ValueAssignment> ASSIGNMENT_OPTION = new Option<>(
+                    "--assignment", s -> IO.load(s, new ValueAssignmentFormat()))
+            .setDescription("An additional assignment to assume")
+            .setDefaultValue(new ValueAssignment());
 
-    public static final Option<ValueClauseList> CLAUSES_OPTION =
-            new Option<>("--clauses", s -> IO.load(s, new ValueClauseListFormat()))
-                    .setDescription("An additional clause list to assume")
-                    .setDefaultValue(new ValueClauseList());
+    public static final Option<ValueClauseList> CLAUSES_OPTION = new Option<>(
+                    "--clauses", s -> IO.load(s, new ValueClauseListFormat()))
+            .setDescription("An additional clause list to assume")
+            .setDefaultValue(new ValueClauseList());
 
-    public static final Option<Long> TIMEOUT_OPTION =
-            new Option<>("--timeout", Result.mapReturnValue(Long::valueOf))
-                    .setDescription("Analysis timeout in milliseconds")
-                    .setValidator(timeout -> timeout >= -1)
-                    .setDefaultValue(ITimeoutDependency.DEFAULT_TIMEOUT);
+    public static final Option<Long> TIMEOUT_OPTION = new Option<>("--timeout", Result.mapReturnValue(Long::valueOf))
+            .setDescription("Analysis timeout in milliseconds")
+            .setValidator(timeout -> timeout >= -1)
+            .setDefaultValue(ITimeoutDependency.DEFAULT_TIMEOUT);
 
-    public static final Option<Long> SEED_OPTION =
-            new Option<>("--seed", Result.mapReturnValue(Long::valueOf))
-                    .setDescription("Seed for pseudorandom number generator")
-                    .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
+    public static final Option<Long> SEED_OPTION = new Option<>("--seed", Result.mapReturnValue(Long::valueOf))
+            .setDescription("Seed for pseudorandom number generator")
+            .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
 
     public static final Option<Boolean> BROWSE_CACHE_OPTION =
-            new Flag("--browse-cache")
-                    .setDescription("Show cache contents in default browser");
+            new Flag("--browse-cache").setDescription("Show cache contents in default browser");
 
     protected IComputation<IFormula> formula;
     protected ArgumentParser argumentParser;
@@ -82,8 +77,7 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             System.err.println("The following problem(s) occurred:");
             result.getProblems().forEach(System.out::println);
         }
-        if (browseCache)
-            FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
+        if (browseCache) FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
         this.argumentParser = null;
     }
 

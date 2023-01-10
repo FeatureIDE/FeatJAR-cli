@@ -27,9 +27,6 @@ import de.featjar.formula.analysis.bool.BooleanSolutionList;
 import de.featjar.formula.analysis.value.ComputeValueRepresentationOfSolutionList;
 import de.featjar.formula.analysis.value.ValueSolutionList;
 
-import static de.featjar.base.computation.Computations.async;
-
-
 public class ComputeSolutionsSAT4J extends ASAT4JAnalysisCommand<ValueSolutionList, BooleanSolutionList> {
     @Override
     public String getDescription() {
@@ -37,12 +34,14 @@ public class ComputeSolutionsSAT4J extends ASAT4JAnalysisCommand<ValueSolutionLi
     }
 
     @Override
-    public de.featjar.formula.analysis.sat4j.ComputeSolutionsSAT4J newAnalysis(IComputation<BooleanClauseList> clauseList) {
+    public de.featjar.formula.analysis.sat4j.ComputeSolutionsSAT4J newAnalysis(
+            IComputation<BooleanClauseList> clauseList) {
         return new de.featjar.formula.analysis.sat4j.ComputeSolutionsSAT4J(clauseList);
     }
 
     @Override
-    public IComputation<ValueSolutionList> interpret(IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
+    public IComputation<ValueSolutionList> interpret(
+            IComputation<BooleanSolutionList> booleanSolutionList, IComputation<VariableMap> variableMap) {
         return new ComputeValueRepresentationOfSolutionList(booleanSolutionList, variableMap);
     }
 
