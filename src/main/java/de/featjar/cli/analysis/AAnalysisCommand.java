@@ -35,6 +35,8 @@ import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueClauseListFormat;
 import de.featjar.formula.structure.formula.IFormula;
+
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -53,9 +55,10 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             .setDescription("An additional clause list to assume")
             .setDefaultValue(new ValueClauseList());
 
-    public static final Option<Long> TIMEOUT_OPTION = new Option<>("--timeout", Result.mapReturnValue(Long::valueOf))
+    public static final Option<Duration> TIMEOUT_OPTION = new Option<>("--timeout",
+            Result.mapReturnValue(s -> Duration.ofMillis(Long.parseLong(s))))
             .setDescription("Analysis timeout in milliseconds")
-            .setValidator(timeout -> timeout >= -1)
+            .setValidator(timeout -> !timeout.isNegative())
             .setDefaultValue(ITimeoutDependency.DEFAULT_TIMEOUT);
 
     public static final Option<Long> SEED_OPTION = new Option<>("--seed", Result.mapReturnValue(Long::valueOf))
