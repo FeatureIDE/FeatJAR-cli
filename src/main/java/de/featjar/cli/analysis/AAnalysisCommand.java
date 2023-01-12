@@ -30,10 +30,11 @@ import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
 import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.analysis.value.ValueAssignment;
+import de.featjar.formula.analysis.value.ValueClause;
 import de.featjar.formula.analysis.value.ValueClauseList;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
-import de.featjar.formula.io.value.ValueClauseListFormat;
+import de.featjar.formula.io.value.ValueAssignmentListFormat;
 import de.featjar.formula.structure.formula.IFormula;
 
 import java.time.Duration;
@@ -46,12 +47,12 @@ import java.util.List;
  */
 public abstract class AAnalysisCommand<T> implements IFormulaCommand {
     public static final Option<ValueAssignment> ASSIGNMENT_OPTION = new Option<>(
-                    "--assignment", s -> IO.load(s, new ValueAssignmentFormat()))
+                    "--assignment", s -> IO.load(s, new ValueAssignmentFormat<>(ValueAssignment::new)))
             .setDescription("An additional assignment to assume")
             .setDefaultValue(new ValueAssignment());
 
     public static final Option<ValueClauseList> CLAUSES_OPTION = new Option<>(
-                    "--clauses", s -> IO.load(s, new ValueClauseListFormat()))
+                    "--clauses", s -> IO.load(s, new ValueAssignmentListFormat<>(ValueClauseList::new, ValueClause::new)))
             .setDescription("An additional clause list to assume")
             .setDefaultValue(new ValueClauseList());
 

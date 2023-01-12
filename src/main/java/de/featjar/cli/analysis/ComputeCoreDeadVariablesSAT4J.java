@@ -22,6 +22,7 @@ package de.featjar.cli.analysis;
 
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.VariableMap;
+import de.featjar.formula.analysis.bool.ABooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanAssignment;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.value.*;
