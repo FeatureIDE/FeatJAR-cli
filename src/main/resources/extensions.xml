@@ -6,6 +6,7 @@
 		<extension id="de.featjar.cli.analysis.ComputeAtomicSetsSAT4J" />
 		<extension id="de.featjar.cli.analysis.ComputeCoreDeadVariablesSAT4J" />
 		<extension id="de.featjar.cli.analysis.ComputeSolutionCountSAT4J" />
+		<extension id="de.featjar.cli.analysis.ComputeSolutionCountSharpSAT" />
 		<extension id="de.featjar.cli.analysis.ComputeSolutionSAT4J" />
 		<extension id="de.featjar.cli.analysis.ComputeSolutionsSAT4J" />
 		<!--<extension id="de.featjar.cli.analysis.CardinalityAlgorithm" />-->
