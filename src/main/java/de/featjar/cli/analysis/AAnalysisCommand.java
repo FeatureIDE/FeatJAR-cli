@@ -28,7 +28,6 @@ import de.featjar.base.computation.*;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
-import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.analysis.value.ValueAssignment;
 import de.featjar.formula.analysis.value.ValueClause;
 import de.featjar.formula.analysis.value.ValueClauseList;
@@ -37,7 +36,6 @@ import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueAssignmentListFormat;
 import de.featjar.formula.structure.formula.IFormula;
 
-import java.time.Duration;
 import java.util.List;
 
 /**
@@ -45,7 +43,7 @@ import java.util.List;
  *
  * @param <T> the type of the analysis result
  */
-public abstract class AAnalysisCommand<T> implements IFormulaCommand {
+public abstract class AAnalysisCommand<T> implements ICommand {
     public static final Option<ValueAssignment> ASSIGNMENT_OPTION = new Option<>(
                     "--assignment", s -> IO.load(s, new ValueAssignmentFormat<>(ValueAssignment::new)))
             .setDescription("An additional assignment to assume")
@@ -56,37 +54,27 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             .setDescription("An additional clause list to assume")
             .setDefaultValue(new ValueClauseList());
 
-    public static final Option<Duration> TIMEOUT_OPTION = new Option<>("--timeout",
-            Result.mapReturnValue(s -> Duration.ofMillis(Long.parseLong(s))))
-            .setDescription("Analysis timeout in milliseconds")
-            .setValidator(timeout -> !timeout.isNegative())
-            .setDefaultValue(ITimeoutDependency.DEFAULT_TIMEOUT);
-
-    public static final Option<Long> SEED_OPTION = new Option<>("--seed", Result.mapReturnValue(Long::valueOf))
-            .setDescription("Seed for pseudorandom number generator")
-            .setDefaultValue(IRandomDependency.DEFAULT_RANDOM_SEED);
-
     public static final Option<Boolean> BROWSE_CACHE_OPTION =
             new Flag("--browse-cache").setDescription("Show cache contents in default browser");
 
     protected IComputation<IFormula> formula;
-    protected ArgumentParser argumentParser;
+    protected IOptionInput optionParser;
 
+    //todo: output option
     @Override
     public List<Option<?>> getOptions() {
         return List.of(INPUT_OPTION, BROWSE_CACHE_OPTION);
     }
 
     @Override
-    public void run(ArgumentParser argumentParser) {
-        this.argumentParser = argumentParser;
-        String input = INPUT_OPTION.parseFrom(argumentParser).get();
-        Boolean browseCache = BROWSE_CACHE_OPTION.parseFrom(argumentParser).get();
+    public void run(IOptionInput optionParser) {
+        this.optionParser = optionParser;
+        String input = optionParser.get(INPUT_OPTION).get();
+        Boolean browseCache = optionParser.get(BROWSE_CACHE_OPTION).get();
         this.formula = async(CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class)));
         IComputation<T> computation = newComputation();
         FeatJAR.log().info("running computation");
         FeatJAR.log().debug(computation.print());
-        argumentParser.close();
         final long localTime = System.nanoTime();
         final Result<T> result = computation.parallelComputeResult();
         final long timeNeeded = System.nanoTime() - localTime;
@@ -102,7 +90,7 @@ public abstract class AAnalysisCommand<T> implements IFormulaCommand {
             result.getProblems().forEach(System.out::println);
         }
         if (browseCache) FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
-        this.argumentParser = null;
+        this.optionParser = null;
     }
 
     public abstract IComputation<T> newComputation();

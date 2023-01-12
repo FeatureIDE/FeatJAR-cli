@@ -36,6 +36,7 @@ public class ComputeCoreDeadVariablesSAT4J extends ASAT4JAnalysisCommand<ValueAs
     @Override
     public de.featjar.formula.analysis.sat4j.ComputeCoreDeadVariablesSAT4J newAnalysis(
             IComputation<BooleanClauseList> clauseList) {
+        // todo: set random
         return new de.featjar.formula.analysis.sat4j.ComputeCoreDeadVariablesSAT4J(clauseList);
     }
 

@@ -26,7 +26,6 @@ import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.*;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.format.IFormat;
-import de.featjar.cli.IFormulaCommand;
 import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.formula.transformation.ComputeCNFFormula;
@@ -41,7 +40,7 @@ import java.util.stream.Collectors;
  * @author Sebastian Krieter
  * @author Elias Kuiter
  */
-public class FormatConverter implements IFormulaCommand {
+public class FormatConverter implements ICommand {
     public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("--format")
             .setRequired(true)
             .setDescription(() -> "Specify format by identifier. One of "
@@ -72,18 +71,18 @@ public class FormatConverter implements IFormulaCommand {
     }
 
     @Override
-    public void run(ArgumentParser argumentParser) {
-        String input = INPUT_OPTION.parseFrom(argumentParser).get();
-        String output = OUTPUT_OPTION.parseFrom(argumentParser).get();
+    public void run(IOptionInput optionParser) {
+        String input = optionParser.get(INPUT_OPTION).get();
+        String output = optionParser.get(OUTPUT_OPTION).get();
         String outputFormatString =
-                OUTPUT_FORMAT_OPTION.parseFrom(argumentParser).get();
+                optionParser.get(OUTPUT_FORMAT_OPTION).get();
         IFormat<IFormula> outputFormat = getFormats().stream() // todo: find by extension ID
                 .filter(f -> Objects.equals(outputFormatString, f.getName().toLowerCase()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Unknown format: " + outputFormatString));
-        boolean dryRun = DRY_RUN_OPTION.parseFrom(argumentParser).get();
-        boolean recursive = RECURSIVE_OPTION.parseFrom(argumentParser).get();
-        boolean CNF = CNF_OPTION.parseFrom(argumentParser).get();
+        boolean dryRun = optionParser.get(DRY_RUN_OPTION).get();
+        boolean recursive = optionParser.get(RECURSIVE_OPTION).get();
+        boolean CNF = optionParser.get(CNF_OPTION).get();
         if (!CommandLineInterface.isValidInput(input)) {
             throw new IllegalArgumentException("input file invalid");
         }

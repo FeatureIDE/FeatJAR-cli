@@ -23,10 +23,6 @@ package de.featjar.cli.analysis;
 import de.featjar.base.cli.ICommand;
 import de.featjar.base.cli.Option;
 import de.featjar.base.computation.IComputation;
-import de.featjar.formula.analysis.VariableMap;
-import de.featjar.formula.analysis.bool.BooleanClauseList;
-import de.featjar.formula.analysis.bool.ComputeBooleanRepresentationOfCNFFormula;
-import de.featjar.formula.analysis.sat4j.ASAT4JAnalysis;
 import de.featjar.formula.analysis.sharpsat.ASharpSATAnalysis;
 import de.featjar.formula.structure.formula.IFormula;
 import de.featjar.formula.transformation.ComputeCNFFormula;
@@ -49,7 +45,7 @@ public abstract class ASharpSATAnalysisCommand<T, U> extends AAnalysisCommand<T>
                 .map(ComputeNNFFormula::new)
                 .map(ComputeCNFFormula::new);
         var analysis = newAnalysis(cnfFormula);
-        analysis.setTimeout(async(TIMEOUT_OPTION.parseFrom(argumentParser)));
+        analysis.setTimeout(async(optionParser.get(TIMEOUT_OPTION)));
         return interpret(analysis);
     }
 

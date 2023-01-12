@@ -81,7 +81,7 @@ public class ConfigurationGenerator implements ICommand {
     }
 
     @Override
-    public void run(ArgumentParser argumentParser) {
+    public void run(IOptionInput argumentParser) {
         String input = INPUT_OPTION.parseFrom(argumentParser).get();
         String output = OUTPUT_OPTION.parseFrom(argumentParser).get();
         String outputFormatString = OUTPUT_FORMAT_OPTION.parseFrom(argumentParser).get();
