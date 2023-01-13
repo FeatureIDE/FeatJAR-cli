@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * @author Elias Kuiter
  */
 public class FormatConverter implements ICommand {
-    public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("--format")
+    public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("format")
             .setRequired(true)
             .setDescription(() -> "Specify format by identifier. One of "
                     + getFormats().stream()
@@ -49,12 +49,12 @@ public class FormatConverter implements ICommand {
                             .map(String::toLowerCase)
                             .collect(Collectors.joining(", ")));
 
-    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("--dry-run").setDescription("Perform dry run");
+    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("dry-run").setDescription("Perform dry run");
 
-    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("--recursive").setDescription("");
+    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("recursive").setDescription("");
 
     public static final Option<Boolean> CNF_OPTION =
-            new Flag("--cnf").setDescription("Transform into CNF before conversion");
+            new Flag("cnf").setDescription("Transform into CNF before conversion");
 
     @Override
     public List<Option<?>> getOptions() {
@@ -83,7 +83,7 @@ public class FormatConverter implements ICommand {
         boolean dryRun = optionParser.get(DRY_RUN_OPTION).get();
         boolean recursive = optionParser.get(RECURSIVE_OPTION).get();
         boolean CNF = optionParser.get(CNF_OPTION).get();
-        if (!CommandLineInterface.isValidInput(input)) {
+        if (!Commands.isValidInput(input)) {
             throw new IllegalArgumentException("input file invalid");
         }
         FeatJAR.log().info("converting " + input + " into " + outputFormatString);
@@ -97,7 +97,7 @@ public class FormatConverter implements ICommand {
     private void convert(String input, String output, IFormat<IFormula> outputFormat, boolean CNF) {
         try {
             final Result<IFormula> formula =
-                    CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
+                    Commands.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
             if (!formula.isPresent()) {
                 FeatJAR.log().error("formula file could not be parsed");
             }
@@ -111,7 +111,7 @@ public class FormatConverter implements ICommand {
                         .get();
             }
             FeatJAR.log().debug(expression.print());
-            CommandLineInterface.saveFile(expression, output, outputFormat);
+            Commands.saveFile(expression, output, outputFormat);
         } catch (final Exception e) {
             FeatJAR.log().error(e);
         }

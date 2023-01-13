@@ -47,7 +47,7 @@ import static de.featjar.base.computation.Computations.async;
  * @author Elias Kuiter
  */
 public class ConfigurationGenerator implements ICommand {
-    public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("--format")
+    public static final Option<String> OUTPUT_FORMAT_OPTION = new StringOption("format")
             .setRequired(true)
             .setDescription(() -> "Specify format by identifier. One of " +
                     getFormats().stream()
@@ -55,13 +55,13 @@ public class ConfigurationGenerator implements ICommand {
                             .map(String::toLowerCase)
                             .collect(Collectors.joining(", ")));
 
-    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("--dry-run")
+    public static final Option<Boolean> DRY_RUN_OPTION = new Flag("dry-run")
             .setDescription("Perform dry run");
 
-    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("--recursive")
+    public static final Option<Boolean> RECURSIVE_OPTION = new Flag("recursive")
             .setDescription("");
 
-    public static final Option<Boolean> CNF_OPTION = new Flag("--cnf")
+    public static final Option<Boolean> CNF_OPTION = new Flag("cnf")
             .setDescription("Transform into CNF before conversion");
 
     @Override
@@ -92,7 +92,7 @@ public class ConfigurationGenerator implements ICommand {
         boolean dryRun = DRY_RUN_OPTION.parseFrom(argumentParser).get();
         boolean recursive = RECURSIVE_OPTION.parseFrom(argumentParser).get();
         boolean CNF = CNF_OPTION.parseFrom(argumentParser).get();
-        if (!CommandLineInterface.isValidInput(input)) {
+        if (!Commands.isValidInput(input)) {
             throw new IllegalArgumentException("input file invalid");
         }
         FeatJAR.log().info(input + " -> " + output);
@@ -103,7 +103,7 @@ public class ConfigurationGenerator implements ICommand {
 
     private void convert(String input, String output, IFormat<IFormula> outputFormat, boolean CNF) {
         try {
-            final Result<IFormula> formula = CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
+            final Result<IFormula> formula = Commands.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class));
             if (!formula.isPresent()) {
                 FeatJAR.log().error("formula file could not be parsed");
             }
@@ -113,7 +113,7 @@ public class ConfigurationGenerator implements ICommand {
             if (CNF) {
                 expression = async(expression).map(ComputeCNFFormula::new).getResult().get();
             }
-            CommandLineInterface.saveFile(expression, output, outputFormat);
+            Commands.saveFile(expression, output, outputFormat);
         } catch (final Exception e) {
             FeatJAR.log().error(e);
         }
@@ -133,11 +133,11 @@ public class ConfigurationGenerator implements ICommand {
 
     @Override
     public void run(List<String> args) {
-        String input = CommandLineInterface.STANDARD_INPUT;
-        String output = CommandLineInterface.STANDARD_OUTPUT;
+        String input = Commands.STANDARD_INPUT;
+        String output = Commands.STANDARD_OUTPUT;
         AlgorithmWrapper<? extends AbstractConfigurationGenerator> algorithm = null;
         int limit = Integer.MAX_VALUE;
-        String verbosity = CommandLineInterface.DEFAULT_VERBOSITY;
+        String verbosity = Commands.DEFAULT_VERBOSITY;
 
         final List<String> remainingArguments = new ArrayList<>();
         for (final ListIterator<String> iterator = args.listIterator(); iterator.hasNext(); ) {
@@ -145,7 +145,7 @@ public class ConfigurationGenerator implements ICommand {
             switch (arg) {
                 case "-a": {
                     // TODO add plugin for icpl and chvatal
-                    final String name = CommandLineInterface.getArgValue(iterator, arg).toLowerCase();
+                    final String name = Commands.getArgValue(iterator, arg).toLowerCase();
                     algorithm = algorithms.stream()
                             .filter(a -> Objects.equals(name, a.getName()))
                             .findFirst()
@@ -153,19 +153,19 @@ public class ConfigurationGenerator implements ICommand {
                     break;
                 }
                 case "-o": {
-                    output = CommandLineInterface.getArgValue(iterator, arg);
+                    output = Commands.getArgValue(iterator, arg);
                     break;
                 }
                 case "-i": {
-                    input = CommandLineInterface.getArgValue(iterator, arg);
+                    input = Commands.getArgValue(iterator, arg);
                     break;
                 }
                 case "-v": {
-                    verbosity = CommandLineInterface.getArgValue(iterator, arg);
+                    verbosity = Commands.getArgValue(iterator, arg);
                     break;
                 }
                 case "-l":
-                    limit = Integer.parseInt(CommandLineInterface.getArgValue(iterator, arg));
+                    limit = Integer.parseInt(Commands.getArgValue(iterator, arg));
                     break;
                 default: {
                     remainingArguments.add(arg);
@@ -174,7 +174,7 @@ public class ConfigurationGenerator implements ICommand {
             }
         }
 
-        CommandLineInterface.installLog(verbosity);
+        Commands.installLog(verbosity);
 
         if (algorithm == null) {
             throw new IllegalArgumentException("No algorithm specified!");
@@ -183,13 +183,13 @@ public class ConfigurationGenerator implements ICommand {
                 algorithm.parseArguments(remainingArguments).orElse(Log::problem);
         if (generator != null) {
             generator.setLimit(limit);
-            final ModelRepresentation c = CommandLineInterface.loadFile(input, FormulaFormats.getInstance()) //
+            final ModelRepresentation c = Commands.loadFile(input, FormulaFormats.getInstance()) //
                     .map(ModelRepresentation::new) //
                     .orElseThrow(p -> new IllegalArgumentException(
                             p.isEmpty() ? null : p.get(0).toException()));
             final Result<BooleanSolutionList> result = c.getResult(generator);
             String finalOutput = output;
-            result.ifPresentOrElse(list -> CommandLineInterface.saveFile(list, finalOutput, new ListFormat()), Log::problem);
+            result.ifPresentOrElse(list -> Commands.saveFile(list, finalOutput, new ListFormat()), Log::problem);
         }
     }
 

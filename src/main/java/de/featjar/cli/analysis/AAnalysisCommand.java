@@ -45,17 +45,17 @@ import java.util.List;
  */
 public abstract class AAnalysisCommand<T> implements ICommand {
     public static final Option<ValueAssignment> ASSIGNMENT_OPTION = new Option<>(
-                    "--assignment", s -> IO.load(s, new ValueAssignmentFormat<>(ValueAssignment::new)))
+                    "assignment", s -> IO.load(s, new ValueAssignmentFormat<>(ValueAssignment::new)))
             .setDescription("An additional assignment to assume")
             .setDefaultValue(new ValueAssignment());
 
     public static final Option<ValueClauseList> CLAUSES_OPTION = new Option<>(
-                    "--clauses", s -> IO.load(s, new ValueAssignmentListFormat<>(ValueClauseList::new, ValueClause::new)))
+                    "clauses", s -> IO.load(s, new ValueAssignmentListFormat<>(ValueClauseList::new, ValueClause::new)))
             .setDescription("An additional clause list to assume")
             .setDefaultValue(new ValueClauseList());
 
     public static final Option<Boolean> BROWSE_CACHE_OPTION =
-            new Flag("--browse-cache").setDescription("Show cache contents in default browser");
+            new Flag("browse-cache").setDescription("Show cache contents in default browser");
 
     protected IComputation<IFormula> formula;
     protected IOptionInput optionParser;
@@ -71,7 +71,7 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         this.optionParser = optionParser;
         String input = optionParser.get(INPUT_OPTION).get();
         Boolean browseCache = optionParser.get(BROWSE_CACHE_OPTION).get();
-        this.formula = async(CommandLineInterface.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class)));
+        this.formula = async(Commands.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class)));
         IComputation<T> computation = newComputation();
         FeatJAR.log().info("running computation");
         FeatJAR.log().debug(computation.print());
