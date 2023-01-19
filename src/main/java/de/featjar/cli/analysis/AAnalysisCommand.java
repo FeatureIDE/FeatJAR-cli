@@ -25,6 +25,7 @@ import static de.featjar.base.computation.Computations.*;
 import de.featjar.base.FeatJAR;
 import de.featjar.base.cli.*;
 import de.featjar.base.computation.*;
+import de.featjar.base.data.Problem;
 import de.featjar.base.data.Result;
 import de.featjar.base.io.IO;
 import de.featjar.base.io.graphviz.GraphVizComputationTreeFormat;
@@ -35,6 +36,9 @@ import de.featjar.formula.io.FormulaFormats;
 import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueAssignmentListFormat;
 import de.featjar.formula.structure.formula.IFormula;
+import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformer.ComputeDNFFormula;
+import de.featjar.formula.transformer.ComputeNNFFormula;
 
 import java.time.Duration;
 import java.util.List;
@@ -73,6 +77,7 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         String input = optionParser.get(INPUT_OPTION).get();
         Boolean browseCache = optionParser.get(BROWSE_CACHE_OPTION).get();
         this.formula = async(Commands.loadFile(input, FeatJAR.extensionPoint(FormulaFormats.class)));
+
         IComputation<T> computation = newComputation();
         FeatJAR.log().info("running computation");
         FeatJAR.log().debug(computation.print());
@@ -88,7 +93,10 @@ public abstract class AAnalysisCommand<T> implements ICommand {
         }
         if (result.hasProblems()) {
             System.err.println("The following problem(s) occurred:");
-            result.getProblems().forEach(System.out::println);
+            for (Problem problem : result.getProblems()) {
+                System.out.print(problem);
+                problem.getException().printStackTrace();
+            }
         }
         if (browseCache) FeatJAR.cache().browse(new GraphVizComputationTreeFormat());
         this.optionParser = null;
