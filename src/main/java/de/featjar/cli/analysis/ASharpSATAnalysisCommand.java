@@ -25,8 +25,8 @@ import de.featjar.base.cli.Option;
 import de.featjar.base.computation.IComputation;
 import de.featjar.formula.analysis.sharpsat.ASharpSATAnalysis;
 import de.featjar.formula.structure.formula.IFormula;
-import de.featjar.formula.transformation.ComputeCNFFormula;
-import de.featjar.formula.transformation.ComputeNNFFormula;
+import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformer.ComputeNNFFormula;
 
 import java.util.List;
 

@@ -36,6 +36,7 @@ import de.featjar.formula.io.value.ValueAssignmentFormat;
 import de.featjar.formula.io.value.ValueAssignmentListFormat;
 import de.featjar.formula.structure.formula.IFormula;
 
+import java.time.Duration;
 import java.util.List;
 
 /**

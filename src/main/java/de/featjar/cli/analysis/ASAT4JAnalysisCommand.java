@@ -29,8 +29,8 @@ import de.featjar.formula.analysis.VariableMap;
 import de.featjar.formula.analysis.bool.BooleanClauseList;
 import de.featjar.formula.analysis.bool.ComputeBooleanRepresentationOfCNFFormula;
 import de.featjar.formula.analysis.sat4j.ASAT4JAnalysis;
-import de.featjar.formula.transformation.ComputeCNFFormula;
-import de.featjar.formula.transformation.ComputeNNFFormula;
+import de.featjar.formula.transformer.ComputeCNFFormula;
+import de.featjar.formula.transformer.ComputeNNFFormula;
 import java.util.List;
 
 public abstract class ASAT4JAnalysisCommand<T, U> extends AAnalysisCommand<T> {

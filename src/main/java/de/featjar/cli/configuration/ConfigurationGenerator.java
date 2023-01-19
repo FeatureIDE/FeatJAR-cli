@@ -30,7 +30,7 @@ import de.featjar.formula.io.FormulaFormats;
 import de.featjar.base.data.Result;
 import de.featjar.base.log.Log;
 import de.featjar.formula.structure.formula.IFormula;
-import de.featjar.formula.transformation.ComputeCNFFormula;
+import de.featjar.formula.transformer.ComputeCNFFormula;
 
 import java.util.ArrayList;
 import java.util.List;
