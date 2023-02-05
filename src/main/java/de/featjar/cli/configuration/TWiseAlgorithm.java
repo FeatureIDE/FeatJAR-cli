@@ -21,7 +21,7 @@
 package de.featjar.cli.configuration;
 
 import de.featjar.analysis.sat4j.twise.TWiseConfigurationGenerator;
-import de.featjar.clauses.ClauseList;
+import de.featjar.clauses.LiteralList;
 import de.featjar.clauses.io.ExpressionGroupFormat;
 import de.featjar.util.cli.AlgorithmWrapper;
 import de.featjar.util.cli.CLI;
@@ -69,8 +69,8 @@ public class TWiseAlgorithm extends AlgorithmWrapper<TWiseConfigurationGenerator
         return true;
     }
 
-    private List<List<ClauseList>> readExpressionFile(Path expressionFile) {
-        final List<List<ClauseList>> expressionGroups;
+    private List<List<List<LiteralList>>> readExpressionFile(Path expressionFile) {
+        final List<List<List<LiteralList>>> expressionGroups;
         if (expressionFile != null) {
             expressionGroups = IO.load(expressionFile, new ExpressionGroupFormat())
                     .orElseThrow(p -> new IllegalArgumentException(
