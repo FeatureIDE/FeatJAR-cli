@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 Elias Kuiter
+ * Copyright (C) 2023 Elias Kuiter
  *
  * This file is part of cli.
  *
